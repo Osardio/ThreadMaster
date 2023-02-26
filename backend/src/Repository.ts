@@ -4,7 +4,25 @@ const prisma = new PrismaClient()
 
 async function init() {
 
-  /*const image = Tools.base64_encode('./assets/sleigh_ride.png')
+  const image = Tools.base64_encode('./assets/sleigh_ride.png')
+
+  await prisma.kits.create({
+    data: {
+      manufacturer: {},
+      series: {},
+      canvas: {},
+      code: "08689",
+      name_en: "Sleigh Ride",
+      name_ru: "Санная прогулка",
+      design_width: 38,
+      design_length: 28,
+      stitches_count: 30000,
+      sharms: "Отсутствуют",
+      colors_count: 57,
+      beads_available: false
+    }
+  })
+
   const manufacturer = await prisma.manufacturers.create({
     data: { name: "Dimensions" }
   })
@@ -30,22 +48,7 @@ async function init() {
       canvas_size_uuid: canvasSize.uuid
     }
   })
-  await prisma.kits.create({
-    data: {
-      manufacturer_uuid: manufacturer.uuid,
-      series_uuid: series.uuid,
-      canvas_uuid: canvas.uuid,
-      code: "08689",
-      name_en: "Sleigh Ride",
-      name_ru: "Санная прогулка",
-      design_width: 38,
-      design_length: 28,
-      design_size: 20,
-      sharms: "Отсутствуют",
-      colors_count: 57,
-      beads_available: false
-    }
-  })*/
+
 }
 
 init()
