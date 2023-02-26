@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model canvas_colors {
+  uuid        String      @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  name        String?     @db.VarChar
+  created_at  DateTime?   @db.Timestamptz(6)
+  updated_at  DateTime?   @db.Timestamptz(6)
+  canvas      canvases[]
+}
+
+model canvas_names {
+  uuid        String      @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  name        String?     @db.VarChar
+  created_at  DateTime?   @db.Timestamptz(6) @default(now())
+  updated_at  DateTime?   @db.Timestamptz(6) @default(now())
+  canvas      canvases[]
+}
+
+model canvas_sizes {
+  uuid        String      @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  size        Int?
+  created_at  DateTime?   @db.Timestamptz(6) @default(now())
+  updated_at  DateTime?   @db.Timestamptz(6) @default(now())
+  canvas      canvases[]
+}
+
+model canvases {
+  uuid               String          @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  canvas_name_uuid   String?         @db.Uuid
+  canvas_color_uuid  String?         @db.Uuid
+  canvas_size_uuid   String?         @db.Uuid
+  kit_uuid           String          @db.Uuid @unique
+  created_at         DateTime?       @db.Timestamptz(6) @default(now())
+  updated_at         DateTime?       @db.Timestamptz(6) @default(now())
+  canvas_name        canvas_names?   @relation(fields: [canvas_name_uuid], references: [uuid])
+  canvas_color       canvas_colors?  @relation(fields: [canvas_color_uuid], references: [uuid])
+  canvas_size        canvas_sizes?   @relation(fields: [canvas_size_uuid], references: [uuid])
+  kit                kits            @relation(fields: [kit_uuid], references: [uuid])
+}
+
+model files {
+  uuid        String     @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  kit_uuid    String     @db.Uuid
+  name        String?    @db.VarChar
+  data        String?    @db.VarChar
+  created_at  DateTime?  @db.Timestamptz(6) @default(now())
+  updated_at  DateTime?  @db.Timestamptz(6) @default(now())
+  kit         kits       @relation(fields: [kit_uuid], references: [uuid])
+}
+
+model manufacturers {
+  uuid        String     @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  name        String?    @db.VarChar
+  created_at  DateTime?  @db.Timestamptz(6) @default(now())
+  updated_at  DateTime?  @db.Timestamptz(6) @default(now())
+  kits        kits[]
+  series      series[]
+}
+
+model series {
+  uuid               String         @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  manufacturer_uuid  String         @db.Uuid
+  name               String?        @db.VarChar
+  created_at         DateTime?      @db.Timestamptz(6) @default(now())
+  updated_at         DateTime?      @db.Timestamptz(6) @default(now())
+  manufacturer       manufacturers  @relation(fields: [manufacturer_uuid], references: [uuid])
+  kits               kits[]
+}
+
+model kits {
+  uuid              String           @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  manufacturer_uuid String?          @db.Uuid
+  series_uuid       String?          @db.Uuid
+  canvas            canvases?
+  files             files[]
+  kits_palettes     kits_palettes[]
+  kits_threads      kits_threads[]
+  code              String?          @db.VarChar
+  name_en           String?          @db.VarChar
+  name_ru           String?          @db.VarChar
+  design_width      Int?
+  design_length     Int?
+  stitches_count    Int?
+  sharms            String?          @db.VarChar
+  colors_count      Int?
+  beads_available   Boolean?
+  created_at        DateTime?        @db.Timestamptz(6) @default(now())
+  updated_at        DateTime?        @db.Timestamptz(6) @default(now())
+  manufacturer      manufacturers?   @relation(fields: [manufacturer_uuid], references: [uuid])
+  series            series?          @relation(fields: [series_uuid], references: [uuid])
+}
+
+model kits_palettes {
+  uuid          String     @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  kit_uuid      String     @db.Uuid
+  palette_uuid  String     @db.Uuid
+  order_number  Int?
+  created_at    DateTime?  @db.Timestamptz(6) @default(now())
+  updated_at    DateTime?  @db.Timestamptz(6) @default(now())
+  kit           kits       @relation(fields: [kit_uuid], references: [uuid])
+  palette       palettes   @relation(fields: [palette_uuid], references: [uuid])
+}
+
+model kits_threads {
+  uuid                   String                   @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  kit_uuid               String                   @db.Uuid
+  order_number           Int
+  quantity               Int?
+  created_at             DateTime?                @db.Timestamptz(6) @default(now())
+  updated_at             DateTime?                @db.Timestamptz(6) @default(now())
+  kit                    kits                     @relation(fields: [kit_uuid], references: [uuid])
+  kits_threads_variants  kits_threads_variants[]
+}
+
+model kits_threads_variants {
+  uuid               String        @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  kits_threads_uuid  String        @db.Uuid
+  thread_uuid        String        @db.Uuid
+  created_at         DateTime?     @db.Timestamptz(6) @default(now())
+  updated_at         DateTime?     @db.Timestamptz(6) @default(now())
+  kit_thread         kits_threads  @relation(fields: [kits_threads_uuid], references: [uuid])
+  thread             threads       @relation(fields: [thread_uuid], references: [uuid])
+}
+
+model threads {
+  uuid                   String                   @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  palette_uuid           String                   @db.Uuid
+  name                   String?                  @db.VarChar
+  number                 String?                  @db.VarChar
+  color                  String?                  @db.VarChar
+  created_at             DateTime?                @db.Timestamptz(6) @default(now())
+  updated_at             DateTime?                @db.Timestamptz(6) @default(now())
+  palette                palettes                 @relation(fields: [palette_uuid], references: [uuid])
+  kits_threads_variants  kits_threads_variants[]
+}
+
+model palettes {
+  uuid           String           @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  name           String?          @db.VarChar
+  created_at     DateTime?        @db.Timestamptz(6) @default(now())
+  updated_at     DateTime?        @db.Timestamptz(6) @default(now())
+  threads        threads[]
+  kits_palettes  kits_palettes[]
+}
+
