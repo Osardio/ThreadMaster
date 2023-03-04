@@ -7,31 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model canvas_colors {
+model CanvasColor {
+  @@map("canvas_colors")
   uuid       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String?    @unique @db.VarChar
   created_at DateTime?  @db.Timestamptz(6)
   updated_at DateTime?  @db.Timestamptz(6)
-  canvas     canvases[]
+  canvas     Canvas[]
 }
 
-model canvas_names {
+model CanvasName {
+  @@map("canvas_names")
   uuid       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String?    @unique @db.VarChar
   created_at DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at DateTime?  @default(now()) @db.Timestamptz(6)
-  canvas     canvases[]
+  canvas     Canvas[]
 }
 
-model canvas_sizes {
+model CanvasSize {
+  @@map("canvas_sizes")
   uuid       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   size       Int?       @unique
   created_at DateTime?  @default(now()) @db.Timestamptz(6)
   updated_at DateTime?  @default(now()) @db.Timestamptz(6)
-  canvas     canvases[]
+  canvas     Canvas[]
 }
 
-model canvases {
+model Canvas {
+  @@map("canvases")
   uuid              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   canvas_name_uuid  String?        @db.Uuid
   canvas_color_uuid String?        @db.Uuid
@@ -39,13 +43,14 @@ model canvases {
   kit_uuid          String         @unique @db.Uuid
   created_at        DateTime?      @default(now()) @db.Timestamptz(6)
   updated_at        DateTime?      @default(now()) @db.Timestamptz(6)
-  canvas_name       canvas_names?  @relation(fields: [canvas_name_uuid], references: [uuid], onDelete: SetNull)
-  canvas_color      canvas_colors? @relation(fields: [canvas_color_uuid], references: [uuid], onDelete: SetNull)
-  canvas_size       canvas_sizes?  @relation(fields: [canvas_size_uuid], references: [uuid], onDelete: SetNull)
-  kit               kits           @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
+  canvas_name       CanvasName?    @relation(fields: [canvas_name_uuid], references: [uuid], onDelete: SetNull)
+  canvas_color      CanvasColor?   @relation(fields: [canvas_color_uuid], references: [uuid], onDelete: SetNull)
+  canvas_size       CanvasSize?    @relation(fields: [canvas_size_uuid], references: [uuid], onDelete: SetNull)
+  kit               Kit            @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
 }
 
-model files {
+model File {
+  @@map("files")
   uuid       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   kit_uuid   String    @db.Uuid
   name       String?   @db.VarChar
@@ -53,31 +58,34 @@ model files {
   file_type  file_type @default(OTHER)
   created_at DateTime? @default(now()) @db.Timestamptz(6)
   updated_at DateTime? @default(now()) @db.Timestamptz(6)
-  kit        kits      @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
+  kit        Kit       @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
 }
 
-model manufacturers {
+model Manufacturer {
+  @@map("manufacturers")
   uuid       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String    @unique @db.VarChar
   created_at DateTime? @default(now()) @db.Timestamptz(6)
   updated_at DateTime? @default(now()) @db.Timestamptz(6)
-  kits       kits[]
-  series     series[]
+  kits       Kit[]
+  series     Series[]
 }
 
-model series {
+model Series {
+  @@map("series")
   uuid              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   manufacturer_uuid String?        @db.Uuid
   name              String?        @db.VarChar
   created_at        DateTime?      @default(now()) @db.Timestamptz(6)
   updated_at        DateTime?      @default(now()) @db.Timestamptz(6)
-  manufacturer      manufacturers? @relation(fields: [manufacturer_uuid], references: [uuid], onDelete: SetNull)
-  kits              kits[]
+  manufacturer      Manufacturer?  @relation(fields: [manufacturer_uuid], references: [uuid], onDelete: SetNull)
+  kits              Kit[]
 
   @@unique([name, manufacturer_uuid])
 }
 
-model kits {
+model Kit {
+  @@map("kits")
   uuid              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   manufacturer_uuid String?         @db.Uuid
   series_uuid       String?         @db.Uuid
@@ -92,58 +100,62 @@ model kits {
   beads_available   Boolean?
   created_at        DateTime?       @default(now()) @db.Timestamptz(6)
   updated_at        DateTime?       @default(now()) @db.Timestamptz(6)
-  canvas            canvases?
-  files             files[]
-  kits_palettes     kits_palettes[]
-  kits_threads      kits_threads[]
-  manufacturer      manufacturers?  @relation(fields: [manufacturer_uuid], references: [uuid], onDelete: SetNull)
-  series            series?         @relation(fields: [series_uuid], references: [uuid], onDelete: SetNull)
+  canvas            Canvas?
+  files             File[]
+  kits_palettes     KitPalette[]
+  kits_threads      KitThread[]
+  manufacturer      Manufacturer?   @relation(fields: [manufacturer_uuid], references: [uuid], onDelete: SetNull)
+  series            Series?         @relation(fields: [series_uuid], references: [uuid], onDelete: SetNull)
 
   @@unique([manufacturer_uuid, series_uuid, code])
 }
 
-model kits_palettes {
+model KitPalette {
+  @@map("kits_palettes")
   uuid                  String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   kit_uuid              String                  @db.Uuid
   palette_uuid          String                  @db.Uuid
   order_number          Int?
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
-  kit                   kits                    @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
-  palette               palettes                @relation(fields: [palette_uuid], references: [uuid], onDelete: Cascade)
-  kits_threads_variants kits_threads_variants[]
+  kit                   Kit                     @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
+  palette               Palette                 @relation(fields: [palette_uuid], references: [uuid], onDelete: Cascade)
+  kits_threads_variants KitThreadVariant[]
 
   @@unique([kit_uuid, palette_uuid])
 }
 
-model kits_threads {
+model KitThread {
+  @@map("kits_threads")
   uuid                  String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   kit_uuid              String                  @db.Uuid
   order_number          Int
   quantity              Int?
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
-  kit                   kits                    @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
-  kits_threads_variants kits_threads_variants[]
+  kit                   Kit                     @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
+  kits_threads_variants KitThreadVariant[]
 
   @@unique([kit_uuid, order_number])
 }
 
-model kits_threads_variants {
+model KitThreadVariant {
+  @@map("kits_threads_variants")
   uuid              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   kits_threads_uuid String        @db.Uuid
   thread_uuid       String        @db.Uuid
   kit_palette_uuid  String        @db.Uuid
   created_at        DateTime?     @default(now()) @db.Timestamptz(6)
   updated_at        DateTime?     @default(now()) @db.Timestamptz(6)
-  kit_thread        kits_threads  @relation(fields: [kits_threads_uuid], references: [uuid], onDelete: Cascade)
-  thread            threads       @relation(fields: [thread_uuid], references: [uuid], onDelete: Cascade)
-  kit_palette       kits_palettes @relation(fields: [kit_palette_uuid], references: [uuid], onDelete: Cascade)
+  kit_thread        KitThread     @relation(fields: [kits_threads_uuid], references: [uuid], onDelete: Cascade)
+  thread            Thread        @relation(fields: [thread_uuid], references: [uuid], onDelete: Cascade)
+  kit_palette       KitPalette    @relation(fields: [kit_palette_uuid], references: [uuid], onDelete: Cascade)
 
   @@unique([kits_threads_uuid, kit_palette_uuid])
 }
 
-model threads {
+model Thread {
+  @@map("threads")
   uuid                  String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   palette_uuid          String                  @db.Uuid
   name                  String?                 @db.VarChar
@@ -151,19 +163,20 @@ model threads {
   color                 String?                 @db.VarChar
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
-  palette               palettes                @relation(fields: [palette_uuid], references: [uuid], onDelete: Cascade)
-  kits_threads_variants kits_threads_variants[]
+  palette               Palette                 @relation(fields: [palette_uuid], references: [uuid], onDelete: Cascade)
+  kits_threads_variants KitThreadVariant[]
 
   @@unique([palette_uuid, code])
 }
 
-model palettes {
+model Palette {
+  @@map("palettes")
   uuid          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String?         @unique @db.VarChar
   created_at    DateTime?       @default(now()) @db.Timestamptz(6)
   updated_at    DateTime?       @default(now()) @db.Timestamptz(6)
-  threads       threads[]
-  kits_palettes kits_palettes[]
+  threads       Thread[]
+  kits_palettes KitPalette[]
 }
 
 enum file_type {
