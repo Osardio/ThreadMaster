@@ -9,8 +9,17 @@ export class Rest {
       res.send('Hello World!');
     });
     app.post('/admin/generate',async (req, res) => {
-      await Repository.generateTestData()
-      res.send('Test data successfully created.')
+      const creationResult = await Repository.generateTestData()
+      switch (creationResult) {
+        case "ok": res.send({ message: "Test data successfully created"}); break;
+        case "present": res.send({ message: "Test data is already present"}); break;
+        default: {
+          res.status(500)
+          res.send({ message: "Failed to create test data"})
+          break;
+        }
+      }
+
     });
     app.listen(port, () => {
       return console.log(`Express is listening at http://localhost:${port}`);
