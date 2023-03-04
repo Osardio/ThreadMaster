@@ -42,7 +42,7 @@ model canvases {
   canvas_name       canvas_names?  @relation(fields: [canvas_name_uuid], references: [uuid], onDelete: SetNull)
   canvas_color      canvas_colors? @relation(fields: [canvas_color_uuid], references: [uuid], onDelete: SetNull)
   canvas_size       canvas_sizes?  @relation(fields: [canvas_size_uuid], references: [uuid], onDelete: SetNull)
-  kit               kits           @relation(fields: [kit_uuid], references: [uuid])
+  kit               kits           @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
 }
 
 model files {
