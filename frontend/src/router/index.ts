@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import CatalogPage from '../views/CatalogPage.vue'
-import DirectoryPage from '../views/DirectoryPage.vue'
+import CatalogPage from "@/views/CatalogPage.vue"
+import DirectoryPage from "@/views/DirectoryPage.vue"
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'catalog', component: CatalogPage, meta: { title: "Каталог"} },
@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
 

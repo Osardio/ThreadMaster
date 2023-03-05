@@ -49,7 +49,7 @@ export class Rest {
     this.crudEntities.forEach((entity: string) => {
       app.get("/"+entity, async (req: Request, res: Response) => {
         try {
-          if (req.query["uuid"] == null) {
+          if (!req.query["uuid"]) {
             res.send(await SimpleCrud.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
           } else {
             res.send(await SimpleCrud.getEntity(entity, req.query["uuid"].toString()))

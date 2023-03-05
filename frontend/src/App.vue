@@ -1,18 +1,19 @@
 <script>
-import LeftPanel from "@/components/LeftPanel";
+import LeftPanel from "@/components/LeftPanel.vue";
 export default {
   components: {LeftPanel},
   name: 'App',
   watch: {
     $route: {
       immediate: true,
-      handler(to, from) {
+      handler(to) {
         document.title = to.meta.title || 'ThreadMaster';
       }
     },
   }
 }
 </script>
+
 <template>
   <div class="application">
     <LeftPanel/>
@@ -21,31 +22,38 @@ export default {
     </div>
   </div>
 </template>
-<style>
+
+<style lang="scss">
+@import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: inline;
+}
+
+html {
+  height: 100%;
 }
 
 body {
+  height: 100vh;
   overflow: hidden;
   margin: 0;
 }
 
 .application {
-  margin: 8px;
+  min-height: 100%;
   display: flex;
-  height: 100vh;
+  box-sizing: border-box;
+  background-color: #404040;
 }
 
 .main-area {
+  border-left: 1px solid #2F2F2F;
   display: block;
-  width: 80vw;
-  background-color: lightgray;
+  width: 100%;
+  background-color: #383838;
 }
 
 </style>
-

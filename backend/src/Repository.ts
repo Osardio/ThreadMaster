@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Kit } from '@prisma/client'
 import Tools from "./Tools";
 import path from "path";
 export const prisma = new PrismaClient()
@@ -13,22 +13,22 @@ export default class Repository {
       })
       const palette = await prisma.palette.create({
         data: { name: "J & P Coats" }
-      }).catch()
+      })
       const thread1 = await prisma.thread.create({
         data: { code: "13013", name: "Red", color: "#FF0000", palette_uuid: palette.uuid }
-      }).catch()
+      })
       const thread2 = await prisma.thread.create({
         data: { code: "13336", name: "Lt. orange", color: "#FFC300", palette_uuid: palette.uuid }
-      }).catch()
+      })
       const thread3 = await prisma.thread.create({
         data: { code: "16878", name: "Green", color: "#38d900", palette_uuid: palette.uuid }
-      }).catch()
+      })
       const thread4 = await prisma.thread.create({
         data: { code: "17181", name: "Blue", color: "#0022ff", palette_uuid: palette.uuid }
-      }).catch()
+      })
       const thread5 = await prisma.thread.create({
         data: { code: "17981", name: "Very dk. blue", color: "#000777", palette_uuid: palette.uuid }
-      }).catch()
+      })
       if ((await prisma.kit.findFirst({ where: { code: "08689", manufacturer_uuid: manufacturer.uuid  } })) !== null) return "present"
       const kit = await prisma.kit.create({
         data: {
@@ -46,7 +46,7 @@ export default class Repository {
           files: {
             create: {
               name: "sleigh_ride.png",
-              data: Tools.base64_encode(image_path),
+              data: await Tools.base64_encode(image_path),
               file_type: "FRONT"
             }
           },

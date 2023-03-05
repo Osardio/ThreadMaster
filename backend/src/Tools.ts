@@ -1,4 +1,4 @@
-import fs = require('fs');
+import fs = require('fs/promises');
 
 export default class Tools {
   static uuidV4(): string {
@@ -10,8 +10,8 @@ export default class Tools {
     );
   }
 
-  static base64_encode(filePath: string): string {
-    return fs.readFileSync(filePath, { encoding: 'base64' });
+  static async base64_encode(filePath: string): Promise<string> {
+    return fs.readFile(filePath, { encoding: 'base64' });
   }
 }
 
