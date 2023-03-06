@@ -1,9 +1,21 @@
-import { PrismaClient, Kit } from '@prisma/client'
+import {File, PrismaClient} from '@prisma/client'
 import Tools from "./Tools";
 import path from "path";
+
 export const prisma = new PrismaClient()
 
 export default class Repository {
+
+  static async getKitPreviewByKitUuid(kitUuid: string) : Promise<File | null> {
+    // TODO change this to actual image preview
+    try {
+      return await prisma.file.findFirst({
+        where: { kit_uuid: kitUuid }
+      })
+    } catch (e) {
+      return null
+    }
+  }
 
   static async generateTestData() : Promise<string> {
     try {
@@ -112,5 +124,7 @@ export default class Repository {
       return "error"
     }
   }
+
+
 }
 

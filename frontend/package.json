@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/node": "^18.14.6",
+    "pinia": "^2.0.32",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
     "url": "^0.11.0",

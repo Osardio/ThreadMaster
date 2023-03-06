@@ -1,7 +1,9 @@
 <script>
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "AppLogo"
-}
+})
 </script>
 
 <template>
@@ -19,8 +21,8 @@ export default {
   align-items: center;
 }
 .logo-image {
-  width: 128px;
-  height: 128px;
+  width: 64px;
+  height: 64px;
 }
 .logo-label {
   color: white;

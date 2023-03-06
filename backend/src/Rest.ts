@@ -3,7 +3,7 @@ import Repository from "./Repository";
 import SimpleCrud from "./SimpleCrud";
 import cors from "cors";
 const app = express();
-const port = 3000;
+const port = 7000;
 
 export class Rest {
 
@@ -21,6 +21,26 @@ export class Rest {
     await this.initSimpleCrud()
     app.get("/health", (req, res) => {
       res.send("Ok");
+    });
+    app.get("/image_preview", async (req, res) => {
+      if (!req.query["uuid"]) {
+        res.status(204)
+        res.send({ message: "No uuid provided"})
+      } else {
+        try {
+          const image = await Repository.getKitPreviewByKitUuid(req.query["uuid"].toString())
+          if (image) {
+            res.type(`image/${image.name.split(".").at(-1)}`)
+            res.end(Buffer.from(image.data, 'base64'));
+          } else {
+            res.status(404)
+            res.send({ error: "Not Found"})
+          }
+        } catch (e) {
+          res.status(500)
+          res.send({ error: "Internal Server Error"})
+        }
+      }
     });
     app.post("/admin/generate",async (req, res) => {
       try {

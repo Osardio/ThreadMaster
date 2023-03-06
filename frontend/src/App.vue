@@ -49,11 +49,4 @@ body {
   background-color: #404040;
 }
 
-.main-area {
-  border-left: 1px solid #2F2F2F;
-  display: block;
-  width: 100%;
-  background-color: #383838;
-}
-
 </style>

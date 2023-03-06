@@ -1,17 +1,19 @@
 <script>
 import NavBar from "@/components/NavBar.vue";
 import AppLogo from "@/components/AppLogo.vue";
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "LeftPanel",
   components: {
     AppLogo,
     NavBar
   }
-}
+})
 </script>
 
 <template>
-  <div class="panel-left">
+  <div class="panel">
     <AppLogo/>
     <NavBar/>
   </div>
@@ -19,11 +21,5 @@ export default {
 </template>
 
 <style scoped>
-.panel-left {
-  padding: 4px;
-  min-height: 100%;
-  background-color: #404040;
-}
-
 
 </style>

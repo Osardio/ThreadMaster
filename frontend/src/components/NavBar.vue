@@ -1,13 +1,15 @@
 <script>
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "NavBar"
-}
+})
 </script>
 
 <template>
   <nav class="navbar">
-    <router-link class="nav-button" to="/"><i class='bx bxs-book'></i> Каталог</router-link>
-    <router-link class="nav-button" to="/directories"><i class='bx bxs-book-content' ></i> Справочники</router-link>
+    <router-link class="nav-button" to="/"><i class='nav-icon bx bxs-book'></i>Каталог</router-link>
+    <router-link class="nav-button" to="/directories"><i class='nav-icon bx bxs-book-content'></i>Справочники</router-link>
   </nav>
 </template>
 
@@ -16,16 +18,23 @@ nav a.router-link-exact-active {
   background-color: #565656;
 }
 
+.nav-icon {
+  margin-right: 4px;
+  height: 14px;
+  width: 14px;
+}
+
 .navbar {
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
 }
 
 .nav-button {
-  margin: 4px;
-  font-weight: bold;
-  color: #B0B0B0;
+  display: flex;
+  align-items: center;
+  margin: 1px;
+  padding-left: 4px;
   text-decoration: none;
   border-radius: 3px;
 }
