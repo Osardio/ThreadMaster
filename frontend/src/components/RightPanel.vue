@@ -14,4 +14,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.panel-right {
+  padding: 25px;
+}
 </style>

@@ -1,7 +1,8 @@
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import Repository from "./Repository";
 import SimpleCrud from "./SimpleCrud";
 import cors from "cors";
+import {tryCatch} from "./Utils";
 const app = express();
 const port = 7000;
 
@@ -19,12 +20,12 @@ export class Rest {
     app.use(express.urlencoded({ limit: "150mb", extended: true }));
     app.set("case sensitive routing", true)
     await this.initSimpleCrud()
-    app.get("/health", (req, res) => {
+    app.get("/health", tryCatch((req, res) => {
       res.send("Ok");
-    });
-    app.get("/image_preview", async (req, res) => {
+    }));
+    app.get("/image_preview", tryCatch(async (req, res) => {
       if (!req.query["uuid"]) {
-        res.status(204)
+        res.status(400)
         res.send({ message: "No uuid provided"})
       } else {
         try {
@@ -34,79 +35,65 @@ export class Rest {
             res.end(Buffer.from(image.data, 'base64'));
           } else {
             res.status(404)
-            res.send({ error: "Not Found"})
+            res.json({ error: "Not Found"})
           }
         } catch (e) {
+          console.log(`GET /image_preview error: `, e)
           res.status(500)
-          res.send({ error: "Internal Server Error"})
+          res.json({ error: "Internal Server Error"})
         }
       }
-    });
-    app.post("/admin/generate",async (req, res) => {
-      try {
-        const creationResult = await Repository.generateTestData()
-        switch (creationResult) {
-          case "ok": res.send({ message: "Test data successfully created"}); break;
-          case "present": res.send({ message: "Test data is already present"}); break;
-          default: {
-            res.status(500)
-            res.send({ message: "Failed to create test data"})
-            break;
-          }
+    }));
+    app.post("/admin/generate",tryCatch(async (req, res, _next) => {
+      const creationResult = await Repository.generateTestData()
+      switch (creationResult) {
+        case "ok": res.json({ message: "Test data successfully created"}); break;
+        case "present": res.json({ message: "Test data is already present"}); break;
+        default: {
+          res.status(500)
+          res.json({ message: "Failed to create test data"})
+          break;
         }
-      } catch (e) {
-        res.status(500)
-        res.send({ error: "Internal Server Error"} )
       }
-
-    });
+    }));
+    app.use(this.errorHandler)
     app.listen(port, () => {
       return console.log(`Express is listening at http://localhost:${port}`);
     });
   }
 
+  private errorHandler(error: Error, req: Request, res: Response, _next: NextFunction) {
+    console.log(`${req.method} ${req.path} error: `, error)
+    res.status(500)
+    res.json({ message: error.name, details: error.stack})
+  }
+
   private async initSimpleCrud() {
     this.crudEntities.forEach((entity: string) => {
-      app.get("/"+entity, async (req: Request, res: Response) => {
-        try {
-          if (!req.query["uuid"]) {
-            res.send(await SimpleCrud.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
-          } else {
-            res.send(await SimpleCrud.getEntity(entity, req.query["uuid"].toString()))
-          }
-        } catch (e) {
-          console.log(`GET /${entity} error: `, e)
-          res.status(500)
-          res.send({ error: "Internal Server Error"} )
+      app.get("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        if (!req.query["uuid"]) {
+          res.json(await SimpleCrud.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
+        } else {
+          res.json(await SimpleCrud.getEntity(entity, req.query["uuid"].toString()))
         }
-      })
-      app.post("/"+entity, async (req: Request, res: Response) => {
-        try {
-          res.send(await SimpleCrud.createEntity(entity, req.body))
-        } catch (e) {
-          console.log(`POST /${entity} error: `, e)
-          res.status(500)
-          res.send({ error: "Internal Server Error"} )
+      }))
+      app.post("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        res.json(await SimpleCrud.createEntity(entity, req.body))
+      }))
+      app.put("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        res.json(await SimpleCrud.updateEntity(entity, req.body))
+      }))
+      app.patch("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        if (req.query["uuid"]) {
+          res.json(await SimpleCrud.updateEntity(entity, req.body, req.query["uuid"].toString()))
+        } else {
+          res.status(400)
+          res.send({ message: "No uuid provided"})
         }
-      })
-      app.patch("/"+entity, async (req: Request, res: Response) => {
-        try {
-          res.send(await SimpleCrud.updateEntity(entity, req.body))
-        } catch (e) {
-          console.log(`PATCH /${entity} error: `, e)
-          res.status(500)
-          res.send({ error: "Internal Server Error"} )
-        }
-      })
-      app.delete("/"+entity, async (req: Request, res: Response) => {
-        try {
-          res.send(await SimpleCrud.deleteEntity(entity, req.body))
-        } catch (e) {
-          console.log(`DELETE /${entity} error: `, e)
-          res.status(500)
-          res.send({ error: "Internal Server Error"} )
-        }
-      })
+      }))
+      app.delete("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        res.json(await SimpleCrud.deleteEntity(entity, req.body))
+      }))
     })
   }
 }

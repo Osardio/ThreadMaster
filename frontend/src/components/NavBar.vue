@@ -25,6 +25,7 @@ nav a.router-link-exact-active {
 }
 
 .navbar {
+  margin-top: 10px;
   text-align: left;
   display: flex;
   flex-direction: column;

@@ -2,16 +2,18 @@
 import {useKitStore} from "@/stores/KitStore";
 import { Kit } from "#/Types";
 import {defineComponent, PropType} from "vue";
+import ImageWrapper from "@/ui/ImageWrapper.vue";
 
 export default defineComponent({
-  name: "Kit",
+  name: "KitCard",
+  components: {ImageWrapper},
   setup() {
     const kitStore = useKitStore()
     return { kitStore }
   },
   computed: {
     kitSelected() {
-      return this.kitStore.activeKit == this.kit.uuid
+      return this.kitStore.kit.uuid === this.kit.uuid
     }
   },
   props: {
@@ -23,19 +25,25 @@ export default defineComponent({
   },
   methods: {
     setActive() {
-      this.kitStore.setActiveKit(this.kit.uuid)
+      this.kitStore.setActiveKit(this.kit)
     }
   }
 })
 </script>
 
 <template>
-  <div :class="{'kit': true, 'kit-selected': kitSelected}"
-       @click="setActive">
-    <img class="kit-preview" src="http://localhost:7000/image_preview?uuid=a0e98e8c-02be-4f7e-b8e1-cd11790751c8" :alt="kit.code">
-    <div>
-      <div class="kit-label">{{ `${kit.code} ${kit.name_ru}` }}</div>
+  <div
+      :class="{'kit': true, 'kit-selected': kitSelected}"
+       @click="setActive"
+  >
+    <div class="kit-preview-container">
+      <ImageWrapper
+          class="kit-preview"
+          :src="`${this.kitStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
+          :alt="kit.code"
+      />
     </div>
+    <div class="kit-label">{{ `${kit.code} ${kit.name_en}` }}</div>
   </div>
 </template>
 
@@ -44,26 +52,34 @@ export default defineComponent({
   margin: 4px;
   display: flex;
   flex-direction: column;
-  max-width: 150px;
-  max-height: 166px;
+  width: 150px;
+  height: 150px;
   background-color: #444444;
   border: 1px solid #565656;
   border-radius: 2px;
+  justify-content: space-between;
 }
 
 .kit:hover {
   cursor: pointer;
 }
 
+.kit-preview-container {
+  display: flex;
+  width: 150px;
+  height: 134px;
+}
+
 .kit-preview {
   width: 100%;
   object-fit: contain;
-  border: 1px solid #2B2B2B;
+  outline: 1px solid #2B2B2B;
 }
 
 .kit-label {
   font-size: 12px;
   word-wrap: break-word;
+  text-align: center;
 }
 
 .kit-selected {

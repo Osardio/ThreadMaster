@@ -18,8 +18,14 @@ export default class SimpleCrud {
     return await prisma[type].create({ data: body })
   }
 
-  static async updateEntity<Type extends DomainEntity>(type: string, body: Type) : Promise<DomainEntity> {
-    return await prisma[type].update({ where: { uuid: body.uuid } })
+  static async updateEntity<Type extends DomainEntity>(type: string, body: Type, uuid?: string) : Promise<DomainEntity> {
+    if (uuid) {
+      // update specific field
+      return await prisma[type].update({ where: { uuid: uuid }, data: body })
+    } else {
+      // update whole entity
+      return await prisma[type].update({ where: { uuid: body.uuid }, data: body })
+    }
   }
 
   static async deleteEntity<Type extends DomainEntity>(type: string, body: Type) : Promise<DomainEntity> {

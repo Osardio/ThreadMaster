@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import CatalogPage from "@/views/CatalogPage.vue"
-import DirectoryPage from "@/views/DirectoryPage.vue"
+import CatalogPage from "@/pages/CatalogPage.vue"
+import DirectoryPage from "@/pages/DirectoryPage.vue"
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'catalog', component: CatalogPage, meta: { title: "Каталог"} },

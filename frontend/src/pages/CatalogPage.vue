@@ -1,24 +1,29 @@
 <script lang="ts">
 import {useKitStore} from "@/stores/KitStore";
 import RightPanel from "@/components/RightPanel.vue";
-import Kit from "@/components/Kit.vue";
+import Kit from "@/components/KitCard.vue";
 import {defineComponent} from "vue";
+import KitSideInfo from "@/components/KitSideInfo.vue";
 
 
 export default defineComponent({
   name: 'CatalogPage',
+  setup() {
+    const kitStore = useKitStore()
+    return { kitStore }
+  },
   data() {
     return {
       kitStore: useKitStore(),
-      metaEnv: import.meta.env
     }
   },
   components: {
+    KitSideInfo,
     Kit,
     RightPanel
   },
   mounted() {
-    this.kitStore.getKits()
+    this.kitStore.fetchKits()
   }
 })
 
@@ -27,7 +32,6 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
-      {{ metaEnv }}
       <div class="kits">
         <Kit
             v-for="kit of kitStore.kits"
@@ -36,10 +40,13 @@ export default defineComponent({
         ></Kit>
       </div>
     </div>
-    <RightPanel/>
+    <RightPanel>
+      <KitSideInfo
+        :kit="kitStore.kit"
+      />
+    </RightPanel>
   </div>
 </template>
-
 
 <style lang="scss">
 $header-font-size: 24px;
@@ -51,6 +58,7 @@ $header-margin: 6px;
   overflow-anchor: none;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   height: 100%;
 }
 .top-label {
