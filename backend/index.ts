@@ -1,4 +1,4 @@
-import {Rest} from "./Rest";
+import {Rest} from "./src/Rest";
 
 async function init() {
   await new Rest().init()

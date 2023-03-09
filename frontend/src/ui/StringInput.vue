@@ -61,7 +61,7 @@ export default defineComponent({
   font-size: 16px;
   background-color: #2D2D2D;
   border: 1px solid #212121;
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 0 10px;
   height: 30px;
   width: 100%;

@@ -3,7 +3,7 @@ import {useKitStore} from "@/stores/KitStore";
 import RightPanel from "@/components/RightPanel.vue";
 import Kit from "@/components/KitCard.vue";
 import {defineComponent} from "vue";
-import KitSideInfo from "@/components/KitSideInfo.vue";
+import KitSideInfo from "@/components/KitSideBar.vue";
 
 
 export default defineComponent({
@@ -60,6 +60,9 @@ $header-margin: 6px;
   flex-wrap: wrap;
   flex-direction: row;
   height: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 .top-label {
   font-size: $header-font-size;

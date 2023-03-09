@@ -1,6 +1,10 @@
 $panel-width: 300px;
+$color: #EBEBEB;
 
 * {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     color: #EBEBEB;
     -webkit-user-drag: none;
     box-sizing: border-box;

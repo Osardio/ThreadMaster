@@ -25,10 +25,8 @@ export default {
 
 <style lang="scss">
 @import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
+@import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
 #app {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   display: inline;
 }
 

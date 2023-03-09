@@ -15,9 +15,11 @@
     "sass-loader": "^13.2.0",
     "url": "^0.11.0",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue-select": "^4.0.0-beta.6"
   },
   "devDependencies": {
+    "@types/vue-select": "^3.16.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "eslint": "^8.35.0",
     "typescript": "^4.9.3",

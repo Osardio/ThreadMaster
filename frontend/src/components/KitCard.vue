@@ -3,13 +3,15 @@ import {useKitStore} from "@/stores/KitStore";
 import { Kit } from "#/Types";
 import {defineComponent, PropType} from "vue";
 import ImageWrapper from "@/ui/ImageWrapper.vue";
+import {useCommonStore} from "@/stores/CommonStore";
 
 export default defineComponent({
   name: "KitCard",
   components: {ImageWrapper},
   setup() {
     const kitStore = useKitStore()
-    return { kitStore }
+    const commonStore = useCommonStore()
+    return { kitStore, commonStore }
   },
   computed: {
     kitSelected() {
@@ -39,7 +41,7 @@ export default defineComponent({
     <div class="kit-preview-container">
       <ImageWrapper
           class="kit-preview"
-          :src="`${this.kitStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
+          :src="`${this.commonStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
           :alt="kit.code"
       />
     </div>

@@ -1,12 +1,12 @@
 import {defineStore} from "pinia";
 import {Kit} from "#/Types";
+import {useCommonStore} from "@/stores/CommonStore";
 
 export const useKitStore = defineStore("kitStore", {
   state: () => {
     return {
       kits: [] as Kit[],
       kit: {} as Kit,
-      backendUrl: import.meta.env.VITE_BACKEND_URL
     }},
   getters: {
     dimensions() : Kit[] {
@@ -15,7 +15,8 @@ export const useKitStore = defineStore("kitStore", {
   },
   actions: {
     async fetchKits() {
-      const res = await fetch(`${this.backendUrl}/kit`)
+      const backendUrl = useCommonStore().backendUrl
+      const res = await fetch(`${backendUrl}/kit`)
       this.kits = (await res.json() as Kit[]).concat(mockKits)
     },
     setActiveKit(kit: Kit) {
@@ -23,7 +24,8 @@ export const useKitStore = defineStore("kitStore", {
     },
     async updateKit(updatedProperty: object) {
       console.log('updated prop: ',updatedProperty)
-      const res = await fetch(`${this.backendUrl}/kit?uuid=${this.kit.uuid}`,{
+      const backendUrl = useCommonStore().backendUrl
+      const res = await fetch(`${backendUrl}/kit?uuid=${this.kit.uuid}`,{
         body: JSON.stringify(updatedProperty),
         method: 'PATCH',
         headers: new Headers({ "Content-Type": "application/json" })
