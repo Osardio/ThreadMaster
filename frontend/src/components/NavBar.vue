@@ -38,6 +38,7 @@ nav a.router-link-exact-active {
   padding-left: 4px;
   text-decoration: none;
   border-radius: 3px;
+  font-size: 16px;
 }
 
 .nav-button:hover {

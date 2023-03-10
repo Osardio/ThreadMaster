@@ -75,7 +75,6 @@ export default defineComponent({
 .kit-preview {
   width: 100%;
   object-fit: contain;
-  outline: 1px solid #2B2B2B;
 }
 
 .kit-label {

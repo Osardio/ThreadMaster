@@ -1,17 +1,3 @@
-<template>
-  <div class="select-input">
-    <label class="select-input-label">{{caption}}</label>
-    <VueSelect
-        :label="label"
-        :options="options"
-        :clearable="clearable"
-        v-model="val"
-        @option:selected="onSelected($event)"
-    />
-  </div>
-
-</template>
-
 <script lang="ts">
 import VueSelect from "vue-select";
 import {defineComponent} from "vue";
@@ -30,6 +16,10 @@ export default defineComponent({
     caption: String,
     placeholder: String,
     clearable: Boolean,
+    searchable: {
+      type: Boolean,
+      default: true
+    },
     value: {
       type: [Object, String],
       default: () => {}
@@ -37,7 +27,6 @@ export default defineComponent({
   },
   methods: {
     onSelected(value: [Object,String]) {
-      console.log('input from selectinput: ',value)
       this.$emit('edited', value)
     }
   },
@@ -47,6 +36,22 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <div class="select-input-container">
+    <label class="select-input-label">{{caption}}</label>
+    <VueSelect
+        class="select-input"
+        :label="label"
+        :options="options"
+        :clearable="clearable"
+        :searchable="searchable"
+        v-model="val"
+        @option:selected="onSelected($event)"
+    />
+  </div>
+
+</template>
+
 <style lang="scss">
 @import "../global.scss";
 
@@ -54,9 +59,16 @@ export default defineComponent({
   font-size: 12px;
 }
 
+.select-input {
+  height: 30px;
+  padding: 0;
+  box-sizing: border-box !important;
+}
+
 .vs__dropdown-toggle {
-  background-color: #2D2D2D;
-  border: 1px solid #212121;
+  background-color: $input-field-bg-color;
+  border: $input-field-border;
+  border-radius: $input-field-border-radius;
 }
 
 .vs__selected {
@@ -68,13 +80,13 @@ export default defineComponent({
 }
 
 .vs__dropdown-option {
-  background-color: #2D2D2D;
+  background-color: $input-field-bg-color;
   padding: 2px 10px;
 }
 
 .vs__dropdown-menu {
-  background-color: #2D2D2D;
-  border: 1px solid #212121;
+  background-color: $input-field-bg-color;
+  border: $input-field-border;
 }
 
 .vs__dropdown-option--highlight {

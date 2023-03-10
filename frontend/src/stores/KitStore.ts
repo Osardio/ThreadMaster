@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {Kit} from "#/Types";
-import {useCommonStore} from "@/stores/CommonStore";
+import Rest from '../Rest'
 
 export const useKitStore = defineStore("kitStore", {
   state: () => {
@@ -15,28 +15,26 @@ export const useKitStore = defineStore("kitStore", {
   },
   actions: {
     async fetchKits() {
-      const backendUrl = useCommonStore().backendUrl
-      const res = await fetch(`${backendUrl}/kit`)
-      this.kits = (await res.json() as Kit[]).concat(mockKits)
+      const res = await Rest.getEntities('kit')
+      this.kits = (res as Kit[]).concat(mockKits)
     },
     setActiveKit(kit: Kit) {
       this.kit = kit
     },
-    async updateKit(updatedProperty: object) {
-      console.log('updated prop: ',updatedProperty)
-      const backendUrl = useCommonStore().backendUrl
-      const res = await fetch(`${backendUrl}/kit?uuid=${this.kit.uuid}`,{
-        body: JSON.stringify(updatedProperty),
-        method: 'PATCH',
-        headers: new Headers({ "Content-Type": "application/json" })
-      })
-      if (res.status == 200) {
-        this.kit = await res.json()
-        const idx = this.kits.findIndex(kitInList => kitInList.uuid === this.kit.uuid)
-        this.kits[idx] = this.kit // patch element in store
-      } else {
-        // TODO notify about error
+    async patchKit(updatedProperty: object) {
+      const oldValue = this.kit[Object.keys(updatedProperty)[0] as keyof Kit]
+      const newValue = Object.values(updatedProperty)[0]
+      if (oldValue === newValue) {
+        // if the property is not changed, return
+        console.log('Prop not changed')
+        return
       }
+      this.kit = await Rest.patchEntity('kit', this.kit.uuid, updatedProperty) as Kit
+      const idx = this.kits.findIndex(kitInList => kitInList.uuid === this.kit.uuid)
+      this.kits[idx] = this.kit // patch element in entities list
+      console.log("Updated prop: ", updatedProperty)
+      // TODO notify about error
+
     }
   }
 })

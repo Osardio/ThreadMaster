@@ -7,10 +7,11 @@ import ImageWrapper from "@/ui/ImageWrapper.vue";
 import SelectInput from "@/ui/SelectInput.vue";
 import {useCommonStore} from "@/stores/CommonStore";
 import {useManufacturerStore} from "@/stores/ManufacturerStore";
+import TextInput from "@/ui/TextInput.vue";
 
 export default defineComponent({
   name: "KitSideBar",
-  components: {SelectInput, StringInput, ImageWrapper},
+  components: {TextInput, SelectInput, StringInput, ImageWrapper},
   setup() {
     const kitStore = useKitStore()
     const commonStore = useCommonStore()
@@ -26,7 +27,7 @@ export default defineComponent({
   },
   methods: {
     onEdited(value: object) {
-      this.kitStore.updateKit(value)
+      this.kitStore.patchKit(value)
     }
   },
   mounted() {
@@ -42,21 +43,27 @@ export default defineComponent({
         :src="`${this.commonStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
         :alt="kit.code"
     />
-    <SelectInput
-        class="kit-side-input"
-        caption="Производитель"
-        label="name"
-        :options="manufacturerStore.manufacturers"
-        :value="manufacturerStore.manufacturers.find(man => man.uuid === kit.manufacturer_uuid)"
-        :clearable="false"
-        @edited="onEdited({ manufacturer_uuid: $event.uuid})"
-    />
-    <StringInput
-        label="Код набора"
-        class="kit-side-input"
-        :value="kit.code"
-        @edited="onEdited({ code: $event})"
-    />
+    <div class="input-container">
+      <SelectInput
+          class="kit-side-input"
+          style="width: 150px"
+          caption="Производитель"
+          label="name"
+          :options="manufacturerStore.manufacturers"
+          :value="manufacturerStore.manufacturers.find(man => man.uuid === kit.manufacturer_uuid)"
+          :clearable="false"
+          width="140px"
+          @edited="onEdited({ manufacturer_uuid: $event.uuid})"
+      />
+      <StringInput
+          label="Код набора"
+          class="kit-side-input"
+          style="width: 80px"
+          :value="kit.code"
+          width="80px"
+          @edited="onEdited({ code: $event})"
+      />
+    </div>
     <StringInput
         label="Английское название"
         class="kit-side-input"
@@ -69,7 +76,7 @@ export default defineComponent({
         :value="kit.name_ru"
         @edited="onEdited({ name_ru: $event})"
     />
-    <div class="numeric-container">
+    <div class="input-container">
       <StringInput
           label="Длина дизайна"
           class="kit-side-input"
@@ -83,27 +90,32 @@ export default defineComponent({
           @edited="onEdited({ design_width: $event})"
       />
     </div>
-    <StringInput
-        label="Кол-во крестиков"
-        class="kit-side-input"
-        :value="kit.stitches_count" type="number"
-        @edited="onEdited({ stitches_count: $event})"
-    />
-    <StringInput
-        label="Кол-во цветов"
-        class="kit-side-input"
-        :value="kit.colors_count" type="number"
-        @edited="onEdited({ colors_count: $event})"
-    />
+    <div class="input-container">
+      <StringInput
+          label="Кол-во крестиков"
+          class="kit-side-input"
+          :value="kit.stitches_count" type="number"
+          @edited="onEdited({ stitches_count: $event})"
+      />
+      <StringInput
+          label="Кол-во цветов"
+          class="kit-side-input"
+          :value="kit.colors_count" type="number"
+          @edited="onEdited({ colors_count: $event})"
+      />
+    </div>
     <StringInput
         label="Шaрмики"
         class="kit-side-input"
         :value="kit.charms"
         @edited="onEdited({ charms: $event})"
     />
-<!--    <input width="50px" height="50px" type="checkbox">-->
+    <TextInput
+        label="Комментарий"
+        style="bottom: 0"
+        :value="kit.comment"
+    />
     <!-- TODO Серия -->
-    <!-- TODO Производитель -->
     <!-- TODO Даты -->
     <!-- TODO Бисер -->
   </div>
@@ -115,6 +127,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   overflow: auto;
+  padding: 1px;
 }
 
 ::-webkit-scrollbar {
@@ -131,12 +144,12 @@ export default defineComponent({
   margin-bottom: 4px;
 }
 
-.numeric-container {
+.input-container {
   display: flex;
   justify-content: space-between;
 }
 
-.numeric-container > div {
+.input-container > div {
   width: 110px;
 }
 </style>

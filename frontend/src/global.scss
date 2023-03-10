@@ -1,8 +1,8 @@
-$panel-width: 300px;
-$color: #EBEBEB;
+@import "variables";
 
 * {
     font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #EBEBEB;
@@ -37,5 +37,4 @@ $color: #EBEBEB;
     padding: 20px;
     min-height: 100%;
     background-color: #404040;
-
 }

@@ -47,10 +47,8 @@ export default defineComponent({
 
 
 
-<style scoped>
-.string-input-container {
-
-}
+<style lang="scss" scoped>
+@import "@/variables";
 
 ::placeholder {
   color: #898989;
@@ -58,10 +56,10 @@ export default defineComponent({
 }
 
 .string-input {
-  font-size: 16px;
-  background-color: #2D2D2D;
-  border: 1px solid #212121;
-  border-radius: 4px;
+  font-size: 14px;
+  background-color: $input-field-bg-color;
+  border: $input-field-border;
+  border-radius: $input-field-border-radius;
   padding: 0 10px;
   height: 30px;
   width: 100%;
