@@ -8,6 +8,7 @@ import SelectInput from "@/ui/SelectInput.vue";
 import {useCommonStore} from "@/stores/CommonStore";
 import {useManufacturerStore} from "@/stores/ManufacturerStore";
 import TextInput from "@/ui/TextInput.vue";
+import {useSeriesStore} from "@/stores/SeriesStore";
 
 export default defineComponent({
   name: "KitSideBar",
@@ -16,7 +17,8 @@ export default defineComponent({
     const kitStore = useKitStore()
     const commonStore = useCommonStore()
     const manufacturerStore = useManufacturerStore()
-    return { kitStore, commonStore, manufacturerStore }
+    const seriesStore = useSeriesStore()
+    return { kitStore, commonStore, manufacturerStore, seriesStore }
   },
   props: {
     kit: {
@@ -25,13 +27,9 @@ export default defineComponent({
       default: () => {}
     }
   },
-  methods: {
-    onEdited(value: object) {
-      this.kitStore.patchKit(value)
-    }
-  },
   mounted() {
     this.manufacturerStore.fetchManufacturers()
+    this.seriesStore.fetchSeries()
   }
 })
 </script>
@@ -53,7 +51,7 @@ export default defineComponent({
           :value="manufacturerStore.manufacturers.find(man => man.uuid === kit.manufacturer_uuid)"
           :clearable="false"
           width="140px"
-          @edited="onEdited({ manufacturer_uuid: $event.uuid})"
+          @edited="kitStore.patchKit({ manufacturer_uuid: $event.uuid})"
       />
       <StringInput
           label="Код набора"
@@ -61,33 +59,43 @@ export default defineComponent({
           style="width: 80px"
           :value="kit.code"
           width="80px"
-          @edited="onEdited({ code: $event})"
+          @edited="kitStore.patchKit({ code: $event})"
       />
     </div>
+    <SelectInput
+        class="kit-side-input"
+        caption="Серия"
+        label="name"
+        :options="seriesStore.series"
+        :value="seriesStore.series.find(series => series.uuid === kit.series_uuid)"
+        :clearable="false"
+        width="140px"
+        @edited="kitStore.patchKit({ series: $event.uuid})"
+    />
     <StringInput
         label="Английское название"
         class="kit-side-input"
         :value="kit.name_en"
-        @edited="onEdited({ name_en: $event})"
+        @edited="kitStore.patchKit({ name_en: $event})"
     />
     <StringInput
         label="Русскоязычное название"
         class="kit-side-input"
         :value="kit.name_ru"
-        @edited="onEdited({ name_ru: $event})"
+        @edited="kitStore.patchKit({ name_ru: $event})"
     />
     <div class="input-container">
       <StringInput
           label="Длина дизайна"
           class="kit-side-input"
           :value="kit.design_length" type="number"
-          @edited="onEdited({ design_length: $event})"
+          @edited="kitStore.patchKit({ design_length: $event})"
       />
       <StringInput
           label="Ширина дизайна"
           class="kit-side-input"
           :value="kit.design_width" type="number"
-          @edited="onEdited({ design_width: $event})"
+          @edited="kitStore.patchKit({ design_width: $event})"
       />
     </div>
     <div class="input-container">
@@ -95,29 +103,26 @@ export default defineComponent({
           label="Кол-во крестиков"
           class="kit-side-input"
           :value="kit.stitches_count" type="number"
-          @edited="onEdited({ stitches_count: $event})"
+          @edited="kitStore.patchKit({ stitches_count: $event})"
       />
       <StringInput
           label="Кол-во цветов"
           class="kit-side-input"
           :value="kit.colors_count" type="number"
-          @edited="onEdited({ colors_count: $event})"
+          @edited="kitStore.patchKit({ colors_count: $event})"
       />
     </div>
     <StringInput
         label="Шaрмики"
         class="kit-side-input"
         :value="kit.charms"
-        @edited="onEdited({ charms: $event})"
+        @edited="kitStore.patchKit({ charms: $event})"
     />
     <TextInput
         label="Комментарий"
-        style="bottom: 0"
         :value="kit.comment"
+        @edited="kitStore.patchKit({ comment: $event})"
     />
-    <!-- TODO Серия -->
-    <!-- TODO Даты -->
-    <!-- TODO Бисер -->
   </div>
 </template>
 

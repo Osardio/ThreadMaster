@@ -32,6 +32,7 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
+      <!-- TODO search -->
       <div class="kits">
         <Kit
             v-for="kit of kitStore.kits"

@@ -21,6 +21,9 @@ export const useKitStore = defineStore("kitStore", {
     setActiveKit(kit: Kit) {
       this.kit = kit
     },
+    async setActiveKitByUuid(uuid: string) {
+      this.kit = await Rest.getEntity("kit",uuid) as Kit
+    },
     async patchKit(updatedProperty: object) {
       const oldValue = this.kit[Object.keys(updatedProperty)[0] as keyof Kit]
       const newValue = Object.values(updatedProperty)[0]
@@ -51,6 +54,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -67,6 +71,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -83,6 +88,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -99,6 +105,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -115,6 +122,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -131,6 +139,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),
@@ -147,6 +156,7 @@ const mockKits : Kit[] = [
     design_length: 28,
     stitches_count: 30000,
     charms: "Отсутствуют",
+    comment: "Лучший в мире набор для вышивания",
     colors_count: 57,
     beads_available: false,
     created_at: new Date("2023-03-04T17:53:38.310Z"),

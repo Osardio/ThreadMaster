@@ -13,6 +13,7 @@ export interface Kit extends DomainEntity {
   design_length: number | null
   stitches_count: number | null
   charms: string | null
+  comment: string | null
   colors_count: number | null
   beads_available: boolean | null
   created_at: Date | null

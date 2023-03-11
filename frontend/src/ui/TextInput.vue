@@ -3,8 +3,13 @@ import {defineComponent, nextTick} from "vue";
 
 export default defineComponent({
   name: "TextInput",
+  emits: ['edited'],
   props: {
     label: {
+      type: String,
+      default: ""
+    },
+    value: {
       type: String,
       default: ""
     }
@@ -14,6 +19,11 @@ export default defineComponent({
       const element = this.$refs._textarea as HTMLTextAreaElement;
       element.style.height = "50px";
       element.style.height = element.scrollHeight + "px";
+    },
+    onFocusLost(value: String) {
+      if (value) {
+        this.$emit('edited', value)
+      }
     }
   },
   mounted() {
@@ -25,10 +35,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <label class="text-input-label">{{label}}</label>
   <div class="text-input-container">
+    <label class="text-input-label">{{label}}</label>
     <textarea
         @input="resize"
+        @blur="onFocusLost($event.target.value)"
+        :value="value"
         ref="_textarea"
         class="text-input"
     />

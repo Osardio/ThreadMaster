@@ -1,18 +1,26 @@
 <script lang="ts">
 import VueSelect from "vue-select";
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
+
 export default defineComponent({
   name: "SelectInput",
   components: {VueSelect},
   emits: ['edited'],
   data() {
     return {
-      val: {}
+      val: { name: "name" } as Object,
+      lab: "name"
     }
   },
   props: {
-    label: String,
-    options: Array(Object),
+    label: {
+      type: String,
+      required: true
+    },
+    options: {
+      type: Array(Object),
+      default: () => [{ name: "default" }]
+    },
     caption: String,
     placeholder: String,
     clearable: Boolean,
@@ -21,8 +29,8 @@ export default defineComponent({
       default: true
     },
     value: {
-      type: [Object, String],
-      default: () => {}
+      type: Object,
+      required: true
     }
   },
   methods: {
@@ -32,6 +40,7 @@ export default defineComponent({
   },
   mounted() {
     this.val = this.value
+    this.lab = this.label
   }
 })
 </script>
@@ -40,8 +49,9 @@ export default defineComponent({
   <div class="select-input-container">
     <label class="select-input-label">{{caption}}</label>
     <VueSelect
+        v-if="options !== {}"
         class="select-input"
-        :label="label"
+        :label="lab"
         :options="options"
         :clearable="clearable"
         :searchable="searchable"
@@ -94,6 +104,7 @@ export default defineComponent({
   color: var(--vs-dropdown-option--active-color);
 }
 
+/*
 .vs__dropdown-option--deselect {
   background: var(--vs-dropdown-option--deselect-bg);
   color: var(--vs-dropdown-option--deselect-color);
@@ -104,4 +115,5 @@ export default defineComponent({
   color: var(--vs-state-disabled-color);
   cursor: var(--vs-state-disabled-cursor);
 }
+*/
 </style>
