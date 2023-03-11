@@ -28,14 +28,14 @@ export default defineComponent({
   props: {
     uuid: {
       type: String,
-      default: ""
+      required: true
     }
   },
-  mounted() {
-    this.kitStore.setActiveKitByUuid(this.uuid);
+  async mounted() {
+    await this.kitStore.setActiveKitByUuid(this.uuid);
     this.kit = this.kitStore.kit
-    this.manufacturerStore.fetchManufacturers()
-    this.seriesStore.fetchSeries()
+    await this.manufacturerStore.fetchManufacturers()
+    await this.seriesStore.fetchSeries()
   }
 })
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
 import VueSelect from "vue-select";
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "SelectInput",

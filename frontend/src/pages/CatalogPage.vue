@@ -22,8 +22,8 @@ export default defineComponent({
     Kit,
     RightPanel
   },
-  mounted() {
-    this.kitStore.fetchKits()
+  async mounted() {
+    await this.kitStore.fetchKits()
   }
 })
 

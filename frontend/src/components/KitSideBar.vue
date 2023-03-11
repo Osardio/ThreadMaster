@@ -27,9 +27,9 @@ export default defineComponent({
       default: () => {}
     }
   },
-  mounted() {
-    this.manufacturerStore.fetchManufacturers()
-    this.seriesStore.fetchSeries()
+  async mounted() {
+    await this.manufacturerStore.fetchManufacturers()
+    await this.seriesStore.fetchSeries()
   }
 })
 </script>
