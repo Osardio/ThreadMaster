@@ -33,6 +33,11 @@ export default defineComponent({
       required: true
     }
   },
+  watch: {
+    value(newValue: object) {
+      this.val = newValue
+    }
+  },
   methods: {
     onSelected(value: [Object,String]) {
       this.$emit('edited', value)

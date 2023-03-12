@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {Kit} from "#/Types";
-import Rest from '../Rest'
+import Rest from '@/Rest'
 
 export const useKitStore = defineStore("kitStore", {
   state: () => {
@@ -29,15 +29,12 @@ export const useKitStore = defineStore("kitStore", {
       const newValue = Object.values(updatedProperty)[0]
       if (oldValue === newValue) {
         // if the property is not changed, return
-        console.log('Prop not changed')
         return
       }
       this.kit = await Rest.patchEntity('kit', this.kit.uuid, updatedProperty) as Kit
       const idx = this.kits.findIndex(kitInList => kitInList.uuid === this.kit.uuid)
       this.kits[idx] = this.kit // patch element in entities list
-      console.log("Updated prop: ", updatedProperty)
       // TODO notify about error
-
     }
   }
 })
