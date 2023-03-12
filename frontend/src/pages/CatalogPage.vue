@@ -1,10 +1,9 @@
 <script lang="ts">
+import {defineComponent} from "vue";
 import {useKitStore} from "@/stores/KitStore";
 import RightPanel from "@/components/RightPanel.vue";
 import Kit from "@/components/KitCard.vue";
-import {defineComponent} from "vue";
-import KitSideInfo from "@/components/KitSideBar.vue";
-
+import KitSideBar from "@/components/KitSideBar.vue";
 
 export default defineComponent({
   name: 'CatalogPage',
@@ -12,13 +11,8 @@ export default defineComponent({
     const kitStore = useKitStore()
     return { kitStore }
   },
-  data() {
-    return {
-      kitStore: useKitStore(),
-    }
-  },
   components: {
-    KitSideInfo,
+    KitSideBar,
     Kit,
     RightPanel
   },
@@ -42,7 +36,7 @@ export default defineComponent({
       </div>
     </div>
     <RightPanel>
-      <KitSideInfo
+      <KitSideBar
         :kit="kitStore.kit"
       />
     </RightPanel>
@@ -50,6 +44,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss">
+@import "../global";
 $header-font-size: 24px;
 $header-margin: 6px;
 

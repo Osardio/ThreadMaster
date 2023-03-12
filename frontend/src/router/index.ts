@@ -4,9 +4,9 @@ import DirectoryPage from "@/pages/DirectoryPage.vue"
 import KitPage from "@/pages/KitPage.vue"
 
 const routes: Array<RouteRecordRaw> = [
-  { path: "/", name: "catalog", component: CatalogPage, meta: { title: "Каталог"} },
+  { path: "/",            name: "catalog",     component: CatalogPage, meta: { title: "Каталог"} },
   { path: "/directories", name: "directories", component: DirectoryPage },
-  { path: "/kit/:uuid", name: "kits", component: KitPage, props: true, meta: { title: "Набор" } },
+  { path: "/kit/:uuid",   name: "kits",        component: KitPage, props: true, meta: { title: "Набор" } },
 ]
 
 const router = createRouter({

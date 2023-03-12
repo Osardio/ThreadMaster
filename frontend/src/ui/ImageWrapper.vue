@@ -1,13 +1,3 @@
-<template>
-  <img :class="{'image-placeholder': error}"
-       :src="src"
-       :alt="alt"
-       @error="onImageError($event)"
-       ref="_img"
-  >
-
-</template>
-
 <script lang="ts">
 import {defineComponent} from "vue";
 
@@ -36,6 +26,15 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <img :class="{'image-placeholder': error}"
+       :src="src"
+       :alt="alt"
+       @error="onImageError($event)"
+       ref="_img"
+  >
+</template>
 
 <style scoped>
 .image-placeholder {

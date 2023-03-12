@@ -69,6 +69,7 @@ export default class Repository {
           design_length: 28,
           stitches_count: 30000,
           charms: "Отсутствуют",
+          comment: "Лучший в мире набор для вышивания",
           colors_count: 57,
           beads_available: false,
         }
