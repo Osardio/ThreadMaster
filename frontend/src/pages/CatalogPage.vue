@@ -44,7 +44,6 @@ export default defineComponent({
 </template>
 
 <style lang="scss">
-@import "../global";
 $header-font-size: 24px;
 $header-margin: 6px;
 

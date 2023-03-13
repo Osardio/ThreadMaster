@@ -2,6 +2,11 @@ export interface DomainEntity {
   uuid: string
 }
 
+/*export interface NamedDomainEntity extends DomainEntity {
+  uuid: string,
+  name: string | null
+}*/
+
 export interface Kit extends DomainEntity {
   uuid: string
   manufacturer_uuid: string | null

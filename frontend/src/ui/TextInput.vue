@@ -49,7 +49,7 @@ export default defineComponent({
 
 
 <style lang="scss" scoped>
-@import "@/global";
+@import "../variables";
 .text-input-container {
   width: 100%;
 }

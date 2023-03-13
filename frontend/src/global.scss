@@ -5,15 +5,16 @@
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #EBEBEB;
+    color: $color;
     -webkit-user-drag: none;
     box-sizing: border-box;
+    --vs-controls-color: #EBEBEB;
 }
 
 .main-area {
     display: flex;
     width: calc(100vw - $panel-width);
-    background-color: #383838;
+    background-color: $main-area-bg-color;
 }
 
 .page-container {
@@ -29,13 +30,13 @@
 }
 
 .panel {
-    border-left: 1px solid #2F2F2F;
-    border-right: 1px solid #2F2F2F;
+    border-left: $panel-border;
+    border-right: $panel-border;
     width: $panel-width;
     height: 100vh;
     min-width: $panel-width;
     flex-direction: column;
     padding: 20px;
     min-height: 100%;
-    background-color: #404040;
+    background-color: $panel-bg-color;
 }

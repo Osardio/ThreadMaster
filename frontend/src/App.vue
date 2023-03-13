@@ -1,5 +1,6 @@
 <script>
 import LeftPanel from "@/components/LeftPanel.vue";
+
 export default {
   components: {LeftPanel},
   name: 'App',
@@ -24,6 +25,7 @@ export default {
 </template>
 
 <style lang="scss">
+@import "global";
 @import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
 @import url("https://unpkg.com/vue-select@latest/dist/vue-select.css");
 #app {

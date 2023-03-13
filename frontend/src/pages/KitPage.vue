@@ -7,10 +7,11 @@ import {useSeriesStore} from "@/stores/SeriesStore";
 import KitSideBar from "@/components/KitSideBar.vue";
 import RightPanel from "@/components/RightPanel.vue";
 import {Kit} from "#/Types";
+import TableData from "@/ui/TableData.vue";
 
 export default defineComponent({
   name: "KitPage",
-  components: {RightPanel, KitSideBar},
+  components: {TableData, RightPanel, KitSideBar},
   setup() {
     const kitStore = useKitStore()
     const commonStore = useCommonStore()
@@ -40,6 +41,12 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
+      <TableData
+        :columns="[{ num: 1, type: 'uuid', name: '№'}, { num: 2, type: 'color', name: 'Цвет'}, { num: 3, type: 'pretty', name: 'Красивый'}]"
+        column_name_field="name"
+        column_type_field="type"
+        :tableData="[{ uuid: 1, color: 'aaaa', pretty: false},{ uuid: 2, color: 'aaaa', pretty: true},{ uuid: 3, color: 'aaaa', pretty: false},{ uuid: 4, color: 'aaaa', pretty: true},{ uuid: 5, color: 'aaaa', pretty: true}]"
+      />
       <!--
       TODO Канва
       TODO Таблица нитей

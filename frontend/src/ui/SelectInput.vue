@@ -68,8 +68,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss">
-@import "../global.scss";
-
+@import "../variables";
 .select-input-label {
   font-size: 12px;
 }
@@ -107,6 +106,10 @@ export default defineComponent({
 .vs__dropdown-option--highlight {
   background: #565656;
   color: var(--vs-dropdown-option--active-color);
+}
+
+.vs-actions > * {
+  fill: $color;
 }
 
 /*
