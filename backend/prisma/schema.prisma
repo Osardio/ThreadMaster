@@ -116,7 +116,7 @@ model KitPalette {
   uuid                  String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   kit_uuid              String                  @db.Uuid
   palette_uuid          String                  @db.Uuid
-  order_number          Int?
+  order_number          Int
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at            DateTime?               @default(now()) @db.Timestamptz(6) @updatedAt
   kit                   Kit                     @relation(fields: [kit_uuid], references: [uuid], onDelete: Cascade)
@@ -160,7 +160,7 @@ model Thread {
   uuid                  String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   palette_uuid          String                  @db.Uuid
   name                  String?                 @db.VarChar
-  code                  String?                 @db.VarChar
+  code                  String                  @db.VarChar
   color                 String?                 @db.VarChar
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   updated_at            DateTime?               @default(now()) @db.Timestamptz(6) @updatedAt
@@ -173,7 +173,7 @@ model Thread {
 model Palette {
   @@map("palettes")
   uuid          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String?         @unique @db.VarChar
+  name          String          @unique @db.VarChar
   created_at    DateTime?       @default(now()) @db.Timestamptz(6)
   updated_at    DateTime?       @default(now()) @db.Timestamptz(6) @updatedAt
   threads       Thread[]

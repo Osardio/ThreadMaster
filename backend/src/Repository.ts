@@ -1,6 +1,7 @@
 import {File, PrismaClient} from '@prisma/client'
 import Tools from "./Tools";
 import path from "path";
+import {KitThreadTableColumn, KitThreadTableData, KitThreadTableRow} from "../../types/ComplexTypes";
 
 export const prisma = new PrismaClient()
 
@@ -14,6 +15,65 @@ export default class Repository {
       })
     } catch (e) {
       return null
+    }
+  }
+
+  // Собирает данные для таблицы соответствия наборов и ниток с учётом палитры
+  static async getKitThreadTableData(kitUuid: string) : Promise<KitThreadTableData> {
+    const tableColumns: KitThreadTableColumn[] = await prisma.kit.findMany({
+      where: { uuid: kitUuid },
+      select: {
+        kits_palettes: {
+          select: {
+            uuid: true,
+            order_number: true,
+            palette: {
+              select: {
+                uuid: true,
+                name: true
+              }
+            }
+          }
+        }
+      }
+    })
+    const tableRows: KitThreadTableRow[] = await prisma.kitThread.findMany({
+      where: { kit_uuid: kitUuid },
+      select: {
+        uuid: true,
+        order_number: true,
+        quantity: true,
+        kits_threads_variants: {
+          select: {
+            uuid: true,
+            kit_palette: {
+              select: {
+                uuid: true,
+                order_number: true,
+                palette: {
+                  select: {
+                    uuid: true,
+                    name: true,
+                  }
+                }
+              }
+            },
+            thread: {
+              select: {
+                uuid: true,
+                name: true,
+                color: true,
+                code: true
+              }
+            }
+          }
+        }
+      }
+    })
+    return {
+      kit_uuid: kitUuid,
+      table_columns: tableColumns,
+      table_rows: tableRows
     }
   }
 

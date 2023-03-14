@@ -29,7 +29,7 @@ export interface KitPalette extends DomainEntity {
   uuid: string
   kit_uuid: string
   palette_uuid: string
-  order_number: number | null
+  order_number: number
   created_at: Date | null
   updated_at: Date | null
 }
@@ -120,7 +120,7 @@ export interface Thread extends DomainEntity {
   uuid: string
   palette_uuid: string
   name: string | null
-  code: string | null
+  code: string
   color: string | null
   created_at: Date | null
   updated_at: Date | null
@@ -128,7 +128,7 @@ export interface Thread extends DomainEntity {
 
 export interface Palette extends DomainEntity {
   uuid: string
-  name: string | null
+  name: string
   created_at: Date | null
   updated_at: Date | null
 }

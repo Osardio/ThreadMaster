@@ -1,24 +1,17 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
+import {KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
 
 export default defineComponent({
-  name: "TableData",
+  name: "KitThreadTable",
   props: {
-    tableData: {
-      type: Array,
+    rows: {
+      type: Array as PropType<KitThreadTableRow[]>,
       default: () => []
     },
     columns: {
-      type: Array,
+      type: Array as PropType<KitThreadTableColumn[]>,
       default: []
-    },
-    column_name_field: {
-      type: String,
-      required: true
-    },
-    column_type_field: {
-      type: String,
-      required: true
     }
   }
 })
@@ -28,27 +21,27 @@ export default defineComponent({
   <div class="table-container">
     <table>
       <thead>
-        <tr>
-          <th
-              v-for="column in columns"
-              :key="column.uuid"
-          >
-            <label>{{ column[column_name_field] }}</label>
-          </th>
-        </tr>
+      <tr>
+        <th
+            v-for="column in columns"
+            :key="column.uuid"
+        >
+          <label>{{ column[column_name_field] }}</label>
+        </th>
+      </tr>
       </thead>
       <tbody>
-        <tr
-            v-for="row in tableData"
-            :key="row.uuid"
+      <tr
+          v-for="row in tableData"
+          :key="row.uuid"
+      >
+        <td
+            v-for="column in columns"
+            :key="column.uuid"
         >
-          <td
-              v-for="column in columns"
-              :key="column.uuid"
-          >
-            {{ row[column[column_type_field]] }}
-          </td>
-        </tr>
+          {{ row[column[column_type_field]] }}
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

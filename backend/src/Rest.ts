@@ -3,6 +3,7 @@ import Repository from "./Repository";
 import SimpleCrud from "./SimpleCrud";
 import cors from "cors";
 import {tryCatch} from "./Utils";
+
 const app = express();
 const port = 7000;
 
@@ -20,6 +21,7 @@ export class Rest {
     app.use(express.urlencoded({ limit: "150mb", extended: true }));
     app.set("case sensitive routing", true)
     await this.initSimpleCrud()
+    await this.initComplexEndpoints()
     app.get("/health", tryCatch((req, res) => {
       res.send("Ok");
     }));
@@ -56,6 +58,7 @@ export class Rest {
         }
       }
     }));
+
     app.use(this.errorHandler)
     app.listen(port, () => {
       return console.log(`Express is listening at http://localhost:${port}`);
@@ -95,6 +98,18 @@ export class Rest {
         res.json(await SimpleCrud.deleteEntity(entity, req.body))
       }))
     })
+  }
+
+  private initComplexEndpoints() {
+    app.get("/complex/kit_thread_table_data",tryCatch( async (req, res, _next) => {
+      if (!req.query["uuid"]) {
+        res.status(400)
+        res.send({ message: "No uuid provided"})
+      } else {
+        const tableData = await Repository.getKitThreadTableData(req.query["uuid"].toString())
+        res.json(tableData)
+      }
+    }))
   }
 }
 

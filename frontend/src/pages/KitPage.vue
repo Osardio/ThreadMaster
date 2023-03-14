@@ -8,10 +8,11 @@ import KitSideBar from "@/components/KitSideBar.vue";
 import RightPanel from "@/components/RightPanel.vue";
 import {Kit} from "#/Types";
 import TableData from "@/ui/TableData.vue";
+import KitThreadTable from "@/components/KitThreadTable.vue";
 
 export default defineComponent({
   name: "KitPage",
-  components: {TableData, RightPanel, KitSideBar},
+  components: {KitThreadTable, TableData, RightPanel, KitSideBar},
   setup() {
     const kitStore = useKitStore()
     const commonStore = useCommonStore()
@@ -32,8 +33,6 @@ export default defineComponent({
   },
   async mounted() {
     await this.kitStore.setActiveKitByUuid(this.uuid);
-    await this.manufacturerStore.fetchManufacturers()
-    await this.seriesStore.fetchSeries()
   }
 })
 </script>
@@ -41,6 +40,10 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
+      <KitThreadTable
+          columns=""
+          rows=""
+      />
       <TableData
         :columns="[{ num: 1, type: 'uuid', name: '№'}, { num: 2, type: 'color', name: 'Цвет'}, { num: 3, type: 'pretty', name: 'Красивый'}]"
         column_name_field="name"
