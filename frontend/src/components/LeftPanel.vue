@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import NavBar from "@/components/NavBar.vue";
 import AppLogo from "@/components/AppLogo.vue";
 import {defineComponent} from "vue";

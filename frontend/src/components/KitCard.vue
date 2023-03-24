@@ -1,6 +1,6 @@
 <script lang="ts">
 import {useKitStore} from "@/stores/KitStore";
-import { Kit } from "#/Types";
+import {Kit} from "#/Types";
 import {defineComponent, PropType} from "vue";
 import ImageWrapper from "@/ui/ImageWrapper.vue";
 import {useCommonStore} from "@/stores/CommonStore";
@@ -61,7 +61,7 @@ export default defineComponent({
       </div>
       <ImageWrapper
           class="kit-preview"
-          :src="`${this.commonStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
+          :src="`${commonStore.backendUrl}/image_preview?uuid=${kit.uuid}`"
           :alt="kit.code"
       />
     </div>

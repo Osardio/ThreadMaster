@@ -1,16 +1,19 @@
 {
-  "name": "backend",
+  "name": "threadmaster_backend",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
   "main": "index.js",
+  "author": "osardio",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install && npx prisma migrate dev && tsc",
+    "dev": "ts-node index.ts",
+    "serve": "npm ci && npx prisma migrate deploy && tsc && node dist/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
+    "@types/node": "^18.15.7",
     "prisma": "^4.10.1",
     "typescript": "^4.9.5"
   },

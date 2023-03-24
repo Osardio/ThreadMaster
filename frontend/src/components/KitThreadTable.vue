@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
-import {KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
+import {KitsThreadVariantShort, KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
 
 export default defineComponent({
   name: "KitThreadTable",
@@ -13,6 +13,15 @@ export default defineComponent({
       type: Array as PropType<KitThreadTableColumn[]>,
       default: []
     }
+  },
+  methods: {
+    sortedKitThreadVariants(array: KitsThreadVariantShort[]): KitsThreadVariantShort[] {
+      return array.sort(function (a: KitsThreadVariantShort, b: KitsThreadVariantShort) {
+        if (a.kit_palette.order_number < b.kit_palette.order_number) return 1
+        if (a.kit_palette.order_number > b.kit_palette.order_number) return -1
+        return 0
+      })
+    }
   }
 })
 </script>
@@ -24,22 +33,24 @@ export default defineComponent({
       <tr>
         <th
             v-for="column in columns"
-            :key="column.uuid"
+            :key="column.kits_palettes[0].uuid"
         >
-          <label>{{ column[column_name_field] }}</label>
+          <label>{{ column.kits_palettes[0].palette.name }}</label>
         </th>
       </tr>
       </thead>
       <tbody>
       <tr
-          v-for="row in tableData"
+          v-for="row in rows"
           :key="row.uuid"
       >
         <td
-            v-for="column in columns"
-            :key="column.uuid"
+            v-for="kt_variant in sortedKitThreadVariants(row.kits_threads_variants)"
+            :key="kt_variant.uuid"
         >
-          {{ row[column[column_type_field]] }}
+          {{ kt_variant.thread.code }}
+          {{ kt_variant.thread.name }}
+          {{ kt_variant.thread.color }}
         </td>
       </tr>
       </tbody>

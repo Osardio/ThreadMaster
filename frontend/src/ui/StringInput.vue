@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 
 export default defineComponent({
   name: "StringInput",
@@ -9,7 +9,7 @@ export default defineComponent({
   },
   props: {
     value: {
-      type: [String, Number],
+      type: {} as PropType<String | Number| null>,
       default: "",
       required: true
     },
@@ -23,10 +23,12 @@ export default defineComponent({
     }
   },
   methods: {
-    onFocusLost(value?: Number | String) {
+    onFocusLost(event: Event) {
+      const value = (event.target as HTMLInputElement).value;
       if (value) {
-        if (this.type === 'number') { value = Number(value) } else { value = String(value) }
-        this.$emit('edited', value)
+        let result;
+        if (this.type === 'number') { result = Number(value) } else { result = String(value) }
+        this.$emit('edited', result)
       }
     }
   }
@@ -37,7 +39,7 @@ export default defineComponent({
   <div class="string-input-container">
     <label class="string-input-label">{{label}}</label>
     <input
-        @blur="onFocusLost($event.target.value)"
+        @blur="onFocusLost($event)"
         class="string-input"
         :value="value"
         :type="type"

@@ -54,7 +54,7 @@ export default defineComponent({
   <div class="select-input-container">
     <label class="select-input-label">{{caption}}</label>
     <VueSelect
-        v-if="options !== {}"
+        v-if="options"
         class="select-input"
         :label="lab"
         :options="options"

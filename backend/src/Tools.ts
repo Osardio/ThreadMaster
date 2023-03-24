@@ -1,4 +1,5 @@
-import fs = require('fs/promises');
+import fs from "fs/promises";
+import * as crypto from "crypto";
 
 export default class Tools {
   static uuidV4(): string {

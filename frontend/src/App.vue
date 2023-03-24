@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import LeftPanel from "@/components/LeftPanel.vue";
 
 export default {

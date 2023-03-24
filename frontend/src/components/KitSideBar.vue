@@ -1,13 +1,13 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import {Kit} from "#/Types";
-import {useKitStore} from "@/stores/KitStore";
 import StringInput from "@/ui/StringInput.vue";
 import ImageWrapper from "@/ui/ImageWrapper.vue";
 import SelectInput from "@/ui/SelectInput.vue";
-import {useCommonStore} from "@/stores/CommonStore";
-import {useManufacturerStore} from "@/stores/ManufacturerStore";
 import TextInput from "@/ui/TextInput.vue";
+import {useCommonStore} from "@/stores/CommonStore";
+import {useKitStore} from "@/stores/KitStore";
+import {useManufacturerStore} from "@/stores/ManufacturerStore";
 import {useSeriesStore} from "@/stores/SeriesStore";
 
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
   <div class="kit-side-panel" v-if="kit.uuid">
     <ImageWrapper
         class="kit-side-preview"
-        :src="`${this.commonStore.backendUrl}/image_preview?uuid=${this.kit.uuid}`"
+        :src="`${commonStore.backendUrl}/image_preview?uuid=${kit.uuid}`"
         :alt="kit.code"
     />
     <div class="input-container">
@@ -48,7 +48,7 @@ export default defineComponent({
           caption="Производитель"
           label="name"
           :options="manufacturerStore.manufacturers"
-          :value="manufacturerStore.manufacturers.find(man => man.uuid === kit.manufacturer_uuid)"
+          :value="manufacturerStore.manufacturers.find(man => man.uuid === kit.manufacturer_uuid) ?? {}"
           :clearable="false"
           width="140px"
           @edited="kitStore.patchKit({ manufacturer_uuid: $event.uuid})"
@@ -67,7 +67,7 @@ export default defineComponent({
         caption="Серия"
         label="name"
         :options="seriesStore.series"
-        :value="seriesStore.series.find(series => series.uuid === kit.series_uuid)"
+        :value="seriesStore.series.find(series => series.uuid === kit.series_uuid) ?? {}"
         :clearable="false"
         width="140px"
         @edited="kitStore.patchKit({ series: $event.uuid})"

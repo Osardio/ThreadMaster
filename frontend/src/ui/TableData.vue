@@ -1,23 +1,24 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import {DomainEntity} from "#/Types";
+import {defineComponent, PropType} from "vue";
 
 export default defineComponent({
   name: "TableData",
   props: {
     tableData: {
-      type: Array,
+      type: [] as PropType<DomainEntity[]>,
       default: () => []
     },
     columns: {
-      type: Array,
+      type: [] as PropType<DomainEntity[]>,
       default: []
     },
     column_name_field: {
-      type: String,
+      type: {} as PropType<keyof DomainEntity>,
       required: true
     },
     column_type_field: {
-      type: String,
+      type: {} as PropType<keyof PropType<DomainEntity[]>>,
       required: true
     }
   }

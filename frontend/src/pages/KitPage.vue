@@ -41,15 +41,15 @@ export default defineComponent({
   <div class="page-container">
     <div class="page">
       <KitThreadTable
-          columns=""
-          rows=""
+          :columns="[]"
+          :rows="[]"
       />
-      <TableData
+<!--      <TableData
         :columns="[{ num: 1, type: 'uuid', name: '№'}, { num: 2, type: 'color', name: 'Цвет'}, { num: 3, type: 'pretty', name: 'Красивый'}]"
         column_name_field="name"
         column_type_field="type"
         :tableData="[{ uuid: 1, color: 'aaaa', pretty: false},{ uuid: 2, color: 'aaaa', pretty: true},{ uuid: 3, color: 'aaaa', pretty: false},{ uuid: 4, color: 'aaaa', pretty: true},{ uuid: 5, color: 'aaaa', pretty: true}]"
-      />
+      />-->
       <!--
       TODO Канва
       TODO Таблица нитей

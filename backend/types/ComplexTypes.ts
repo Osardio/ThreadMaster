@@ -31,8 +31,8 @@ export interface KitPaletteShort extends DomainEntity  {
 
 export interface ThreadShort extends DomainEntity  {
   uuid: string;
-  name: string;
-  color: string;
+  name: string | null;
+  color: string | null;
   code: string;
 }
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
+import errorImageUrl from "@/assets/img_error.svg"
 
 export default defineComponent({
   name: "ImageWrapper",
@@ -14,13 +15,13 @@ export default defineComponent({
       required: true
     },
     alt: {
-      type: String,
+      type: {} as PropType<string | null>,
       default: ""
     }
   },
   methods: {
-    onImageError(_event: ErrorEvent) {
-      (this.$refs._img as HTMLImageElement).src='src/assets/img_error.svg'
+    onImageError(_event: Event) {
+      (this.$refs._img as HTMLImageElement).src=new URL(errorImageUrl, import.meta.url).href
       this.error = true
     }
   }
@@ -30,7 +31,7 @@ export default defineComponent({
 <template>
   <img :class="{'image-placeholder': error}"
        :src="src"
-       :alt="alt"
+       :alt="alt ?? ''"
        @error="onImageError($event)"
        ref="_img"
   >

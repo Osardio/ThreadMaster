@@ -1,7 +1,7 @@
 import {File, PrismaClient} from '@prisma/client'
-import Tools from "./Tools";
+import Tools from "@/Tools";
 import path from "path";
-import {KitThreadTableColumn, KitThreadTableData, KitThreadTableRow} from "../../types/ComplexTypes";
+import {KitThreadTableColumn, KitThreadTableData, KitThreadTableRow} from "#/ComplexTypes";
 
 export const prisma = new PrismaClient()
 

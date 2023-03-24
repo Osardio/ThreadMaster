@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, nextTick} from "vue";
+import {defineComponent, nextTick, PropType} from "vue";
 
 export default defineComponent({
   name: "TextInput",
@@ -10,7 +10,7 @@ export default defineComponent({
       default: ""
     },
     value: {
-      type: String,
+      type: {} as PropType<string | null>,
       default: ""
     }
   },
@@ -20,7 +20,8 @@ export default defineComponent({
       element.style.height = "50px";
       element.style.height = element.scrollHeight + "px";
     },
-    onFocusLost(value: String) {
+    onFocusLost(event: Event) {
+      const value = (event.target as HTMLInputElement).value
       if (value) {
         this.$emit('edited', value)
       }
@@ -39,8 +40,8 @@ export default defineComponent({
     <label class="text-input-label">{{label}}</label>
     <textarea
         @input="resize"
-        @blur="onFocusLost($event.target.value)"
-        :value="value"
+        @blur="onFocusLost($event)"
+        :value="value ?? ''"
         ref="_textarea"
         class="text-input"
     />
