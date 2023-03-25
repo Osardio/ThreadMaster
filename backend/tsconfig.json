@@ -1,25 +1,14 @@
 {
   "compilerOptions": {
-    "strict": true,
     "target": "es6",
     "module": "commonjs",
+    "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "lib": ["ESNext"],
+    "lib": ["es2015"],
     "skipLibCheck": true,
     "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "#/*": ["./types/*"]
-    }
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "types/**/*.ts",
-    "prisma/**/*",
-  ],
+    "baseUrl": "."
+  }
 }

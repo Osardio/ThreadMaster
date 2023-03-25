@@ -1,5 +1,5 @@
-import {DomainEntity} from "#/Types";
-import {prisma} from "@/Repository";
+import {DomainEntity} from "types/Types";
+import {prisma} from "./Repository";
 import {PrismaClient} from "@prisma/client";
 
 export default class SimpleCrud {

@@ -2,13 +2,12 @@
   "name": "threadmaster_backend",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "main": "index.js",
   "author": "osardio",
   "scripts": {
-    "build": "npm install && npx prisma migrate dev && tsc",
-    "dev": "ts-node index.ts",
-    "serve": "npm ci && npx prisma migrate deploy && tsc && node dist/index.js"
+    "build": "npx prisma migrate dev && tsc",
+    "dev": "npx prisma migrate dev && ts-node index.ts",
+    "serve": "npx prisma migrate deploy && tsc && node dist/index.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

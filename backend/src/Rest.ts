@@ -1,8 +1,8 @@
 import express, {NextFunction, Request, Response} from 'express';
 import cors from "cors";
-import Repository from "@/Repository";
-import SimpleCrud from "@/SimpleCrud";
-import {tryCatch} from "@/Utils";
+import Repository from "./Repository";
+import SimpleCrud from "./SimpleCrud";
+import {tryCatch} from "./Utils";
 import {PrismaClient} from "@prisma/client";
 
 const app = express();
