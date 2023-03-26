@@ -5,7 +5,7 @@ import {PrismaClient} from "@prisma/client";
 export default class SimpleCrud {
 
   static async getEntities(type: keyof PrismaClient, limit?: string, page?: string) : Promise<Array<DomainEntity>> {
-    const queryOptions = { take: Number(), skip: Number() };
+    let queryOptions: QueryOptions = {};
     if (limit !== undefined) queryOptions.take = Number(limit)
     if (page !== undefined) queryOptions.skip = Number(limit) * (Number(page) - 1)
     // @ts-ignore
@@ -39,4 +39,9 @@ export default class SimpleCrud {
     return await prisma[type].delete({ where: { uuid: body.uuid } })
   }
 
+}
+
+interface QueryOptions {
+  take?: number,
+  skip?: number
 }

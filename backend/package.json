@@ -5,9 +5,9 @@
   "main": "index.js",
   "author": "osardio",
   "scripts": {
-    "build": "npx prisma migrate dev && tsc",
-    "dev": "npx prisma migrate dev && ts-node index.ts",
-    "serve": "npx prisma migrate deploy && tsc && node dist/index.js"
+    "generate": "npx prisma generate && npx prisma migrate dev",
+    "dev": "npm run generate && ts-node index.ts",
+    "serve": "npx prisma generate && npx prisma migrate deploy && ts-node index.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -20,6 +20,7 @@
     "@prisma/client": "^4.10.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "postgres": "^3.3.3"
+    "postgres": "^3.3.3",
+    "ts-node": "^10.9.1"
   }
 }
