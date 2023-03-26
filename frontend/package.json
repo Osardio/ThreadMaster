@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "serve": "vue-tsc && vite build && vite preview"
+    "serve": "vue-tsc && vite build && vite preview --port 7001"
   },
   "dependencies": {
     "@types/node": "^18.14.6",
