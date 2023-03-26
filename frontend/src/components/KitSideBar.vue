@@ -70,32 +70,32 @@ export default defineComponent({
         :value="seriesStore.series.find(series => series.uuid === kit.series_uuid) ?? {}"
         :clearable="false"
         width="140px"
-        @edited="kitStore.patchKit({ series: $event.uuid})"
+        @edited="kitStore.patchKit({ series: $event.uuid })"
     />
     <StringInput
         label="Английское название"
         class="kit-side-input"
         :value="kit.name_en"
-        @edited="kitStore.patchKit({ name_en: $event})"
+        @edited="kitStore.patchKit({ name_en: $event })"
     />
     <StringInput
         label="Русскоязычное название"
         class="kit-side-input"
         :value="kit.name_ru"
-        @edited="kitStore.patchKit({ name_ru: $event})"
+        @edited="kitStore.patchKit({ name_ru: $event })"
     />
     <div class="input-container">
       <StringInput
           label="Длина дизайна"
           class="kit-side-input"
           :value="kit.design_length" type="number"
-          @edited="kitStore.patchKit({ design_length: $event})"
+          @edited="kitStore.patchKit({ design_length: $event })"
       />
       <StringInput
           label="Ширина дизайна"
           class="kit-side-input"
           :value="kit.design_width" type="number"
-          @edited="kitStore.patchKit({ design_width: $event})"
+          @edited="kitStore.patchKit({ design_width: $event })"
       />
     </div>
     <div class="input-container">
@@ -103,25 +103,25 @@ export default defineComponent({
           label="Кол-во крестиков"
           class="kit-side-input"
           :value="kit.stitches_count" type="number"
-          @edited="kitStore.patchKit({ stitches_count: $event})"
+          @edited="kitStore.patchKit({ stitches_count: $event })"
       />
       <StringInput
           label="Кол-во цветов"
           class="kit-side-input"
           :value="kit.colors_count" type="number"
-          @edited="kitStore.patchKit({ colors_count: $event})"
+          @edited="kitStore.patchKit({ colors_count: $event })"
       />
     </div>
     <StringInput
         label="Шaрмики"
         class="kit-side-input"
         :value="kit.charms"
-        @edited="kitStore.patchKit({ charms: $event})"
+        @edited="kitStore.patchKit({ charms: $event })"
     />
     <TextInput
         label="Комментарий"
         :value="kit.comment"
-        @edited="kitStore.patchKit({ comment: $event})"
+        @edited="kitStore.patchKit({ comment: $event })"
     />
   </div>
 </template>

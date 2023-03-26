@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {Manufacturer} from "#/Types";
-import {useCommonStore} from "@/stores/CommonStore";
+import Rest from "@/Rest";
 
 export const useManufacturerStore = defineStore("manufacturerStore",{
   state: () => {
@@ -9,9 +9,7 @@ export const useManufacturerStore = defineStore("manufacturerStore",{
     }},
   actions: {
     async fetchManufacturers() {
-      const backendUrl = useCommonStore().backendUrl
-      const res = await fetch(`${backendUrl}/manufacturer`)
-      this.manufacturers = (await res.json() as Manufacturer[])
-    }
+      this.manufacturers = await Rest.getEntities("manufacturer") as Manufacturer[]
+    },
   }
 })

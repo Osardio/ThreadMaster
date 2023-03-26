@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 import errorImageUrl from "@/assets/img_error.svg"
 
 export default defineComponent({
@@ -12,10 +12,11 @@ export default defineComponent({
   props: {
     src: {
       type: String,
-      required: true
+      required: true,
+      default: ""
     },
     alt: {
-      type: {} as PropType<string | null>,
+      type: String,
       default: ""
     }
   },

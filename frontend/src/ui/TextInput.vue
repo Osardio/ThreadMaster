@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, nextTick, PropType} from "vue";
+import {defineComponent, nextTick} from "vue";
 
 export default defineComponent({
   name: "TextInput",
@@ -10,8 +10,8 @@ export default defineComponent({
       default: ""
     },
     value: {
-      type: {} as PropType<string | null>,
-      default: ""
+      type: String,
+      required: true
     }
   },
   methods: {
@@ -37,7 +37,7 @@ export default defineComponent({
 
 <template>
   <div class="text-input-container">
-    <label class="text-input-label">{{label}}</label>
+    <label v-if="label !==''" class="text-input-label">{{label}}</label>
     <textarea
         @input="resize"
         @blur="onFocusLost($event)"

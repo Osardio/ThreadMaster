@@ -4,7 +4,7 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "SelectInput",
-  components: {VueSelect},
+  components: { VueSelect },
   emits: ['edited'],
   data() {
     return {

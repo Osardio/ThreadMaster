@@ -29,6 +29,7 @@ export const useKitStore = defineStore("kitStore", {
       const newValue = Object.values(updatedProperty)[0]
       if (oldValue === newValue) {
         // if the property is not changed, return
+        // TODO move to input
         return
       }
       this.kit = await Rest.patchEntity('kit', this.kit.uuid, updatedProperty) as Kit

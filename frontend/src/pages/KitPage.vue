@@ -1,24 +1,18 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useKitStore} from "@/stores/KitStore";
-import {useCommonStore} from "@/stores/CommonStore";
-import {useManufacturerStore} from "@/stores/ManufacturerStore";
-import {useSeriesStore} from "@/stores/SeriesStore";
 import KitSideBar from "@/components/KitSideBar.vue";
 import RightPanel from "@/components/RightPanel.vue";
 import {Kit} from "#/Types";
-import TableData from "@/ui/TableData.vue";
 import KitThreadTable from "@/components/KitThreadTable.vue";
 
 export default defineComponent({
   name: "KitPage",
-  components: {KitThreadTable, TableData, RightPanel, KitSideBar},
+  components: {KitThreadTable, RightPanel, KitSideBar},
   setup() {
     const kitStore = useKitStore()
-    const commonStore = useCommonStore()
-    const manufacturerStore = useManufacturerStore()
-    const seriesStore = useSeriesStore()
-    return { kitStore, commonStore, manufacturerStore, seriesStore }
+    kitStore.fetchKits()
+    return { kitStore }
   },
   computed: {
     kit() : Kit {
@@ -31,8 +25,8 @@ export default defineComponent({
       required: true
     }
   },
-  async mounted() {
-    await this.kitStore.setActiveKitByUuid(this.uuid);
+  async beforeCreate() {
+    await this.kitStore.setActiveKitByUuid(this.uuid)
   }
 })
 </script>
@@ -40,27 +34,16 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
-      <KitThreadTable
-          :columns="[]"
-          :rows="[]"
-      />
-<!--      <TableData
-        :columns="[{ num: 1, type: 'uuid', name: '№'}, { num: 2, type: 'color', name: 'Цвет'}, { num: 3, type: 'pretty', name: 'Красивый'}]"
-        column_name_field="name"
-        column_type_field="type"
-        :tableData="[{ uuid: 1, color: 'aaaa', pretty: false},{ uuid: 2, color: 'aaaa', pretty: true},{ uuid: 3, color: 'aaaa', pretty: false},{ uuid: 4, color: 'aaaa', pretty: true},{ uuid: 5, color: 'aaaa', pretty: true}]"
-      />-->
+      <KitThreadTable v-if="kitStore.kit.uuid !== undefined" :uuid="uuid"/>
       <!--
-      TODO Канва
       TODO Таблица нитей
+      TODO Канва
       TODO Даты
       TODO вложенные файлы
       -->
     </div>
     <RightPanel>
-      <KitSideBar
-          :kit="kitStore.kit"
-      />
+      <KitSideBar v-if="kitStore.kit.uuid !== undefined" :kit="kitStore.kit"/>
     </RightPanel>
   </div>
 </template>

@@ -1,17 +1,51 @@
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 import {KitsThreadVariantShort, KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
+import {useComplexStore} from "@/stores/ComplexStore";
+import KitThreadVariant from "@/components/KitThreadVariant.vue";
+import TextInput from "@/ui/TextInput.vue";
+import StringInput from "@/ui/StringInput.vue";
 
 export default defineComponent({
   name: "KitThreadTable",
+  components: {TextInput, KitThreadVariant, StringInput},
+  setup() {
+    const complexStore = useComplexStore()
+    return { complexStore }
+  },
   props: {
-    rows: {
-      type: Array as PropType<KitThreadTableRow[]>,
-      default: () => []
+    uuid: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    columns_numbered(): KitThreadTableColumn[] {
+      const numberColumn : KitThreadTableColumn = {
+        kits_palettes: [
+            {
+              uuid: "0",
+              order_number: 0,
+              palette: { uuid: "0", name: "№" }
+            }
+        ]
+      }
+      const amountColumn : KitThreadTableColumn = {
+        kits_palettes: [
+          {
+            uuid: "0",
+            order_number: 0,
+            palette: { uuid: "0", name: "Кол-во" }
+          }
+        ]
+      }
+      return [].concat([numberColumn, amountColumn], this.columns)
     },
-    columns: {
-      type: Array as PropType<KitThreadTableColumn[]>,
-      default: []
+    columns(): KitThreadTableColumn[] {
+      return this.complexStore.kitThreadTableData.table_columns
+    },
+    rows(): KitThreadTableRow[] {
+      return this.complexStore.kitThreadTableData.table_rows
     }
   },
   methods: {
@@ -22,17 +56,20 @@ export default defineComponent({
         return 0
       })
     }
+  },
+  async beforeCreate() {
+    await this.complexStore.fetchKitThreadTableData(this.uuid)
   }
 })
 </script>
 
 <template>
   <div class="table-container">
-    <table>
+    <table v-if="complexStore.kitThreadTableData.kit_uuid !== undefined">
       <thead>
       <tr>
         <th
-            v-for="column in columns"
+            v-for="column in columns_numbered"
             :key="column.kits_palettes[0].uuid"
         >
           <label>{{ column.kits_palettes[0].palette.name }}</label>
@@ -44,13 +81,26 @@ export default defineComponent({
           v-for="row in rows"
           :key="row.uuid"
       >
+        <td>
+          {{ row.order_number }}
+        </td>
+        <td>
+          <div class="thread-quantity">
+            <StringInput
+                :value="row.quantity"
+                :show_arrows="false"
+                :centered="true"
+                type="number"
+                style="width: 40px"
+                @edited="complexStore.updateKitThread(row.uuid, { quantity: $event })"
+            />
+          </div>
+        </td>
         <td
             v-for="kt_variant in sortedKitThreadVariants(row.kits_threads_variants)"
             :key="kt_variant.uuid"
         >
-          {{ kt_variant.thread.code }}
-          {{ kt_variant.thread.name }}
-          {{ kt_variant.thread.color }}
+          <KitThreadVariant :value="kt_variant"/>
         </td>
       </tr>
       </tbody>
@@ -113,5 +163,14 @@ tbody tr td:first-child {
 
 tr:hover {
   background-color: $row-bg-color-selected;
+}
+
+.thread-number {
+  text-align: center;
+}
+
+.thread-quantity {
+  display: flex;
+  justify-content: center;
 }
 </style>

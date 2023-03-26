@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {DomainEntity} from "#/Types";
+import {KitThreadTableData} from "#/ComplexTypes";
 
 const rest = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -30,16 +31,21 @@ export default class Rest {
   }
 
   static async patchEntity(entityType: string, entityUuid: string, body: object): Promise<DomainEntity> {
-    return (await rest.patch( entityType, body, {
+    return (await rest.patch(entityType, body, {
         params: { uuid: entityUuid }
     })).data as DomainEntity
   }
 
   static async deleteEntity(entityType: string, entityUuid: string): Promise<DomainEntity> {
-    return (await rest.delete( entityType, {
+    return (await rest.delete(entityType, {
       params: { uuid: entityUuid },
     })).data as DomainEntity
   }
 
+  static async getKitThreadTableData(kitUuid: string) : Promise<KitThreadTableData> {
+    return (await rest.get("complex/kit_thread_table_data", {
+      params: { uuid: kitUuid },
+    })).data as KitThreadTableData
+  }
 
 }

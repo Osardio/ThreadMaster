@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "StringInput",
@@ -9,7 +9,7 @@ export default defineComponent({
   },
   props: {
     value: {
-      type: {} as PropType<String | Number| null>,
+      type: [String, Number],
       default: "",
       required: true
     },
@@ -20,6 +20,14 @@ export default defineComponent({
     type: {
       type: String,
       default: "string"
+    },
+    show_arrows: {
+      type: Boolean,
+      default: true
+    },
+    centered: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -37,10 +45,10 @@ export default defineComponent({
 
 <template>
   <div class="string-input-container">
-    <label class="string-input-label">{{label}}</label>
+    <label v-if="label !==''" class="string-input-label">{{label}}</label>
     <input
         @blur="onFocusLost($event)"
-        class="string-input"
+        :class="{ 'string-input': true, 'string-input-hidden-arrow': !show_arrows, 'string-input-centered': centered }"
         :value="value"
         :type="type"
     >
@@ -65,6 +73,15 @@ export default defineComponent({
   padding: 0 10px;
   height: 30px;
   width: 100%;
+}
+
+.string-input-hidden-arrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.string-input-centered {
+  text-align: center;
 }
 
 .string-input-label {
