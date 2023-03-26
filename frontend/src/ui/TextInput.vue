@@ -4,6 +4,7 @@ import {defineComponent, nextTick} from "vue";
 export default defineComponent({
   name: "TextInput",
   emits: ['edited'],
+  data() { return { initialValue: "" } },
   props: {
     label: {
       type: String,
@@ -22,12 +23,14 @@ export default defineComponent({
     },
     onFocusLost(event: Event) {
       const value = (event.target as HTMLInputElement).value
-      if (value) {
+      if (value === this.initialValue) {
         this.$emit('edited', value)
+        this.initialValue = this.value
       }
     }
   },
   mounted() {
+    this.initialValue = this.value
     nextTick(() => {
       this.resize();
     })

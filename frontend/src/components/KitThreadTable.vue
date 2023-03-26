@@ -5,13 +5,16 @@ import {useComplexStore} from "@/stores/ComplexStore";
 import KitThreadVariant from "@/components/KitThreadVariant.vue";
 import TextInput from "@/ui/TextInput.vue";
 import StringInput from "@/ui/StringInput.vue";
+import TButton from "@/ui/TButton.vue";
+import {useThreadStore} from "@/stores/ThreadStore";
 
 export default defineComponent({
   name: "KitThreadTable",
-  components: {TextInput, KitThreadVariant, StringInput},
+  components: {TButton, TextInput, KitThreadVariant, StringInput},
   setup() {
     const complexStore = useComplexStore()
-    return { complexStore }
+    const threadStore = useThreadStore()
+    return { complexStore, threadStore }
   },
   props: {
     uuid: {
@@ -20,27 +23,6 @@ export default defineComponent({
     }
   },
   computed: {
-    columns_numbered(): KitThreadTableColumn[] {
-      const numberColumn : KitThreadTableColumn = {
-        kits_palettes: [
-            {
-              uuid: "0",
-              order_number: 0,
-              palette: { uuid: "0", name: "№" }
-            }
-        ]
-      }
-      const amountColumn : KitThreadTableColumn = {
-        kits_palettes: [
-          {
-            uuid: "0",
-            order_number: 0,
-            palette: { uuid: "0", name: "Кол-во" }
-          }
-        ]
-      }
-      return [].concat([numberColumn, amountColumn], this.columns)
-    },
     columns(): KitThreadTableColumn[] {
       return this.complexStore.kitThreadTableData.table_columns
     },
@@ -55,10 +37,14 @@ export default defineComponent({
         if (a.kit_palette.order_number > b.kit_palette.order_number) return -1
         return 0
       })
+    },
+    removeRow() {
+
     }
   },
   async beforeCreate() {
     await this.complexStore.fetchKitThreadTableData(this.uuid)
+    await this.threadStore.fetchThreads()
   }
 })
 </script>
@@ -68,8 +54,10 @@ export default defineComponent({
     <table v-if="complexStore.kitThreadTableData.kit_uuid !== undefined">
       <thead>
       <tr>
+        <th><label>№</label></th>
+        <th><label>Кол-во</label></th>
         <th
-            v-for="column in columns_numbered"
+            v-for="column in columns"
             :key="column.kits_palettes[0].uuid"
         >
           <label>{{ column.kits_palettes[0].palette.name }}</label>
@@ -87,7 +75,7 @@ export default defineComponent({
         <td>
           <div class="thread-quantity">
             <StringInput
-                :value="row.quantity"
+                :value="row.quantity ?? 0"
                 :show_arrows="false"
                 :centered="true"
                 type="number"
@@ -97,10 +85,22 @@ export default defineComponent({
           </div>
         </td>
         <td
+            v-if="row.kits_threads_variants.length > 0"
             v-for="kt_variant in sortedKitThreadVariants(row.kits_threads_variants)"
             :key="kt_variant.uuid"
         >
-          <KitThreadVariant :value="kt_variant"/>
+          <KitThreadVariant :value="kt_variant" :options="threadStore.threads"/>
+        </td>
+        <td v-else>Выбрать цвет</td>
+      </tr>
+      <tr>
+        <td :colspan="2 + columns.length">
+          <div class="add-thread-row">
+           <TButton
+             label="Добавить цвет"
+             @click="complexStore.addKitThread()"
+           />
+          </div>
         </td>
       </tr>
       </tbody>
@@ -122,7 +122,7 @@ export default defineComponent({
   outline-offset: -1px;
 }
 
-th , td  {
+th, td  {
   border: $border;
   padding: 10px;
 }
@@ -170,6 +170,10 @@ tr:hover {
 }
 
 .thread-quantity {
+  display: flex;
+  justify-content: center;
+}
+.add-thread-row {
   display: flex;
   justify-content: center;
 }

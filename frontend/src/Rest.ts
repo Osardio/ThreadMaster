@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {DomainEntity} from "#/Types";
+import {DomainEntity, EntityType} from "#/Types";
 import {KitThreadTableData} from "#/ComplexTypes";
 
 const rest = axios.create({
@@ -20,23 +20,23 @@ export default class Rest {
     return (await rest.get(entityType)).data as DomainEntity[]
   }
 
-  static async postEntity<Type extends DomainEntity>(entityType: string, entity: Type): Promise<DomainEntity> {
+  static async postEntity(entityType: EntityType, entity: object): Promise<DomainEntity> {
     return (await rest.post(entityType, entity)).data as DomainEntity
   }
 
-  static async putEntity<Type extends DomainEntity>(entityType: string, entity: Type): Promise<DomainEntity> {
+  static async putEntity<Type extends DomainEntity>(entityType: EntityType, entity: Type): Promise<DomainEntity> {
     return (await rest.put(entityType, entity, {
       params: { uuid: entity.uuid }
     })).data as DomainEntity
   }
 
-  static async patchEntity(entityType: string, entityUuid: string, body: object): Promise<DomainEntity> {
+  static async patchEntity(entityType: EntityType, entityUuid: string, body: object): Promise<DomainEntity> {
     return (await rest.patch(entityType, body, {
         params: { uuid: entityUuid }
     })).data as DomainEntity
   }
 
-  static async deleteEntity(entityType: string, entityUuid: string): Promise<DomainEntity> {
+  static async deleteEntity(entityType: EntityType, entityUuid: string): Promise<DomainEntity> {
     return (await rest.delete(entityType, {
       params: { uuid: entityUuid },
     })).data as DomainEntity

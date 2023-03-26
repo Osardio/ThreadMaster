@@ -2,10 +2,21 @@ export interface DomainEntity {
   uuid: string
 }
 
-/*export interface NamedDomainEntity extends DomainEntity {
-  uuid: string,
-  name: string | null
-}*/
+export enum EntityType {
+  CANVAS_COLOR = "canvasColor",
+  CANVAS_NAME = "canvasName",
+  CANVAS_SIZE = "canvasSize",
+  CANVAS = "canvas",
+  FILE = "file",
+  MANUFACTURER = "manufacturer",
+  SERIES = "series",
+  KIT = "kit",
+  KIT_PALETTE = "kitPalette",
+  KIT_THREAD = "kitThread",
+  KIT_THREAD_VARIANT = "kitThreadVariant",
+  THREAD = "thread",
+  PALETTE = "palette"
+}
 
 export interface Kit extends DomainEntity {
   uuid: string
@@ -41,6 +52,12 @@ export interface KitThread extends DomainEntity {
   quantity: number | null
   created_at: Date | null
   updated_at: Date | null
+}
+
+export interface KitThreadCreateDto {
+  order_number: number
+  kit_uuid: string
+  quantity?: number
 }
 
 export interface KitThreadVariant extends DomainEntity {

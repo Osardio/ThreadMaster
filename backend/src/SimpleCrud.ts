@@ -1,10 +1,9 @@
-import {DomainEntity} from "types/Types";
+import {DomainEntity, EntityType, KitThreadCreateDto} from "../types/Types";
 import {prisma} from "./Repository";
-import {PrismaClient} from "@prisma/client";
 
 export default class SimpleCrud {
 
-  static async getEntities(type: keyof PrismaClient, limit?: string, page?: string) : Promise<Array<DomainEntity>> {
+  static async getEntities(type: EntityType, limit?: string, page?: string) : Promise<Array<DomainEntity>> {
     let queryOptions: QueryOptions = {};
     if (limit !== undefined) queryOptions.take = Number(limit)
     if (page !== undefined) queryOptions.skip = Number(limit) * (Number(page) - 1)
@@ -12,17 +11,12 @@ export default class SimpleCrud {
     return await prisma[type].findMany(queryOptions)
   }
 
-  static async getEntity(type: keyof PrismaClient, uuid: string) : Promise<DomainEntity> {
+  static async getEntity(type: EntityType, uuid: string) : Promise<DomainEntity> {
     // @ts-ignore
     return await prisma[type].findUnique({ where: { uuid: uuid }})
   }
 
-  static async createEntity(type: keyof PrismaClient, body: any) : Promise<DomainEntity> {
-    // @ts-ignore
-    return await prisma[type].create({ data: body })
-  }
-
-  static async updateEntity<Type extends DomainEntity>(type: keyof PrismaClient, body: Type, uuid?: string) : Promise<DomainEntity> {
+  static async updateEntity<Type extends DomainEntity>(type: EntityType, body: Type, uuid?: string) : Promise<DomainEntity> {
     if (uuid) {
       // update specific field
       // @ts-ignore
@@ -34,9 +28,24 @@ export default class SimpleCrud {
     }
   }
 
-  static async deleteEntity<Type extends DomainEntity>(type: keyof PrismaClient, body: Type) : Promise<DomainEntity> {
+  static async deleteEntity<Type extends DomainEntity>(type: EntityType, body: Type) : Promise<DomainEntity> {
     // @ts-ignore
     return await prisma[type].delete({ where: { uuid: body.uuid } })
+  }
+
+  static async createEntity(type: EntityType, body: any) : Promise<DomainEntity> {
+    switch (type) {
+      case EntityType.KIT_THREAD:
+        const createDto = body as KitThreadCreateDto
+        return await prisma.kitThread.create({data: {
+            quantity: createDto.quantity,
+            order_number: createDto.order_number,
+            kit: { connect: { uuid: createDto.kit_uuid } }
+        }})
+      default:
+        // @ts-ignore
+        return await prisma[type].create({data: body})
+    }
   }
 
 }

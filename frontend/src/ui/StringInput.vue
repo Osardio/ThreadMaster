@@ -5,7 +5,7 @@ export default defineComponent({
   name: "StringInput",
   emits: ['edited'],
   data() {
-    return {}
+    return { initialValue: "" }
   },
   props: {
     value: {
@@ -33,12 +33,16 @@ export default defineComponent({
   methods: {
     onFocusLost(event: Event) {
       const value = (event.target as HTMLInputElement).value;
-      if (value) {
-        let result;
-        if (this.type === 'number') { result = Number(value) } else { result = String(value) }
+      let result;
+      if (this.type === 'number') { result = Number(value) } else { result = String(value) }
+      if (result !== this.initialValue) {
         this.$emit('edited', result)
+        this.initialValue = value
       }
     }
+  },
+  mounted() {
+    this.initialValue = this.value
   }
 })
 </script>

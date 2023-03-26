@@ -3,17 +3,12 @@ import cors from "cors";
 import Repository from "./Repository";
 import SimpleCrud from "./SimpleCrud";
 import {tryCatch} from "./Utils";
-import {PrismaClient} from "@prisma/client";
+import {EntityType} from "../types/Types";
 
 const app = express();
 const port = 7000;
 
 export class Rest {
-
-  crudEntities: Array<string> = [
-    "canvasColor", "canvasName", "canvasSize", "canvas", "file", "manufacturer", "series",
-    "kit", "kitPalette", "kitThread", "kitThreadVariant", "thread", "palette"
-  ]
 
   async init() {
     app.use(cors());
@@ -73,32 +68,32 @@ export class Rest {
   }
 
   private async initSimpleCrud() {
-    this.crudEntities.forEach((entity: string) => {
+    for (const entity of Object.values(EntityType)) {
       app.get("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
         if (!req.query["uuid"]) {
-          res.json(await SimpleCrud.getEntities(entity as keyof PrismaClient, req.query["limit"]?.toString(), req.query["page"]?.toString()))
+          res.json(await SimpleCrud.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
         } else {
-          res.json(await SimpleCrud.getEntity(entity as keyof PrismaClient, req.query["uuid"].toString()))
+          res.json(await SimpleCrud.getEntity(entity, req.query["uuid"].toString()))
         }
       }))
       app.post("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.createEntity(entity as keyof PrismaClient, req.body))
+        res.json(await SimpleCrud.createEntity(entity, req.body))
       }))
       app.put("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.updateEntity(entity as keyof PrismaClient, req.body))
+        res.json(await SimpleCrud.updateEntity(entity, req.body))
       }))
       app.patch("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
         if (req.query["uuid"]) {
-          res.json(await SimpleCrud.updateEntity(entity as keyof PrismaClient, req.body, req.query["uuid"].toString()))
+          res.json(await SimpleCrud.updateEntity(entity, req.body, req.query["uuid"].toString()))
         } else {
           res.status(400)
           res.send({ message: "No uuid provided"})
         }
       }))
       app.delete("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.deleteEntity(entity as keyof PrismaClient, req.body))
+        res.json(await SimpleCrud.deleteEntity(entity as EntityType, req.body))
       }))
-    })
+    }
   }
 
   private initComplexEndpoints() {
