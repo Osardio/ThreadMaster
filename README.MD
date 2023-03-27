@@ -36,7 +36,7 @@ PORT=7000
 1. `npm install`
 1. `npm run serve`
 
-### Deploy in a Docker container
+### Deploy in a Docker container with Nginx as HTTP server
 1. `cd backend`
 1. `docker build -t threadmaster_backend .`
 1. `docker run --env-file env.docker --network="backend" -dp 7000:7000 threadmaster_backend`
@@ -66,3 +66,4 @@ _Note:_ you can change default backend host used by frontend container via envir
 ```
 VITE_BACKEND_URL=http://localhost:7000
 ``` 
+**WARNING:** If you will not change this variable, site will be available only on user's localhost. This should be changed to domain name/IP address where backend is located.
