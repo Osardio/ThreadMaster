@@ -39,7 +39,7 @@ export default defineComponent({
     <ImageWrapper
         class="kit-side-preview"
         :src="`${commonStore.backendUrl}/image_preview?uuid=${kit.uuid}`"
-        :alt="kit.code"
+        :alt="kit.code ?? ''"
     />
     <div class="input-container">
       <SelectInput
@@ -57,7 +57,7 @@ export default defineComponent({
           label="Код набора"
           class="kit-side-input"
           style="width: 80px"
-          :value="kit.code"
+          :value="kit.code ?? ''"
           width="80px"
           @edited="kitStore.patchKit({ code: $event})"
       />
@@ -75,26 +75,28 @@ export default defineComponent({
     <StringInput
         label="Английское название"
         class="kit-side-input"
-        :value="kit.name_en"
+        :value="kit.name_en ?? ''"
         @edited="kitStore.patchKit({ name_en: $event })"
     />
     <StringInput
         label="Русскоязычное название"
         class="kit-side-input"
-        :value="kit.name_ru"
+        :value="kit.name_ru ?? ''"
         @edited="kitStore.patchKit({ name_ru: $event })"
     />
     <div class="input-container">
       <StringInput
           label="Длина дизайна"
           class="kit-side-input"
-          :value="kit.design_length" type="number"
+          :value="kit.design_length ?? 0"
+          type="number"
           @edited="kitStore.patchKit({ design_length: $event })"
       />
       <StringInput
           label="Ширина дизайна"
           class="kit-side-input"
-          :value="kit.design_width" type="number"
+          :value="kit.design_width ?? 0"
+          type="number"
           @edited="kitStore.patchKit({ design_width: $event })"
       />
     </div>
@@ -102,25 +104,27 @@ export default defineComponent({
       <StringInput
           label="Кол-во крестиков"
           class="kit-side-input"
-          :value="kit.stitches_count" type="number"
+          :value="kit.stitches_count ?? 0"
+          type="number"
           @edited="kitStore.patchKit({ stitches_count: $event })"
       />
       <StringInput
           label="Кол-во цветов"
           class="kit-side-input"
-          :value="kit.colors_count" type="number"
+          :value="kit.colors_count ?? 0"
+          type="number"
           @edited="kitStore.patchKit({ colors_count: $event })"
       />
     </div>
     <StringInput
         label="Шaрмики"
         class="kit-side-input"
-        :value="kit.charms"
+        :value="kit.charms ?? ''"
         @edited="kitStore.patchKit({ charms: $event })"
     />
     <TextInput
         label="Комментарий"
-        :value="kit.comment"
+        :value="kit.comment ?? ''"
         @edited="kitStore.patchKit({ comment: $event })"
     />
   </div>

@@ -5,7 +5,7 @@ export default defineComponent({
   name: "StringInput",
   emits: ['edited'],
   data() {
-    return { initialValue: "" }
+    return { initialValue: {} }
   },
   props: {
     value: {
@@ -42,7 +42,11 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.initialValue = this.value
+    if (this.type === 'number') {
+      this.initialValue = Number(this.value)
+    } else {
+      this.initialValue = String(this.value)
+    }
   }
 })
 </script>

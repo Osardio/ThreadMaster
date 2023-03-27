@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {Kit} from "#/Types";
+import {EntityType, Kit} from "#/Types";
 import Rest from '@/Rest'
 
 export const useKitStore = defineStore("kitStore", {
@@ -32,7 +32,7 @@ export const useKitStore = defineStore("kitStore", {
         // TODO move to input
         return
       }
-      this.kit = await Rest.patchEntity('kit', this.kit.uuid, updatedProperty) as Kit
+      this.kit = await Rest.patchEntity(EntityType.KIT, this.kit.uuid, updatedProperty) as Kit
       const idx = this.kits.findIndex(kitInList => kitInList.uuid === this.kit.uuid)
       this.kits[idx] = this.kit // patch element in entities list
       // TODO notify about error

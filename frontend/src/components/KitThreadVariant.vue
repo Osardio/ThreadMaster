@@ -8,7 +8,10 @@ export default defineComponent({
   name: "KitThreadVariant",
   components: {SelectInput},
   props: {
-    value: Object as PropType<KitsThreadVariantShort>,
+    value: {
+      type: Object as PropType<KitsThreadVariantShort>,
+      required: true
+    },
     show_color: {
       type: Boolean,
       default: true

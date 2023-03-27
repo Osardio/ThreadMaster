@@ -62,7 +62,7 @@ export default defineComponent({
       <ImageWrapper
           class="kit-preview"
           :src="`${commonStore.backendUrl}/image_preview?uuid=${kit.uuid}`"
-          :alt="kit.code"
+          :alt="kit.code ?? ''"
       />
     </div>
     <div class="kit-label">{{ `${kit.code} ${kit.name_en}` }}</div>
