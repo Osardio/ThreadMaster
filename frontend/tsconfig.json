@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "lib": ["ESNext", "DOM"],
+    "plugins": [{"name": "typescript-tslint-plugin"}],
     "skipLibCheck": true,
     "noEmit": true,
     "baseUrl": ".",

@@ -31,10 +31,6 @@ export default defineComponent({
     value: {
       type: Object,
       required: true
-    },
-    customOption: {
-      type: Boolean,
-      default: false
     }
   },
   watch: {
@@ -67,9 +63,6 @@ export default defineComponent({
         v-model="val"
         @option:selected="onSelected($event)"
     >
-      <template v-if="customOption">
-        <slot></slot>
-      </template>
     </VueSelect>
   </div>
 

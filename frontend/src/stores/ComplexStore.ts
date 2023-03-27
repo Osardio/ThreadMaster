@@ -25,6 +25,9 @@ export const useComplexStore = defineStore("complexStore",{
         quantity: 0
       })
       await this.fetchKitThreadTableData(this.kit_uuid)
+    },
+    async updateKitThreadVariant(kitThreadVariantUuid: string, updatedProperty: object) {
+      await Rest.patchEntity(EntityType.KIT_THREAD_VARIANT, kitThreadVariantUuid, updatedProperty)
     }
   }
 })

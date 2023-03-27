@@ -89,7 +89,11 @@ export default defineComponent({
             v-for="kt_variant in sortedKitThreadVariants(row.kits_threads_variants)"
             :key="kt_variant.uuid"
         >
-          <KitThreadVariant :value="kt_variant" :options="threadStore.threads"/>
+          <KitThreadVariant
+              :value="kt_variant"
+              :threads="threadStore.threads"
+              @edited="complexStore.updateKitThreadVariant(row.uuid, { thread_uuid: $event })"
+          />
         </td>
         <td v-else>Выбрать цвет</td>
       </tr>
