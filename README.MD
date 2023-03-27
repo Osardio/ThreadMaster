@@ -21,7 +21,10 @@ DATABASE_URL=postgresql://postgres:postgrespw@localhost:5432/threadmaster?schema
 ```
 or via environment variable `DATABASE_URL` (in `docker run` command). Otherwise, the default connection string pointing to `localhost:5432` will be used.
 
-
+_Note:_ you can change default backend host via environment variable `PORT`. Defaults are:
+```
+PORT=7000
+```
 
 ### Run development build:
 1. `cd backend`
