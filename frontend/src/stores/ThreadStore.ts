@@ -10,6 +10,6 @@ export const useThreadStore = defineStore("threadStore",{
   actions: {
     async fetchThreads() {
       this.threads = await Rest.getEntities(EntityType.THREAD) as Thread[]
-    },
+    }
   }
 })

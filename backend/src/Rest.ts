@@ -91,7 +91,12 @@ export class Rest {
         }
       }))
       app.delete("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.deleteEntity(entity as EntityType, req.body))
+        if (req.query["uuid"]) {
+          res.json(await SimpleCrud.deleteEntity(entity, req.query["uuid"].toString()))
+        } else {
+          res.status(400)
+          res.send({ message: "No uuid provided"})
+        }
       }))
     }
   }

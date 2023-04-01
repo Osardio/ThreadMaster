@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
-import {KitsThreadVariantShort} from "#/ComplexTypes";
+import {KitsThreadVariantShort, PaletteShort} from "#/ComplexTypes";
 import SelectKitThreadInput from "@/components/SelectKitThreadInput.vue"
 import {Thread} from "#/Types";
 import {useComplexStore} from "@/stores/ComplexStore";
@@ -15,7 +15,6 @@ export default defineComponent({
   props: {
     value: {
       type: Object as PropType<KitsThreadVariantShort>,
-      required: true
     },
     threads: {
       type: [] as PropType<Thread[]>,
@@ -25,12 +24,20 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
+    palette: {
+      type: Object as PropType<PaletteShort>,
+      required: true
+    }
   },
   computed: {
     suitableThreads() {
-      return this.threads.filter( (thread) =>
-          (thread.palette_uuid === this.value.kit_palette.palette.uuid)
-      ) ?? []
+      if (this.value?.kit_palette !== undefined) {
+        return this.threads.filter( (thread) =>
+            (thread.palette_uuid === this.value!.kit_palette.palette.uuid)
+        ) ?? []
+      } else {
+        return this.threads
+      }
     }
   },
   methods: {
@@ -46,7 +53,7 @@ export default defineComponent({
     <SelectKitThreadInput
         v-if="threads"
         :options="suitableThreads"
-        :value="threads.find((thread) => thread.uuid === value.thread.uuid)"
+        :value="threads.find((thread) => thread.uuid === value?.thread?.uuid)"
         :show_color="show_color"
         @edited="updateKitThreadVariant($event)"
     />

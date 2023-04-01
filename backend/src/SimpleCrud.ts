@@ -28,20 +28,28 @@ export default class SimpleCrud {
     }
   }
 
-  static async deleteEntity<Type extends DomainEntity>(type: EntityType, body: Type) : Promise<DomainEntity> {
+  static async deleteEntity(type: EntityType, entityUuid?: string) : Promise<DomainEntity> {
     // @ts-ignore
-    return await prisma[type].delete({ where: { uuid: body.uuid } })
+    return await prisma[type].delete({ where: { uuid: entityUuid } })
   }
 
   static async createEntity(type: EntityType, body: any) : Promise<DomainEntity> {
     switch (type) {
       case EntityType.KIT_THREAD:
         const createDto = body as KitThreadCreateDto
-        return await prisma.kitThread.create({data: {
+        const kitThread = await prisma.kitThread.create({data: {
             quantity: createDto.quantity,
             order_number: createDto.order_number,
             kit: { connect: { uuid: createDto.kit_uuid } }
         }})
+        const kitPalettes = await prisma.kitPalette.findMany({ where: { kit: { uuid: kitThread.kit_uuid }}})
+        for (const kitPalette of kitPalettes) {
+          await prisma.kitThreadVariant.create({ data: {
+            kit_palette: { connect: { uuid: kitPalette.uuid } },
+            kit_thread: { connect: { uuid: kitThread.uuid } }
+          }})
+        }
+        return kitThread
       default:
         // @ts-ignore
         return await prisma[type].create({data: body})

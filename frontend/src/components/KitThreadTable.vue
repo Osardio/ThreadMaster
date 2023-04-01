@@ -7,10 +7,11 @@ import TextInput from "@/ui/TextInput.vue";
 import StringInput from "@/ui/StringInput.vue";
 import TButton from "@/ui/TButton.vue";
 import {useThreadStore} from "@/stores/ThreadStore";
+import KitThreadRow from "@/components/KitThreadRow.vue";
 
 export default defineComponent({
   name: "KitThreadTable",
-  components: {TButton, TextInput, KitThreadVariant, StringInput},
+  components: {KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput},
   setup() {
     const complexStore = useComplexStore()
     const threadStore = useThreadStore()
@@ -69,9 +70,10 @@ export default defineComponent({
           v-for="row in rows"
           :key="row.uuid"
       >
-        <td>
-          {{ row.order_number }}
-        </td>
+        <KitThreadRow
+          :number="row.order_number"
+          @removed="complexStore.removeKitThread(row.uuid)"
+        />
         <td>
           <div class="thread-quantity">
             <StringInput
@@ -91,11 +93,18 @@ export default defineComponent({
         >
           <KitThreadVariant
               :value="kt_variant"
+              :palette="kt_variant.kit_palette.palette"
               :threads="threadStore.threads"
-              @edited="complexStore.updateKitThreadVariant(row.uuid, { thread_uuid: $event })"
+              @edited="complexStore.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
           />
         </td>
-        <td v-else>Выбрать цвет</td>
+<!--        <td v-else ref="tdCell">Выбрать цвет
+          <KitThreadVariant
+              :palette="columns[this.$refs.tdCell.getAttribute('cellIndex')].kits_palettes[0].palette"
+              :threads="threadStore.threads"
+              @created="complexStore.createKitThreadVariant($event)"
+          />
+        </td>-->
       </tr>
       <tr>
         <td :colspan="2 + columns.length">
@@ -120,8 +129,6 @@ export default defineComponent({
 }
 
 .table-container {
-  border-radius: 4px;
-  overflow: hidden;
   outline: $border;
   outline-offset: -1px;
 }
@@ -131,7 +138,7 @@ th, td  {
   padding: 10px;
 }
 
-thead tr th:first-child {
+/*thead tr th:first-child {
   border-radius: $table-border-radius 0 0 0;
 }
 thead tr th:last-child {
@@ -142,7 +149,7 @@ tbody tr:last-child td:last-child {
 }
 tbody tr:last-child td:first-child {
   border-radius: 0 0 0 $table-border-radius;
-}
+}*/
 
 th {
   background-color: #323232;

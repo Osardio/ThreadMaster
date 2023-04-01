@@ -20,7 +20,7 @@ export interface KitThreadTableRow extends DomainEntity  {
 export interface KitsThreadVariantShort extends DomainEntity {
   uuid: string;
   kit_palette: KitPaletteShort;
-  thread: ThreadShort;
+  thread: ThreadShort | null;
 }
 
 export interface KitPaletteShort extends DomainEntity  {
