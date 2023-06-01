@@ -1,6 +1,9 @@
 # ThreadMaster
 Cross stitch kit organizer
 
+Backend: NodeJS/TypeScript
+Frontend: Vue.js
+
 Dependencies: DB <- backend <- frontend
 
 ## BACKEND
