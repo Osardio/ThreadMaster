@@ -60,6 +60,12 @@ export interface KitThreadCreateDto {
   quantity?: number
 }
 
+export interface KitPaletteCreateDto {
+  order_number: number
+  kit_uuid: string
+  palette_uuid: string
+}
+
 export interface KitThreadVariant extends DomainEntity {
   uuid: string
   kits_threads_uuid: string

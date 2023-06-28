@@ -5,6 +5,5 @@ import router from "./router"
 
 createApp(App)
   .use(router)
-  //.use(vuetify)
   .use(createPinia())
   .mount('#app')

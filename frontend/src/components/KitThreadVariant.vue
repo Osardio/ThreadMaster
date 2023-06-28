@@ -3,14 +3,9 @@ import {defineComponent, PropType} from "vue";
 import {KitsThreadVariantShort, PaletteShort} from "#/ComplexTypes";
 import SelectKitThreadInput from "@/components/SelectKitThreadInput.vue"
 import {Thread} from "#/Types";
-import {useComplexStore} from "@/stores/ComplexStore";
 
 export default defineComponent({
   name: "KitThreadVariant",
-  setup() {
-    const complexStore = useComplexStore()
-    return { complexStore }
-  },
   components: {SelectKitThreadInput},
   props: {
     value: {

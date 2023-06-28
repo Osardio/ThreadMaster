@@ -1,12 +1,15 @@
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {Component, defineComponent, PropType} from "vue";
 import {Thread} from "#/Types";
 import TButton from "@/ui/TButton.vue";
 import VueSelect from "vue-select";
 
+// fix for typescript
+const VueSelects = VueSelect as Component
+
 export default defineComponent({
   name: "SelectKitThreadInput",
-  components: { TButton, VueSelect },
+  components: { TButton, VueSelects },
   emits: ['edited'],
   data() {
     return {
@@ -57,7 +60,7 @@ export default defineComponent({
 <template>
   <div class="select-input-container">
     <label class="select-input-label">{{caption}}</label>
-    <VueSelect
+    <VueSelects
         v-if="options.length !== 0"
         class="select-input"
         :options="options"
@@ -95,7 +98,7 @@ export default defineComponent({
           <TButton label="Новая нить"/>
         </div>
       </template>
-    </VueSelect>
+    </VueSelects>
   </div>
 
 </template>

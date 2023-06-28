@@ -1,22 +1,18 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useKitStore} from "@/stores/KitStore";
 import KitSideBar from "@/components/KitSideBar.vue";
 import RightPanel from "@/components/RightPanel.vue";
 import {Kit} from "#/Types";
 import KitThreadTable from "@/components/KitThreadTable.vue";
+import {useApi} from "@/stores/Api";
 
 export default defineComponent({
   name: "KitPage",
   components: {KitThreadTable, RightPanel, KitSideBar},
-  setup() {
-    const kitStore = useKitStore()
-    kitStore.fetchKits()
-    return { kitStore }
-  },
+  setup() { const api = useApi(); return { api } },
   computed: {
     kit() : Kit {
-      return this.kitStore.kit
+      return this.api.kits.kit
     }
   },
   props: {
@@ -26,7 +22,10 @@ export default defineComponent({
     }
   },
   async beforeCreate() {
-    await this.kitStore.setActiveKitByUuid(this.uuid)
+    await this.api.kits.setActiveKitByUuid(this.uuid)
+  },
+  async mounted() {
+    await this.api.kits.get()
   }
 })
 </script>
@@ -34,7 +33,7 @@ export default defineComponent({
 <template>
   <div class="page-container">
     <div class="page">
-      <KitThreadTable v-if="kitStore.kit.uuid !== undefined" :uuid="uuid"/>
+      <KitThreadTable v-if="api.kits.kit.uuid !== undefined" :uuid="uuid"/>
       <!--
       TODO Таблица нитей
       TODO Канва
@@ -43,7 +42,7 @@ export default defineComponent({
       -->
     </div>
     <RightPanel>
-      <KitSideBar v-if="kitStore.kit.uuid !== undefined" :kit="kitStore.kit"/>
+      <KitSideBar v-if="api.kits.kit.uuid !== undefined" :kit="api.kits.kit"/>
     </RightPanel>
   </div>
 </template>

@@ -1,4 +1,4 @@
-import {DomainEntity, EntityType, KitThreadCreateDto} from "../types/Types";
+import {DomainEntity, EntityType, KitPaletteCreateDto, KitThreadCreateDto} from "../types/Types";
 import {prisma} from "./Repository";
 
 export default class SimpleCrud {
@@ -34,9 +34,10 @@ export default class SimpleCrud {
   }
 
   static async createEntity(type: EntityType, body: any) : Promise<DomainEntity> {
+    let createDto;
     switch (type) {
       case EntityType.KIT_THREAD:
-        const createDto = body as KitThreadCreateDto
+        createDto = body as KitThreadCreateDto
         const kitThread = await prisma.kitThread.create({data: {
             quantity: createDto.quantity,
             order_number: createDto.order_number,
@@ -50,6 +51,14 @@ export default class SimpleCrud {
           }})
         }
         return kitThread
+      case EntityType.KIT_PALETTE:
+        createDto = body as KitPaletteCreateDto
+        const kitPalette = await prisma.kitPalette.create({data: {
+            order_number: createDto.order_number,
+            palette: { connect: { uuid: createDto.palette_uuid }},
+            kit: { connect: { uuid: createDto.kit_uuid }}
+          }})
+        return kitPalette
       default:
         // @ts-ignore
         return await prisma[type].create({data: body})

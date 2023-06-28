@@ -1,10 +1,13 @@
 <script lang="ts">
 import VueSelect from "vue-select";
-import {defineComponent} from "vue";
+import {Component, defineComponent} from "vue";
+
+// fix for typescript
+const VueSelects = VueSelect as Component
 
 export default defineComponent({
   name: "SelectInput",
-  components: { VueSelect },
+  components: { VueSelects },
   emits: ['edited'],
   data() {
     return {
@@ -53,7 +56,7 @@ export default defineComponent({
 <template>
   <div class="select-input-container">
     <label class="select-input-label">{{caption}}</label>
-    <VueSelect
+    <VueSelects
         v-if="options"
         class="select-input"
         :label="lab"
@@ -63,7 +66,7 @@ export default defineComponent({
         v-model="val"
         @option:selected="onSelected($event)"
     >
-    </VueSelect>
+    </VueSelects>
   </div>
 
 </template>

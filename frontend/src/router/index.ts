@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import CatalogPage from "@/pages/CatalogPage.vue"
 import DirectoryPage from "@/pages/DirectoryPage.vue"
 import KitPage from "@/pages/KitPage.vue"
@@ -13,6 +13,5 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
-
 
 export default router

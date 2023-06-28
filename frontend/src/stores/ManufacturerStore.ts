@@ -8,7 +8,7 @@ export const useManufacturerStore = defineStore("manufacturerStore",{
       manufacturers: [] as Manufacturer[],
     }},
   actions: {
-    async fetchManufacturers() {
+    async get() {
       this.manufacturers = await Rest.getEntities("manufacturer") as Manufacturer[]
     },
   }

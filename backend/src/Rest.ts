@@ -33,7 +33,7 @@ export class Rest {
             res.end(Buffer.from(image.data ?? "", 'base64'));
           } else {
             res.status(404)
-            res.json({ error: "Not Found"})
+            res.json({ error: "Not Found" })
           }
         } catch (e) {
           console.log(`GET /image_preview error: `, e)

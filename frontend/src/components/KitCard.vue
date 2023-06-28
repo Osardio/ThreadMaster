@@ -1,18 +1,13 @@
 <script lang="ts">
-import {useKitStore} from "@/stores/KitStore";
 import {Kit} from "#/Types";
 import {defineComponent, PropType} from "vue";
 import ImageWrapper from "@/ui/ImageWrapper.vue";
-import {useCommonStore} from "@/stores/CommonStore";
+import {useApi} from "@/stores/Api";
 
 export default defineComponent({
   name: "KitCard",
   components: {ImageWrapper},
-  setup() {
-    const kitStore = useKitStore()
-    const commonStore = useCommonStore()
-    return { kitStore, commonStore }
-  },
+  setup() { const api = useApi(); return { api } },
   data() {
     return {
       hovered: false
@@ -20,7 +15,7 @@ export default defineComponent({
   },
   computed: {
     kitSelected() {
-      return this.kitStore.kit.uuid === this.kit.uuid
+      return this.api.kits.kit.uuid === this.kit.uuid
     }
   },
   props: {
@@ -32,7 +27,7 @@ export default defineComponent({
   },
   methods: {
     setActive() {
-      this.kitStore.setActiveKit(this.kit)
+      this.api.kits.setActiveKit(this.kit)
     },
     openKit() {
       this.$router.push(`/kit/${this.kit.uuid}`)
@@ -61,7 +56,7 @@ export default defineComponent({
       </div>
       <ImageWrapper
           class="kit-preview"
-          :src="`${commonStore.backendUrl}/image_preview?uuid=${kit.uuid}`"
+          :src="`${api.common.backendUrl}/image_preview?uuid=${kit.uuid}`"
           :alt="kit.code ?? ''"
       />
     </div>

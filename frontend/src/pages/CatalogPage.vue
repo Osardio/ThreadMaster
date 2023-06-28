@@ -1,23 +1,20 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useKitStore} from "@/stores/KitStore";
 import RightPanel from "@/components/RightPanel.vue";
 import Kit from "@/components/KitCard.vue";
 import KitSideBar from "@/components/KitSideBar.vue";
+import {useApi} from "@/stores/Api";
 
 export default defineComponent({
   name: 'CatalogPage',
-  setup() {
-    const kitStore = useKitStore()
-    return { kitStore }
-  },
+  setup() { const api = useApi(); return { api } },
   components: {
     KitSideBar,
     Kit,
     RightPanel
   },
   async mounted() {
-    await this.kitStore.fetchKits()
+    await this.api.kits.get()
   }
 })
 
@@ -29,7 +26,7 @@ export default defineComponent({
       <!-- TODO search -->
       <div class="kits">
         <Kit
-            v-for="kit of kitStore.kits"
+            v-for="kit of api.kits.kits"
             :key="kit.uuid"
             :kit="kit"
         ></Kit>
@@ -37,7 +34,7 @@ export default defineComponent({
     </div>
     <RightPanel>
       <KitSideBar
-        :kit="kitStore.kit"
+        :kit="api.kits.kit"
       />
     </RightPanel>
   </div>

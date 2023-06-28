@@ -1,22 +1,18 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {KitsThreadVariantShort, KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
-import {useComplexStore} from "@/stores/ComplexStore";
 import KitThreadVariant from "@/components/KitThreadVariant.vue";
 import TextInput from "@/ui/TextInput.vue";
 import StringInput from "@/ui/StringInput.vue";
 import TButton from "@/ui/TButton.vue";
-import {useThreadStore} from "@/stores/ThreadStore";
 import KitThreadRow from "@/components/KitThreadRow.vue";
+import KitThreadColumn from "@/components/KitThreadColumn.vue";
+import {useApi} from "@/stores/Api";
 
 export default defineComponent({
   name: "KitThreadTable",
-  components: {KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput},
-  setup() {
-    const complexStore = useComplexStore()
-    const threadStore = useThreadStore()
-    return { complexStore, threadStore }
-  },
+  components: {KitThreadColumn, KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput},
+  setup() { const api = useApi(); return { api } },
   props: {
     uuid: {
       type: String,
@@ -25,10 +21,10 @@ export default defineComponent({
   },
   computed: {
     columns(): KitThreadTableColumn[] {
-      return this.complexStore.kitThreadTableData.table_columns
+      return this.api.complex.kitThreadTableData.table_columns
     },
     rows(): KitThreadTableRow[] {
-      return this.complexStore.kitThreadTableData.table_rows
+      return this.api.complex.kitThreadTableData.table_rows
     }
   },
   methods: {
@@ -44,24 +40,30 @@ export default defineComponent({
     }
   },
   async beforeCreate() {
-    await this.complexStore.fetchKitThreadTableData(this.uuid)
-    await this.threadStore.fetchThreads()
+    await this.api.complex.getKitThreadTableData(this.uuid)
+    await this.api.threads.get()
+    await this.api.palettes.get()
   }
 })
 </script>
 
 <template>
   <div class="table-container">
-    <table v-if="complexStore.kitThreadTableData.kit_uuid !== undefined">
+    <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
       <thead>
       <tr>
         <th><label>№</label></th>
         <th><label>Кол-во</label></th>
         <th
-            v-for="column in columns"
+            v-for="(column, index) in columns"
             :key="column.kits_palettes[0].uuid"
         >
-          <label>{{ column.kits_palettes[0].palette.name }}</label>
+          <KitThreadColumn
+              :show_removal="index !== (columns.length - 1)"
+              :name="column.kits_palettes[0].palette.name"
+              :palettes="api.palettes.palettes"
+              @added="api.complex.addKitPalette($event)"
+          />
         </th>
       </tr>
       </thead>
@@ -71,8 +73,9 @@ export default defineComponent({
           :key="row.uuid"
       >
         <KitThreadRow
-          :number="row.order_number"
-          @removed="complexStore.removeKitThread(row.uuid)"
+            :show_removal="row.order_number === rows.length"
+            :number="row.order_number"
+            @removed="api.complex.removeKitThread(row.uuid)"
         />
         <td>
           <div class="thread-quantity">
@@ -82,7 +85,7 @@ export default defineComponent({
                 :centered="true"
                 type="number"
                 style="width: 40px"
-                @edited="complexStore.updateKitThread(row.uuid, { quantity: $event })"
+                @edited="api.complex.updateKitThread(row.uuid, { quantity: $event })"
             />
           </div>
         </td>
@@ -94,8 +97,8 @@ export default defineComponent({
           <KitThreadVariant
               :value="kt_variant"
               :palette="kt_variant.kit_palette.palette"
-              :threads="threadStore.threads"
-              @edited="complexStore.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
+              :threads="api.threads.threads"
+              @edited="api.complex.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
           />
         </td>
 <!--        <td v-else ref="tdCell">Выбрать цвет
@@ -111,7 +114,7 @@ export default defineComponent({
           <div class="add-thread-row">
            <TButton
              label="Добавить цвет"
-             @click="complexStore.addKitThread()"
+             @click="api.complex.addKitThread()"
            />
           </div>
         </td>

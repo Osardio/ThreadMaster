@@ -8,7 +8,7 @@ export const useSeriesStore = defineStore("seriesStore",{
       series: [] as Series[],
     }},
   actions: {
-    async fetchSeries() {
+    async get() {
       const backendUrl = useCommonStore().backendUrl
       const res = await fetch(`${backendUrl}/series`)
       this.series = (await res.json() as Series[])

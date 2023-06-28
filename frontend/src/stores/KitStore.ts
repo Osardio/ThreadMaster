@@ -14,7 +14,7 @@ export const useKitStore = defineStore("kitStore", {
     }
   },
   actions: {
-    async fetchKits() {
+    async get() {
       const res = await Rest.getEntities('kit')
       this.kits = (res as Kit[]).concat(mockKits)
     },
@@ -22,9 +22,9 @@ export const useKitStore = defineStore("kitStore", {
       this.kit = kit
     },
     async setActiveKitByUuid(uuid: string) {
-      this.kit = await Rest.getEntity("kit",uuid) as Kit
+      this.kit = await Rest.getEntity("kit", uuid) as Kit
     },
-    async patchKit(updatedProperty: object) {
+    async patch(updatedProperty: object) {
       const oldValue = this.kit[Object.keys(updatedProperty)[0] as keyof Kit]
       const newValue = Object.values(updatedProperty)[0]
       if (oldValue === newValue) {

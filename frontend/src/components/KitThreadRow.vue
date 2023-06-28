@@ -10,7 +10,11 @@ export default defineComponent({
     }
   },
   props: {
-    number: Number
+    number: Number,
+    show_removal: {
+      type: Boolean,
+      default: false
+    }
   },
 })
 </script>
@@ -19,21 +23,22 @@ export default defineComponent({
   <td class="kit-thread-row"
       @mouseover="hovered = true"
       @mouseleave="hovered = false">
-  <div>
-    <div
-        v-if="hovered"
-        class="remove-row-button"
-        @click="$emit('removed')"
-    >
-      <i class="bx bx-trash"></i>
-    </div>{{ number }}
-  </div>
+    <div>
+      <div
+          v-if="hovered && show_removal"
+          class="remove-row-button"
+          @click="$emit('removed')"
+      >
+        <i class="bx bx-trash"></i>
+      </div>{{ number }}
+    </div>
   </td>
 </template>
 
 <style scoped>
 
 .kit-thread-row {
+  width: 45px;
   text-align: center;
   position: relative;
 }
@@ -41,7 +46,7 @@ export default defineComponent({
 .remove-row-button {
   position: absolute;
   z-index: 1;
-  left: 2px;
+  left: 3px;
   bottom: 15px;
 }
 
