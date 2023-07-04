@@ -13,7 +13,4 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.panel-right {
-  padding: 25px;
-}
 </style>

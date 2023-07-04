@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 import Tools from "../src/Tools";
 import path from "path";
 import {KitThreadTableColumn, KitThreadTableData, KitThreadTableRow} from "../types/ComplexTypes";
-import {File} from "../types/Types";
+import {File, file_type} from "../types/Types";
 
 export const prisma = new PrismaClient()
 
@@ -12,7 +12,8 @@ export default class Repository {
     // TODO change this to actual image preview
     try {
       return await prisma.file.findFirst({
-        where: { kit_uuid: kitUuid }
+        // @ts-ignore
+        where: { kit_uuid: kitUuid, file_type: file_type.FRONT }
       })
     } catch (e) {
       return null

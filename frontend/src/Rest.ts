@@ -20,6 +20,18 @@ export default class Rest {
     return (await rest.get(entityType)).data as DomainEntity[]
   }
 
+  static async getEntityCustom(entityType: string, params: object): Promise<DomainEntity> {
+    return (await rest.get('custom/' + entityType, {
+      params: params
+    })).data as DomainEntity
+  }
+
+  static async getEntitiesCustom(entityType: string, params: object): Promise<DomainEntity[]> {
+    return (await rest.get('custom/' + entityType, {
+      params: { multiple: true, ...params}
+    })).data as DomainEntity[]
+  }
+
   static async postEntity(entityType: EntityType, entity: object): Promise<DomainEntity> {
     return (await rest.post(entityType, entity)).data as DomainEntity
   }

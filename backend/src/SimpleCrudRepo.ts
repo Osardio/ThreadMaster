@@ -1,7 +1,7 @@
 import {DomainEntity, EntityType, KitPaletteCreateDto, KitThreadCreateDto} from "../types/Types";
 import {prisma} from "./Repository";
 
-export default class SimpleCrud {
+export default class SimpleCrudRepo {
 
   static async getEntities(type: EntityType, limit?: string, page?: string) : Promise<Array<DomainEntity>> {
     let queryOptions: QueryOptions = {};
@@ -14,6 +14,16 @@ export default class SimpleCrud {
   static async getEntity(type: EntityType, uuid: string) : Promise<DomainEntity> {
     // @ts-ignore
     return await prisma[type].findUnique({ where: { uuid: uuid }})
+  }
+
+  static async getEntityCustom(type: EntityType, params: object) : Promise<DomainEntity> {
+    // @ts-ignore
+    return await prisma[type].findUnique({ where: params })
+  }
+
+  static async getEntitiesCustom(type: EntityType, params: object) : Promise<DomainEntity[]> {
+    // @ts-ignore
+    return await prisma[type].findMany({ where: params })
   }
 
   static async updateEntity<Type extends DomainEntity>(type: EntityType, body: Type, uuid?: string) : Promise<DomainEntity> {

@@ -48,7 +48,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="table-container">
+  <div class="kit-thread-table">
+    <div class="heading-16">Таблица цветов</div>
+    <div class="table-container">
     <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
       <thead>
       <tr>
@@ -122,17 +124,18 @@ export default defineComponent({
       </tbody>
     </table>
   </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 @import "../variables";
+@import "../global";
 
 .table-container > * {
   border-collapse: collapse;
 }
 
 .table-container {
-  outline: $border;
   outline-offset: -1px;
 }
 

@@ -1,7 +1,7 @@
 import express, {NextFunction, Request, Response} from 'express';
 import cors from "cors";
 import Repository from "./Repository";
-import SimpleCrud from "./SimpleCrud";
+import SimpleCrudRepo from "./SimpleCrudRepo";
 import {tryCatch} from "./Utils";
 import {EntityType} from "../types/Types";
 
@@ -70,21 +70,29 @@ export class Rest {
   private async initSimpleCrud() {
     for (const entity of Object.values(EntityType)) {
       app.get("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        if (!req.query["uuid"]) {
-          res.json(await SimpleCrud.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
+        if (req.query["uuid"]) {
+          res.json(await SimpleCrudRepo.getEntity(entity, req.query["uuid"].toString()))
         } else {
-          res.json(await SimpleCrud.getEntity(entity, req.query["uuid"].toString()))
+          res.json(await SimpleCrudRepo.getEntities(entity, req.query["limit"]?.toString(), req.query["page"]?.toString()))
+        }
+      }))
+      app.get("/custom/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
+        if (req.query["multiple"]) {
+          delete req.query["multiple"]
+          res.json(await SimpleCrudRepo.getEntitiesCustom(entity, req.query))
+        } else {
+          res.json(await SimpleCrudRepo.getEntityCustom(entity, req.query))
         }
       }))
       app.post("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.createEntity(entity, req.body))
+        res.json(await SimpleCrudRepo.createEntity(entity, req.body))
       }))
       app.put("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
-        res.json(await SimpleCrud.updateEntity(entity, req.body))
+        res.json(await SimpleCrudRepo.updateEntity(entity, req.body))
       }))
       app.patch("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
         if (req.query["uuid"]) {
-          res.json(await SimpleCrud.updateEntity(entity, req.body, req.query["uuid"].toString()))
+          res.json(await SimpleCrudRepo.updateEntity(entity, req.body, req.query["uuid"].toString()))
         } else {
           res.status(400)
           res.send({ message: "No uuid provided"})
@@ -92,7 +100,7 @@ export class Rest {
       }))
       app.delete("/"+entity, tryCatch(async (req: Request, res: Response, _next) => {
         if (req.query["uuid"]) {
-          res.json(await SimpleCrud.deleteEntity(entity, req.query["uuid"].toString()))
+          res.json(await SimpleCrudRepo.deleteEntity(entity, req.query["uuid"].toString()))
         } else {
           res.status(400)
           res.send({ message: "No uuid provided"})

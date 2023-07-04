@@ -1,6 +1,5 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import errorImageUrl from "@/assets/img_error.svg"
 
 export default defineComponent({
   name: "ImageWrapper",
@@ -22,7 +21,6 @@ export default defineComponent({
   },
   methods: {
     onImageError(_event: Event) {
-      (this.$refs._img as HTMLImageElement).src=new URL(errorImageUrl, import.meta.url).href
       this.error = true
     }
   }
@@ -30,17 +28,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <img :class="{'image-placeholder': error}"
+  <img v-if="!error"
        :src="src"
        :alt="alt ?? ''"
        @error="onImageError($event)"
        ref="_img"
   >
+  <div v-else
+       class="image-placeholder bx bx-image-alt"
+  />
 </template>
 
 <style scoped>
-.image-placeholder {
-  fill: red;
-  color: red;
-}
 </style>

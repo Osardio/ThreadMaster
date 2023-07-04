@@ -58,6 +58,7 @@ export default defineComponent({
           class="kit-preview"
           :src="`${api.common.backendUrl}/image_preview?uuid=${kit.uuid}`"
           :alt="kit.code ?? ''"
+          style="font-size: 150px"
       />
     </div>
     <div class="kit-label">{{ `${kit.code} ${kit.name_en}` }}</div>

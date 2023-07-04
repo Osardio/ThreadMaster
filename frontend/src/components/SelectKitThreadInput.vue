@@ -157,7 +157,7 @@ export default defineComponent({
   border-radius: 5px;
   width: 10px;
   height: 10px;
-  margin: 3px;
+  margin: 3px 6px 3px 6px;
 }
 
 .kit-thread-variant-option {

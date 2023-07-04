@@ -121,7 +121,9 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../global";
+
 .kit-side-panel {
   height: 100%;
   display: flex;
@@ -144,12 +146,4 @@ export default defineComponent({
   margin-bottom: 4px;
 }
 
-.input-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.input-container > div {
-  width: 110px;
-}
 </style>

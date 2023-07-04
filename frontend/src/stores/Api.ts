@@ -7,6 +7,8 @@ import {useManufacturerStore} from "@/stores/ManufacturerStore";
 import {useThreadStore} from "@/stores/ThreadStore";
 import {useComplexStore} from "@/stores/ComplexStore";
 import {usePaletteStore} from "@/stores/PaletteStore";
+import {useCanvasStore} from "@/stores/CanvasStore";
+import {useFileStore} from "@/stores/FileStore";
 
 export const useApi = defineStore("api", {
   state: () => {
@@ -19,6 +21,8 @@ export const useApi = defineStore("api", {
       kitThreads: useKitThreadStore(),
       manufacturers: useManufacturerStore(),
       threads: useThreadStore(),
+      canvases: useCanvasStore(),
+      files: useFileStore()
     }
   }
 })

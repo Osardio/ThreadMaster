@@ -111,6 +111,7 @@ export interface File extends DomainEntity {
   kit_uuid: string
   name: string | null
   data: string | null
+  data_type: string | null
   file_type: file_type
   created_at: Date | null
   updated_at: Date | null

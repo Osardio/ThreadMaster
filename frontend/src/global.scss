@@ -1,44 +1,59 @@
 @import "variables";
 
 * {
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: $color;
-    -webkit-user-drag: none;
-    box-sizing: border-box;
-    --vs-controls-color: #EBEBEB;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $color;
+  -webkit-user-drag: none;
+  box-sizing: border-box;
+  --vs-controls-color: #EBEBEB;
 }
 
 .main-area {
-    display: flex;
-    width: calc(100vw - $panel-width);
-    height: 100vh;
-    background-color: $main-area-bg-color;
+  display: flex;
+  width: calc(100vw - $panel-width);
+  height: 100vh;
+  background-color: $main-area-bg-color;
 }
 
 .page-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .page {
-    height: 100vh;
-    display: inline-block;
-    padding: 0 10px;
-    overflow-y: scroll;
+  width: 100%;
+  height: 100vh;
+  display: inline-block;
+  padding: 20px;
+  overflow-y: scroll;
 }
 
 .panel {
-    border-left: $panel-border;
-    border-right: $panel-border;
-    width: $panel-width;
-    height: 100vh;
-    min-width: $panel-width;
-    flex-direction: column;
-    padding: 20px;
-    min-height: 100%;
-    background-color: $panel-bg-color;
+  border-left: $panel-border;
+  border-right: $panel-border;
+  width: $panel-width;
+  height: 100vh;
+  min-width: $panel-width;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 100%;
+  background-color: $panel-bg-color;
+}
+
+.heading-16 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-container > div {
+  width: 110px;
 }
