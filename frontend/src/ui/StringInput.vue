@@ -3,7 +3,7 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "StringInput",
-  emits: ['edited'],
+  emits: ['edited', 'changed'],
   data() {
     return { initialValue: {} }
   },
@@ -28,6 +28,10 @@ export default defineComponent({
     centered: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: ""
     }
   },
   methods: {
@@ -39,6 +43,9 @@ export default defineComponent({
         this.$emit('edited', result)
         this.initialValue = value
       }
+    },
+    onValueChanged(event: Event) {
+      this.$emit("changed", (event.target as HTMLInputElement).value)
     }
   },
   mounted() {
@@ -56,9 +63,11 @@ export default defineComponent({
     <label v-if="label !==''" class="string-input-label">{{label}}</label>
     <input
         @blur="onFocusLost($event)"
+        @input="onValueChanged"
         :class="{ 'string-input': true, 'string-input-hidden-arrow': !show_arrows, 'string-input-centered': centered }"
         :value="value"
         :type="type"
+        :placeholder="placeholder"
     >
   </div>
 </template>

@@ -20,10 +20,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/variables";
 .button-container {
-  width: 100%;
 }
 
 .t-button {
+  height: 100%;
+  width: 100%;
   user-select: none;
   background-color: $input-field-bg-color;
   outline: $input-field-border;

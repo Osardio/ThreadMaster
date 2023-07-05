@@ -33,7 +33,7 @@ export default defineComponent({
     },
     value: {
       type: Object,
-      required: true
+      required: false
     }
   },
   watch: {

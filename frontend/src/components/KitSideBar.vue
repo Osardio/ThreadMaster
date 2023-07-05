@@ -16,6 +16,11 @@ export default defineComponent({
       type: Object as PropType<Kit>,
       required: true,
       default: () => {}
+    },
+    draft: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   async mounted() {
@@ -50,7 +55,7 @@ export default defineComponent({
           style="width: 80px"
           :value="kit.code ?? ''"
           width="80px"
-          @edited="api.kits.patch({ code: $event})"
+          @edited="api.kits.patch({ code: $event })"
       />
     </div>
     <SelectInput
@@ -61,7 +66,7 @@ export default defineComponent({
         :value="api.series.series.find(series => series.uuid === kit.series_uuid) ?? {}"
         :clearable="false"
         width="140px"
-        @edited="api.kits.patch({ series: $event.uuid })"
+        @edited="api.kits.patch({ series_uuid: $event.uuid })"
     />
     <StringInput
         label="Английское название"

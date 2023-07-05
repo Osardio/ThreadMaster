@@ -53,7 +53,7 @@ export default defineComponent({
     <div class="table-container">
     <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
       <thead>
-      <tr>
+      <tr v-if="columns">
         <th><label>№</label></th>
         <th><label>Кол-во</label></th>
         <th
@@ -70,7 +70,7 @@ export default defineComponent({
       </tr>
       </thead>
       <tbody>
-      <tr
+      <tr v-if="rows"
           v-for="row in rows"
           :key="row.uuid"
       >
