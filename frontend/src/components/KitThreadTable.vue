@@ -8,11 +8,19 @@ import TButton from "@/ui/TButton.vue";
 import KitThreadRow from "@/components/KitThreadRow.vue";
 import KitThreadColumn from "@/components/KitThreadColumn.vue";
 import {useApi} from "@/stores/Api";
+import ModalWindow from "@/ui/ModalWindow.vue";
+import SelectInput from "@/ui/SelectInput.vue";
+import {Palette} from "#/Types";
 
 export default defineComponent({
   name: "KitThreadTable",
-  components: {KitThreadColumn, KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput},
+  components: {KitThreadColumn, KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput, SelectInput, ModalWindow},
   setup() { const api = useApi(); return { api } },
+  data() {
+    return {
+      paletteCreationModalVisible: false
+    }
+  },
   props: {
     uuid: {
       type: String,
@@ -25,19 +33,25 @@ export default defineComponent({
     },
     rows(): KitThreadTableRow[] {
       return this.api.complex.kitThreadTableData.table_rows
+    },
+    filteredPalettes() : Palette[] {
+      return this.api.palettes.palettes.filter(palette =>
+          !this.columns[0].kits_palettes.map(pal => pal.palette.uuid).includes(palette.uuid)
+      )
     }
   },
   methods: {
     sortedKitThreadVariants(array: KitsThreadVariantShort[]): KitsThreadVariantShort[] {
+      // TODO Use utils sort function
       return array.sort(function (a: KitsThreadVariantShort, b: KitsThreadVariantShort) {
         if (a.kit_palette.order_number < b.kit_palette.order_number) return 1
         if (a.kit_palette.order_number > b.kit_palette.order_number) return -1
         return 0
       })
     },
-    removeRow() {
-
-    }
+    showPaletteCreationModal() {
+      this.paletteCreationModalVisible = true
+    },
   },
   async beforeCreate() {
     await this.api.complex.getKitThreadTableData(this.uuid)
@@ -49,11 +63,11 @@ export default defineComponent({
 
 <template>
   <div class="kit-thread-table">
-    <div class="heading-16">Таблица цветов</div>
+    <div class="heading-16" style="margin-bottom: 7px">Таблица цветов</div>
     <div class="table-container">
     <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
       <thead>
-      <tr v-if="columns">
+      <tr v-if="columns[0].kits_palettes.length !== 0">
         <th><label>№</label></th>
         <th><label>Кол-во</label></th>
         <th
@@ -63,14 +77,33 @@ export default defineComponent({
           <KitThreadColumn
               :show_removal="index !== (columns.length - 1)"
               :name="column.kits_palettes[0].palette.name"
-              :palettes="api.palettes.palettes"
+              :palettes="filteredPalettes"
               @added="api.complex.addKitPalette($event)"
+              style="min-width: 140px;"
           />
         </th>
       </tr>
+      <tr v-else>
+        <TButton
+            label="Добавить палитру"
+            @click="showPaletteCreationModal"
+        />
+        <ModalWindow
+            v-model:show="paletteCreationModalVisible"
+        >
+          <SelectInput
+              @edited="api.complex.addKitPalette($event.uuid)"
+              class="palette-select"
+              caption="Новая палитра"
+              :value="undefined"
+              label="name"
+              :options="filteredPalettes"
+          />
+        </ModalWindow>
+      </tr>
       </thead>
       <tbody>
-      <tr v-if="rows"
+      <tr v-if="rows.length !== 0"
           v-for="row in rows"
           :key="row.uuid"
       >
@@ -112,9 +145,10 @@ export default defineComponent({
         </td>-->
       </tr>
       <tr>
-        <td :colspan="2 + columns.length">
+        <td :colspan="2 + columns.length" v-if="columns[0].kits_palettes.length !== 0">
           <div class="add-thread-row">
            <TButton
+
              label="Добавить цвет"
              @click="api.complex.addKitThread()"
            />

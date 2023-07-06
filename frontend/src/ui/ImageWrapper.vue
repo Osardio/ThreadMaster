@@ -19,6 +19,11 @@ export default defineComponent({
       default: ""
     }
   },
+  watch: {
+    src() {
+      this.error = false
+    }
+  },
   methods: {
     onImageError(_event: Event) {
       this.error = true

@@ -86,10 +86,12 @@ export default defineComponent({
 .kit-page {
   display: flex;
   width: calc(100vw - $panel-width * 2 - 40px);
+  height: 100%;
   justify-content: space-between;
+  overflow-y: scroll;
 }
 
 .kit-page > * {
-  margin-top: -10px
+  margin-top: -10px;
 }
 </style>

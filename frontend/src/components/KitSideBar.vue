@@ -23,6 +23,11 @@ export default defineComponent({
       default: false
     }
   },
+  computed: {
+    previewLink() {
+      return `${this.api.common.backendUrl}/image_preview?uuid=${this.kit.uuid}`
+    }
+  },
   async mounted() {
     await this.api.manufacturers.get()
     await this.api.series.get()
@@ -33,10 +38,15 @@ export default defineComponent({
 <template>
   <div class="kit-side-panel" v-if="kit.uuid">
     <ImageWrapper
+        v-if="!draft"
         class="kit-side-preview"
-        :src="`${api.common.backendUrl}/image_preview?uuid=${kit.uuid}`"
+        :src="previewLink"
         :alt="kit.code ?? ''"
+        style="height: 250px; font-size: 150px; display: flex; justify-content: center"
     />
+    <div class="draft-label" v-else>
+      Заполните обязательные поля:
+    </div>
     <div class="input-container">
       <SelectInput
           class="kit-side-input"
@@ -75,12 +85,13 @@ export default defineComponent({
         @edited="api.kits.patch({ name_en: $event })"
     />
     <StringInput
+        v-if="!draft"
         label="Русскоязычное название"
         class="kit-side-input"
         :value="kit.name_ru ?? ''"
         @edited="api.kits.patch({ name_ru: $event })"
     />
-    <div class="input-container">
+    <div v-if="!draft" class="input-container">
       <StringInput
           label="Длина дизайна"
           class="kit-side-input"
@@ -96,7 +107,7 @@ export default defineComponent({
           @edited="api.kits.patch({ design_width: $event })"
       />
     </div>
-    <div class="input-container">
+    <div v-if="!draft" class="input-container">
       <StringInput
           label="Кол-во крестиков"
           class="kit-side-input"
@@ -113,12 +124,14 @@ export default defineComponent({
       />
     </div>
     <StringInput
+        v-if="!draft"
         label="Шaрмики"
         class="kit-side-input"
         :value="kit.charms ?? ''"
         @edited="api.kits.patch({ charms: $event })"
     />
     <TextInput
+        v-if="!draft"
         label="Комментарий"
         :value="kit.comment ?? ''"
         @edited="api.kits.patch({ comment: $event })"
@@ -128,6 +141,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import "../global";
+
+.draft-label {
+  margin-bottom: 4px;
+}
 
 .kit-side-panel {
   height: 100%;

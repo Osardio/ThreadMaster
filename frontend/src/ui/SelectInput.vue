@@ -59,6 +59,7 @@ export default defineComponent({
     <VueSelects
         v-if="options"
         class="select-input"
+        placeholder="Выберите..."
         :label="lab"
         :options="options"
         :clearable="clearable"

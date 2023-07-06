@@ -7,10 +7,11 @@ import SelectInput from "@/ui/SelectInput.vue";
 import TextInput from "@/ui/TextInput.vue";
 import {useApi} from "@/stores/Api";
 import BooleanInput from "@/ui/BooleanInput.vue";
+import TButton from "@/ui/TButton.vue";
 
 export default defineComponent({
   name: "KitInfoBlock",
-  components: {BooleanInput, TextInput, SelectInput, StringInput, ImageWrapper},
+  components: {BooleanInput, TextInput, SelectInput, StringInput, ImageWrapper, TButton},
   setup() { const api = useApi(); return { api } },
   props: {
     kit: {
@@ -20,8 +21,16 @@ export default defineComponent({
     }
   },
   computed: {
-    canvas() : Canvas {
+    canvas() : Canvas | null {
       return this.api.canvases.canvas
+    },
+    draftCanvas() : Boolean {
+      return this.canvas === null
+    }
+  },
+  methods: {
+    async addCanvas() {
+      await this.api.canvases.create(this.kit.uuid)
     }
   },
   async mounted() {
@@ -32,8 +41,8 @@ export default defineComponent({
 
 <template>
   <div class="kit-info-block">
-    <div class="canvas-fields">
-      <div class="heading-16">Информация о наборе</div>
+    <div class="heading-16">Информация о наборе</div>
+    <div v-if="!draftCanvas" class="canvas-fields">
       <SelectInput
           style="width: 150px"
           caption="Канва"
@@ -42,7 +51,7 @@ export default defineComponent({
           :value="api.canvases.canvasNames.find(name => name.uuid === canvas?.canvas_name_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.kits.patch({ manufacturer_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_name_uuid: $event.uuid})"
       />
       <SelectInput
           style="width: 150px"
@@ -52,7 +61,7 @@ export default defineComponent({
           :value="api.canvases.canvasSizes.find(size => size.uuid === canvas?.canvas_size_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.kits.patch({ manufacturer_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_size_uuid: $event.uuid})"
       />
       <SelectInput
           style="width: 150px"
@@ -62,12 +71,19 @@ export default defineComponent({
           :value="api.canvases.canvasColors.find(color => color.uuid === canvas?.canvas_color_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.kits.patch({ manufacturer_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_color_uuid: $event.uuid})"
       />
       <BooleanInput
           caption="Наличие бисера"
           :selected="kit.beads_available"
           @toggled="api.kits.patch({ beads_available: $event })"
+      />
+    </div>
+    <div v-else class="canvas-fields">
+      <TButton
+          style="margin-top: 2px"
+          label="Добавить канву"
+          @click="addCanvas"
       />
     </div>
   </div>
@@ -77,6 +93,7 @@ export default defineComponent({
 @import "../global";
 .kit-info-block {
   display: flex;
+  flex-direction: column;
 }
 
 .canvas-fields > * {
