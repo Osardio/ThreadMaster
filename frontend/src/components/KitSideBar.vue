@@ -6,11 +6,19 @@ import ImageWrapper from "@/ui/ImageWrapper.vue";
 import SelectInput from "@/ui/SelectInput.vue";
 import TextInput from "@/ui/TextInput.vue";
 import {useApi} from "@/stores/Api";
+import ModalWindow from "@/ui/ModalWindow.vue";
+import TButton from "@/ui/TButton.vue";
 
 export default defineComponent({
   name: "KitSideBar",
-  components: {TextInput, SelectInput, StringInput, ImageWrapper},
+  components: {TextInput, SelectInput, StringInput, ImageWrapper, ModalWindow, TButton},
   setup() { const api = useApi(); return { api } },
+  data() {
+    return {
+      previewHovered: false,
+      kitRemovalModalModalVisible: false
+    }
+  },
   props: {
     kit: {
       type: Object as PropType<Kit>,
@@ -21,11 +29,25 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    removalAvailable: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
     previewLink() {
       return `${this.api.common.backendUrl}/image_preview?uuid=${this.kit.uuid}`
+    }
+  },
+  methods: {
+    showKitRemovalModal() {
+      this.kitRemovalModalModalVisible = true;
+    },
+    async deleteKit() {
+      await this.api.kits.delete(this.kit.uuid)
+      this.$router.push(`/`)
     }
   },
   async mounted() {
@@ -37,16 +59,55 @@ export default defineComponent({
 
 <template>
   <div class="kit-side-panel" v-if="kit.uuid">
-    <ImageWrapper
-        v-if="!draft"
-        class="kit-side-preview"
-        :src="previewLink"
-        :alt="kit.code ?? ''"
-        style="height: 250px; font-size: 150px; display: flex; justify-content: center"
-    />
+    <div v-if="!draft"
+         @mouseover="previewHovered = true"
+         @mouseleave="previewHovered = false"
+    >
+      <div
+          v-if="previewHovered && removalAvailable"
+          class="kit-removal-button"
+          title="Удалить набор"
+          @click="showKitRemovalModal"
+      >
+        <i class="bx bx-trash"/>
+      </div>
+      <ImageWrapper
+          class="kit-side-preview"
+          :src="previewLink"
+          :alt="kit.code ?? ''"
+          style="min-height: 100px; font-size: 150px; display: flex; justify-content: center"
+      />
+    </div>
     <div class="draft-label" v-else>
       Заполните обязательные поля:
     </div>
+    <ModalWindow
+        v-model:show="kitRemovalModalModalVisible"
+    >
+      <div class="confirm-deletion-modal">
+        <div class="confirm-deletion">
+          <span>Действительно хотите удалить данный набор?</span>
+          <div
+              class="kit-name"
+              :title="`${kit.code} ${kit.name_en}`"
+              style="margin-left: 0"
+          >{{ kit.code }} {{ kit.name_en }}</div>
+          <span>Внимание: данное действие <b>НЕОБРАТИМО!</b></span>
+          <div class="delete-buttons">
+            <TButton
+                label="Да"
+                @click="deleteKit"
+                style="width: 50px"
+            />
+            <TButton
+                label="Нет"
+                @click="kitRemovalModalModalVisible = false"
+                style="width: 50px"
+            />
+          </div>
+        </div>
+      </div>
+    </ModalWindow>
     <div class="input-container">
       <SelectInput
           class="kit-side-input"
@@ -164,8 +225,56 @@ export default defineComponent({
   width: 100%;
 }
 
+.kit-removal-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 1;
+  right: 26px;
+  top: 26px;
+  border-radius: 4px;
+}
+
+.kit-removal-button > * {
+  font-size: 36px;
+  color: red;
+}
+
+.kit-removal-button:hover {
+  background: rgba(86,86,86,0.8);
+  cursor: pointer;
+}
+
 .kit-side-input {
   margin-bottom: 4px;
+}
+
+.confirm-deletion-modal {
+  display: flex;
+  justify-content: center;
+}
+
+.confirm-deletion {
+  display: flex;
+  flex-direction: column;
+}
+
+.kit-name {
+  margin-left: 4px;
+  width: 130px;
+  max-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.delete-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
 }
 
 </style>

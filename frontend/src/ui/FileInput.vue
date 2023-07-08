@@ -229,7 +229,7 @@ export default defineComponent({
 .delete-buttons {
   margin-top: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 </style>

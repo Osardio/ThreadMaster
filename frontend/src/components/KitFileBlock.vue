@@ -46,6 +46,12 @@ export default defineComponent({
       this.$router.go() // refresh page to load updated preview
     }
   },
+  watch: {
+    async kit() {
+      // for updating component files on page switch
+      await this.api.files.get(this.kit.uuid);
+    }
+  },
   async mounted() {
     await this.api.files.get(this.kit.uuid);
   }

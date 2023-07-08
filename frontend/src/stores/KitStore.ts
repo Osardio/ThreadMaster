@@ -63,6 +63,9 @@ export const useKitStore = defineStore("kitStore", {
       this.kit = await Rest.postEntity(EntityType.KIT, this.kit) as Kit
       const idx = this.kits.findIndex(kitInList => kitInList.uuid === this.kit.uuid)
       this.kits[idx] = this.kit
+    },
+    async delete(kitUuid: string) {
+      await Rest.deleteEntity(EntityType.KIT, kitUuid)
     }
   }
 })

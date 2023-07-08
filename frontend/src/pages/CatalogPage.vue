@@ -80,6 +80,7 @@ export default defineComponent({
     <RightPanel>
       <KitSideBar
         :kit="api.kits.kit"
+        :removal-available="false"
       />
     </RightPanel>
   </div>

@@ -28,6 +28,11 @@ export default defineComponent({
       return this.canvas === null
     }
   },
+  watch: {
+    async kit() {
+      await this.api.canvases.get(this.kit.uuid)
+    }
+  },
   methods: {
     async addCanvas() {
       await this.api.canvases.create(this.kit.uuid)

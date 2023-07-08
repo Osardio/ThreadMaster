@@ -224,8 +224,10 @@ tr:hover {
   display: flex;
   justify-content: center;
 }
+
 .add-thread-row {
   display: flex;
   justify-content: center;
 }
+
 </style>

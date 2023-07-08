@@ -28,6 +28,9 @@ export default defineComponent({
     },
     isDraft() {
       return this.api.kits.isDraft
+    },
+    kitTitle() {
+      return `${this.kit.code} ${this.kit.name_en}`
     }
   },
   watch: {
@@ -35,6 +38,13 @@ export default defineComponent({
       if (!newValue && oldValue && this.draft) {
         // if kit is no more a draft, go to normal kit page
         this.$router.push({ path: `${this.kit.uuid}` })
+      }
+    },
+    kit() {
+      if (!this.isDraft) {
+        document.title = this.kitTitle ?? 'Набор';
+      } else {
+        document.title = 'Черновик набора';
       }
     }
   },
@@ -76,6 +86,7 @@ export default defineComponent({
           v-if="kit.uuid !== undefined"
           :kit="kit"
           :draft="isDraft"
+          :removal-available="true"
       />
     </RightPanel>
   </div>
@@ -92,6 +103,5 @@ export default defineComponent({
 }
 
 .kit-page > * {
-  margin-top: -10px;
 }
 </style>
