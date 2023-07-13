@@ -44,7 +44,7 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <SelectInput
-            class="manufacturer-select"
+            class="dictionary-select"
             label="name"
             caption="Палитра"
             :value="palette"
@@ -52,9 +52,7 @@ export default defineComponent({
             :clearable="false"
             @edited="onPaletteChanged"
         />
-        <!--
-        TODO ThreadTable
-         !-->
+        <!-- TODO ThreadTable -->
         <DictionaryBlock
             :items="filteredThreads"
             data-type="string"
@@ -70,7 +68,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.manufacturer-select {
+.dictionary-select {
   margin-bottom: 16px;
   width: 260px;
 }

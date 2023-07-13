@@ -16,7 +16,7 @@ export default defineComponent({
     }
   },
   computed: {
-    filteredThreads() {
+    filteredSeries() {
       return this.api.series.items.filter(series => series.manufacturer_uuid === this.manufacturer.uuid)
     }
   },
@@ -27,7 +27,7 @@ export default defineComponent({
     onEdited(event: any) {
       this.api.series.patch(event.uuid, event.value)
     },
-    onPaletteChanged(manufacturer: Manufacturer) {
+    onManufacturerChanged(manufacturer: Manufacturer) {
       this.manufacturer = manufacturer
     }
   },
@@ -44,7 +44,7 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <SelectInput
-            class="manufacturer-select"
+            class="dictionary-select"
             label="name"
             caption="Производитель"
             :value="manufacturer"
@@ -67,7 +67,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.manufacturer-select {
+.dictionary-select {
   margin-bottom: 16px;
   width: 260px;
 }
