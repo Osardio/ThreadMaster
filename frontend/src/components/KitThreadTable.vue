@@ -148,7 +148,6 @@ export default defineComponent({
         <td :colspan="2 + columns.length" v-if="columns[0].kits_palettes.length !== 0">
           <div class="add-thread-row">
            <TButton
-
              label="Добавить цвет"
              @click="api.complex.addKitThread()"
            />
@@ -197,11 +196,6 @@ th {
 
 tr {
   background-color: $row-bg-color
-}
-
-td:hover {
-  outline: 2px solid orange;
-  outline-offset: -2px;
 }
 
 tr:nth-child(even) {

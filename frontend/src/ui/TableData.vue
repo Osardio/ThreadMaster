@@ -1,27 +1,40 @@
 <script lang="ts">
 import {DomainEntity} from "#/Types";
 import {defineComponent, PropType} from "vue";
+import StringInput from "@/ui/StringInput.vue";
+import TButton from "@/ui/TButton.vue";
 
 export default defineComponent({
   name: "TableData",
+  components: {StringInput, TButton},
+  emits: ["edited", "created"],
   props: {
     tableData: {
-      type: [] as PropType<DomainEntity[]>,
-      default: () => []
-    },
-    columns: {
-      type: [] as PropType<DomainEntity[]>,
-      default: []
-    },
-    column_name_field: {
-      type: {} as PropType<keyof DomainEntity>,
+      type: Array as PropType<DomainEntity[]>,
+      default: [],
       required: true
     },
-    column_type_field: {
-      type: {} as PropType<keyof PropType<DomainEntity[]>>,
+    editField: {
+      type: String as PropType<keyof DomainEntity>,
       required: true
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    editFieldType: {
+      type: String,
+      default: "string"
     }
-  }
+  },
+  methods: {
+    onCreated() {
+      this.$emit("created", "")
+    },
+    onEdited(uuid: string, value: any) {
+      this.$emit("edited", { uuid: uuid, value: value } )
+    },
+   }
 })
 </script>
 
@@ -30,11 +43,8 @@ export default defineComponent({
     <table>
       <thead>
         <tr>
-          <th
-              v-for="column in columns"
-              :key="column.uuid"
-          >
-            <label>{{ column[column_name_field] }}</label>
+          <th>
+            <label>{{ label }}</label>
           </th>
         </tr>
       </thead>
@@ -44,10 +54,22 @@ export default defineComponent({
             :key="row.uuid"
         >
           <td
-              v-for="column in columns"
-              :key="column.uuid"
           >
-            {{ row[column[column_type_field]] }}
+            <StringInput
+                :value="row[editField]"
+                :type="editFieldType"
+                @edited="onEdited(row.uuid, $event)"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="add-row">
+              <TButton
+                  label="Добавить"
+                  @click="onCreated"
+              />
+            </div>
           </td>
         </tr>
       </tbody>
@@ -69,22 +91,13 @@ export default defineComponent({
   outline-offset: -1px;
 }
 
+table {
+  width: 100%;
+}
+
 th , td  {
   border: $border;
   padding: 10px;
-}
-
-thead tr th:first-child {
-  border-radius: $table-border-radius 0 0 0;
-}
-thead tr th:last-child {
-  border-radius: 0 $table-border-radius 0 0;
-}
-tbody tr:last-child td:last-child {
-  border-radius: 0 0 $table-border-radius 0;
-}
-tbody tr:last-child td:first-child {
-  border-radius: 0 0 0 $table-border-radius;
 }
 
 th {
@@ -92,12 +105,7 @@ th {
 }
 
 tr {
-  background-color: $row-bg-color
-}
-
-td:hover {
-  outline: 2px solid orange;
-  outline-offset: -2px;
+  background-color: $row-bg-color;
 }
 
 tr:nth-child(even) {

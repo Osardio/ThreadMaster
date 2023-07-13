@@ -9,6 +9,9 @@ import {useComplexStore} from "@/stores/ComplexStore";
 import {usePaletteStore} from "@/stores/PaletteStore";
 import {useCanvasStore} from "@/stores/CanvasStore";
 import {useFileStore} from "@/stores/FileStore";
+import {useCanvasNamesStore} from "@/stores/CanvasNamesStore";
+import {useCanvasColorsStore} from "@/stores/CanvasColorsStore";
+import {useCanvasSizesStore} from "@/stores/CanvasSizesStore";
 
 export const useApi = defineStore("api", {
   state: () => {
@@ -22,6 +25,9 @@ export const useApi = defineStore("api", {
       manufacturers: useManufacturerStore(),
       threads: useThreadStore(),
       canvases: useCanvasStore(),
+      canvasNames: useCanvasNamesStore(),
+      canvasColors: useCanvasColorsStore(),
+      canvasSizes: useCanvasSizesStore(),
       files: useFileStore()
     }
   }

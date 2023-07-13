@@ -56,7 +56,7 @@ export default defineComponent({
           :value="api.canvases.canvasNames.find(name => name.uuid === canvas?.canvas_name_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.canvases.patch({ canvas_name_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_name_uuid: $event.uuid })"
       />
       <SelectInput
           style="width: 150px"
@@ -66,7 +66,7 @@ export default defineComponent({
           :value="api.canvases.canvasSizes.find(size => size.uuid === canvas?.canvas_size_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.canvases.patch({ canvas_size_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_size_uuid: $event.uuid })"
       />
       <SelectInput
           style="width: 150px"
@@ -76,7 +76,7 @@ export default defineComponent({
           :value="api.canvases.canvasColors.find(color => color.uuid === canvas?.canvas_color_uuid)"
           :clearable="false"
           width="140px"
-          @edited="api.canvases.patch({ canvas_color_uuid: $event.uuid})"
+          @edited="api.canvases.patch({ canvas_color_uuid: $event.uuid })"
       />
       <BooleanInput
           caption="Наличие бисера"

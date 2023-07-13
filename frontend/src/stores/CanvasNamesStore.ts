@@ -1,19 +1,19 @@
 import {defineStore} from "pinia";
-import {EntityType, Series} from "#/Types";
+import {CanvasName, EntityType} from "#/Types";
 import Rest from "@/Rest";
 
-export const useSeriesStore = defineStore("seriesStore",{
+export const useCanvasNamesStore = defineStore("canvasNamesStore",{
   state: () => {
     return {
-      items: [] as Series[],
-      entityType: EntityType.SERIES,
+      items: [] as CanvasName[],
+      entityType: EntityType.CANVAS_NAME,
     }},
   actions: {
     async get() {
-      this.items = await Rest.getEntities(this.entityType) as Series[]
+      this.items = await Rest.getEntities(this.entityType) as CanvasName[]
     },
-    async create(manufacturer_uuid: string) {
-      await Rest.postEntity(this.entityType, { manufacturer_uuid: manufacturer_uuid })
+    async create(name: string) {
+      await Rest.postEntity(this.entityType, { name: name })
       await this.get()
     },
     async patch(uuid: string, name: string) {
