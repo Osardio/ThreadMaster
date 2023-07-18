@@ -40,6 +40,11 @@ export const useComplexStore = defineStore("complexStore",{
         order_number: this.kitThreadTableData.table_columns.length + 1,
         kit_uuid: this.kit_uuid,
       })
+      await this.getKitThreadTableData(this.kit_uuid)
+    },
+    async removeKitPalette(kitPaletteUuid: string) {
+      await Rest.deleteEntity(EntityType.KIT_PALETTE, kitPaletteUuid)
+      await this.getKitThreadTableData(this.kit_uuid)
     }
   }
 })

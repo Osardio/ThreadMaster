@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import {KitsThreadVariantShort, KitThreadTableColumn, KitThreadTableRow} from "#/ComplexTypes";
+import {KitPaletteShort, KitsThreadVariantShort, KitThreadTableRow} from "#/ComplexTypes";
 import KitThreadVariant from "@/components/KitThreadVariant.vue";
 import TextInput from "@/ui/TextInput.vue";
 import StringInput from "@/ui/StringInput.vue";
@@ -28,15 +28,15 @@ export default defineComponent({
     }
   },
   computed: {
-    columns(): KitThreadTableColumn[] {
-      return this.api.complex.kitThreadTableData.table_columns
+    columns(): KitPaletteShort[] {
+      return this.api.complex.kitThreadTableData.table_columns[0].kits_palettes
     },
     rows(): KitThreadTableRow[] {
       return this.api.complex.kitThreadTableData.table_rows
     },
     filteredPalettes() : Palette[] {
       return this.api.palettes.palettes.filter(palette =>
-          !this.columns[0].kits_palettes.map(pal => pal.palette.uuid).includes(palette.uuid)
+          !this.columns.map(pal => pal.palette.uuid).includes(palette.uuid)
       )
     }
   },
@@ -67,18 +67,20 @@ export default defineComponent({
     <div class="table-container">
     <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
       <thead>
-      <tr v-if="columns[0].kits_palettes.length !== 0">
+      <tr v-if="columns.length !== 0">
         <th><label>№</label></th>
         <th><label>Кол-во</label></th>
         <th
-            v-for="(column, index) in columns"
-            :key="column.kits_palettes[0].uuid"
+            v-for="column in columns"
+            :key="column.uuid"
         >
           <KitThreadColumn
-              :show_removal="index !== (columns.length - 1)"
-              :name="column.kits_palettes[0].palette.name"
+              :show_removal="columns.length > 1"
+              :name="column.palette.name"
+              :uuid="column.uuid"
               :palettes="filteredPalettes"
               @added="api.complex.addKitPalette($event)"
+              @removed="api.complex.removeKitPalette($event)"
               style="min-width: 140px;"
           />
         </th>
@@ -126,15 +128,23 @@ export default defineComponent({
         </td>
         <td
             v-if="row.kits_threads_variants.length > 0"
-            v-for="kt_variant in sortedKitThreadVariants(row.kits_threads_variants)"
-            :key="kt_variant.uuid"
+            v-for="col in columns"
+            :key="col.uuid"
         >
-          <KitThreadVariant
-              :value="kt_variant"
-              :palette="kt_variant.kit_palette.palette"
-              :threads="api.threads.threads"
-              @edited="api.complex.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
-          />
+          <div
+              v-for="kt_variant in Array(sortedKitThreadVariants(row.kits_threads_variants).find(el => el.kit_palette.uuid === col.uuid))"
+          >
+            <KitThreadVariant
+                v-if="kt_variant"
+                :value="kt_variant"
+                :palette="kt_variant.kit_palette.palette"
+                :threads="api.threads.threads"
+                @edited="api.complex.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
+            />
+            <div v-else>
+
+            </div>
+          </div>
         </td>
 <!--        <td v-else ref="tdCell">Выбрать цвет
           <KitThreadVariant
@@ -145,7 +155,7 @@ export default defineComponent({
         </td>-->
       </tr>
       <tr>
-        <td :colspan="2 + columns.length" v-if="columns[0].kits_palettes.length !== 0">
+        <td :colspan="2 + columns.length" v-if="columns.length !== 0">
           <div class="add-thread-row">
            <TButton
              label="Добавить цвет"

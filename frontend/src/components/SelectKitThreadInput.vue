@@ -61,7 +61,6 @@ export default defineComponent({
   <div class="select-input-container">
     <label class="select-input-label">{{caption}}</label>
     <VueSelects
-        v-if="options.length !== 0"
         class="select-input"
         :options="options"
         :clearable="clearable"
@@ -114,6 +113,7 @@ export default defineComponent({
 }
 
 .select-input {
+  min-width: 150px;
   height: 30px;
   padding: 0;
   box-sizing: border-box !important;
@@ -167,6 +167,7 @@ export default defineComponent({
 
 .new-thread-button {
   display: flex;
+  justify-content: center;
   width: 100%;
 }
 

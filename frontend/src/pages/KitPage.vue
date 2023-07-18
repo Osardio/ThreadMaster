@@ -68,17 +68,22 @@ export default defineComponent({
             v-if="!isDraft && kit.uuid !== undefined"
             :uuid="uuid"
         />
+        <div class="kit-info">
+          <KitInfoBlock
+              v-if="!isDraft && kit.uuid"
+              :kit="kit"
+          />
+          <KitFileBlock
+              style="margin-top: 16px"
+              v-if="!isDraft && kit.uuid"
+              :kit="kit"
+          />
+
         <!--
         TODO Даты
         -->
-        <KitFileBlock
-            v-if="!isDraft && kit.uuid"
-            :kit="kit"
-        />
-        <KitInfoBlock
-            v-if="!isDraft && kit.uuid"
-            :kit="kit"
-        />
+        </div>
+
       </div>
     </div>
     <RightPanel>
@@ -96,12 +101,17 @@ export default defineComponent({
 @import "../global";
 .kit-page {
   display: flex;
+  flex-direction: row;
   width: calc(100vw - $panel-width * 2 - 40px);
   height: 100%;
-  justify-content: space-between;
   overflow-y: scroll;
+  justify-content: space-between
 }
 
+.kit-info {
+  display: flex;
+  flex-direction: column;
+}
 .kit-page > * {
 }
 </style>

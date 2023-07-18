@@ -68,6 +68,13 @@ export default class SimpleCrudRepo {
             palette: { connect: { uuid: createDto.palette_uuid }},
             kit: { connect: { uuid: createDto.kit_uuid }}
           }})
+        // filling empty kitThreadVariants for new kitPalette
+        const kitThreadVariants = (await prisma.kitThread.findMany({ where: { kit_uuid: createDto.kit_uuid }})).map((element) => ({
+          kits_threads_uuid: element.uuid,
+          thread_uuid: null,
+          kit_palette_uuid: kitPalette.uuid
+        }))
+        await prisma.kitThreadVariant.createMany({data: kitThreadVariants})
         return kitPalette
       default:
         // @ts-ignore
