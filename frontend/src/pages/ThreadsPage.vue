@@ -22,7 +22,7 @@ export default defineComponent({
   },
   methods: {
     onCreated() {
-      this.api.threads.create(this.palette.uuid, "0")
+      this.api.threads.create({ palette_uuid: this.palette.uuid })
     },
     onEdited(event: any) {
       this.api.threads.patch(event.uuid, { name: event.value })
@@ -52,7 +52,6 @@ export default defineComponent({
             :clearable="false"
             @edited="onPaletteChanged"
         />
-        <!-- TODO ThreadTable -->
         <DictionaryBlock
             :items="filteredThreads"
             data-type="string"

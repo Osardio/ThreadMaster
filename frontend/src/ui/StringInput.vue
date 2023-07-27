@@ -32,7 +32,7 @@ export default defineComponent({
     placeholder: {
       type: String,
       default: ""
-    }
+    },
   },
   methods: {
     onFocusLost(event: Event) {
@@ -46,6 +46,10 @@ export default defineComponent({
     },
     onValueChanged(event: Event) {
       this.$emit("changed", (event.target as HTMLInputElement).value)
+    },
+    setFocus() {
+      console.log("IN SET FOCUS");
+      (this.$refs.input as HTMLInputElement).focus()
     }
   },
   mounted() {
@@ -68,6 +72,7 @@ export default defineComponent({
         :value="value"
         :type="type"
         :placeholder="placeholder"
+        ref="input"
     >
   </div>
 </template>

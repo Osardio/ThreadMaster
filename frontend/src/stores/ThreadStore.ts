@@ -12,8 +12,10 @@ export const useThreadStore = defineStore("threadsStore",{
     async get() {
       this.threads = await Rest.getEntities(this.entityType) as Thread[]
     },
-    async create(palette_uuid: string, code: string ) {
-      await Rest.postEntity(this.entityType, { palette_uuid: palette_uuid, code: code })
+    async create(creationDto: Partial<Thread>) {
+      if (creationDto.color === null) creationDto.color = "#000000"
+      if (creationDto.code === null) creationDto.code = "0"
+      await Rest.postEntity(this.entityType, creationDto)
       await this.get()
     },
     async patch(uuid: string, changes: object) {

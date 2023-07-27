@@ -6,6 +6,7 @@ import {Thread} from "#/Types";
 
 export default defineComponent({
   name: "KitThreadVariant",
+  emits: ["edited", "new"],
   components: {SelectKitThreadInput},
   props: {
     value: {
@@ -37,7 +38,14 @@ export default defineComponent({
   },
   methods: {
     updateKitThreadVariant(event: Event ) {
-      this.$emit('edited', (event as unknown as Thread).uuid)
+      this.$emit("edited", (event as unknown as Thread).uuid)
+    },
+    onCreateNewThread(event: Event) {
+      this.$emit("new", {
+        kits_thread_variant_uuid: this.value?.uuid,
+        code: event,
+        palette_uuid: this.palette.uuid
+      })
     }
   }
 })
@@ -51,6 +59,7 @@ export default defineComponent({
         :value="threads.find((thread) => thread.uuid === value?.thread?.uuid)"
         :show_color="show_color"
         @edited="updateKitThreadVariant($event)"
+        @new="onCreateNewThread"
     />
   </div>
 </template>

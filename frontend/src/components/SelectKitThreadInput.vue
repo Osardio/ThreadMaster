@@ -10,10 +10,11 @@ const VueSelects = VueSelect as Component
 export default defineComponent({
   name: "SelectKitThreadInput",
   components: { TButton, VueSelects },
-  emits: ['edited'],
+  emits: ["edited", "new"],
   data() {
     return {
       val: {} as unknown | PropType<Thread | null>,
+      searchValue: null as number | string
     }
   },
   props: {
@@ -44,11 +45,16 @@ export default defineComponent({
   },
   methods: {
     filter(options: Thread[], search: string) {
-      console.log('in search')
       return options.filter((thread) => thread.code.includes(search) || thread.name?.includes(search) )
     },
-    onSelected(value: [Object,String]) {
+    onSelected(value: [Object, String]) {
       this.$emit('edited', value)
+    },
+    onCreateNewThread() {
+      this.$emit("new", this.searchValue)
+    },
+    onSearchValueChanged(value: string | number) {
+      this.searchValue = value
     }
   },
   mounted() {
@@ -68,6 +74,7 @@ export default defineComponent({
         :filter="filter"
         placeholder="Выберите цвет"
         v-model="val"
+        @search="onSearchValueChanged"
         @option:selected="onSelected($event)"
     >
         <template #option="{ name, color, code }" class="kit-thread-variant-option">
@@ -94,7 +101,10 @@ export default defineComponent({
       </template>
       <template #no-options="{ name, color, code }" >
         <div class="new-thread-button">
-          <TButton label="Новая нить"/>
+          <TButton
+              @click="onCreateNewThread"
+              label="Новая нить"
+          />
         </div>
       </template>
     </VueSelects>

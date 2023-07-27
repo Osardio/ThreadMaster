@@ -12,7 +12,7 @@ export default defineComponent({
   data() {
     return {
       hovered: false,
-      modalVisible: false,
+      creationModalVisible: false,
       newSelectedPalette: Object as Palette,
       confirmDeletionModalVisible: false
     }
@@ -31,10 +31,10 @@ export default defineComponent({
   },
   methods: {
     showModal() {
-      this.modalVisible = true;
+      this.creationModalVisible = true;
     },
     hideModal() {
-      this.modalVisible = false;
+      this.creationModalVisible = false;
     },
     columnAdded() {
       if (this.newSelectedPalette.uuid) {
@@ -74,7 +74,7 @@ export default defineComponent({
     </div>
     <label>{{ name }}</label>
     <ModalWindow
-        v-model:show="modalVisible"
+        v-model:show="creationModalVisible"
     >
       <SelectInput
           @edited="newSelectedPalette = $event"
