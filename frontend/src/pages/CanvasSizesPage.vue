@@ -9,6 +9,9 @@ export default defineComponent({
   name: "CanvasSizesPage",
   components: {DictionaryBlock, SelectInput, TableData},
   setup() { const api = useApi(); return { api } },
+  async mounted() {
+    await this.api.canvasSizes.get()
+  },
   methods: {
     onCreated() {
       this.api.canvasSizes.create(0)
@@ -17,9 +20,6 @@ export default defineComponent({
       console.log(event)
       this.api.canvasSizes.patch(event.uuid, event.value)
     }
-  },
-  async mounted() {
-    await this.api.canvasSizes.get()
   }
 })
 </script>
@@ -29,13 +29,13 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <DictionaryBlock
-            :items="api.canvasSizes.items"
-            data-type="number"
-            edit-field="size"
-            sort-field="created_at"
-            table-label="Размер канвы"
-            @created="onCreated"
-            @edited="onEdited"
+          :items="api.canvasSizes.items"
+          data-type="number"
+          edit-field="size"
+          sort-field="created_at"
+          table-label="Размер канвы"
+          @created="onCreated"
+          @edited="onEdited"
         />
       </div>
     </div>

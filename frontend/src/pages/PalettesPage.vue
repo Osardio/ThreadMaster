@@ -18,6 +18,9 @@ export default defineComponent({
       return Utils.sortArrayByField(this.items, "created_at")
     }
   },
+  async mounted() {
+    await this.api.palettes.get()
+  },
   methods: {
     onCreated(name: string) {
       if (!this.items.find(el => el.name === name)) {
@@ -27,9 +30,6 @@ export default defineComponent({
     onEdited(event: any) {
       this.api.palettes.patch(event.uuid, event.value)
     }
-  },
-  async mounted() {
-    await this.api.palettes.get()
   }
 })
 </script>
@@ -39,13 +39,13 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <TableData
-            style="width: 260px"
-            v-if="sortedPalettes.length !== 0"
-            :table-data="sortedPalettes"
-            edit-field="name"
-            label="Палитры"
-            @created="onCreated"
-            @edited="onEdited"
+          v-if="sortedPalettes.length !== 0"
+          style="width: 260px"
+          :table-data="sortedPalettes"
+          edit-field="name"
+          label="Палитры"
+          @created="onCreated"
+          @edited="onEdited"
         />
       </div>
     </div>

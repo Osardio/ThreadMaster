@@ -18,6 +18,10 @@ export const useThreadStore = defineStore("threadsStore",{
       await Rest.postEntity(this.entityType, creationDto)
       await this.get()
     },
+    async patchObject(object: Partial<Thread>) {
+      await Rest.patchEntity(this.entityType, object.uuid!, object)
+      await this.get()
+    },
     async patch(uuid: string, changes: object) {
       await Rest.patchEntity(this.entityType, uuid, changes)
       await this.get()

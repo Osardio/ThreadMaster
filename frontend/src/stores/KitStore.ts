@@ -10,7 +10,7 @@ export const useKitStore = defineStore("kitStore", {
       kit: {} as Kit,
     }},
   getters: {
-    isDraft() : Boolean {
+    isDraft() : boolean {
       return (
         !this.kit ||
         !this.kit.manufacturer_uuid ||

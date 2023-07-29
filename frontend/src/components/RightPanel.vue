@@ -8,7 +8,7 @@ export default defineComponent({
 
 <template>
   <div class="panel panel-right">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

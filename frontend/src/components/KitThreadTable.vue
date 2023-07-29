@@ -2,7 +2,6 @@
 import {defineComponent} from "vue";
 import {KitPaletteShort, KitsThreadVariantShort, KitThreadTableRow} from "#/ComplexTypes";
 import KitThreadVariant from "@/components/KitThreadVariant.vue";
-import TextInput from "@/ui/TextInput.vue";
 import StringInput from "@/ui/StringInput.vue";
 import TButton from "@/ui/TButton.vue";
 import KitThreadRow from "@/components/KitThreadRow.vue";
@@ -12,26 +11,31 @@ import ModalWindow from "@/ui/ModalWindow.vue";
 import SelectInput from "@/ui/SelectInput.vue";
 import {Palette, Thread} from "#/Types";
 import Utils from "@/Utils";
+import {ColorPicker} from "vue-color-kit";
+import 'vue-color-kit/dist/vue-color-kit.css'
 
 export default defineComponent({
   name: "KitThreadTable",
-  components: {KitThreadColumn, KitThreadRow, TButton, TextInput, KitThreadVariant, StringInput, SelectInput, ModalWindow},
-  setup() { const api = useApi(); return { api } },
-  data() {
-    return {
-      paletteCreationModalVisible: false,
-      threadCreationModalVisible: false,
-      threadCreationCode: null as string,
-      threadCreationPaletteUuid: null as string,
-      threadCreationColorName: null as string,
-      threadCreationHexCode: null as string,
-      threadCreationKitThreadVariant: null as string
-    }
+  components: {
+    KitThreadColumn, KitThreadRow, TButton, KitThreadVariant,
+    StringInput, SelectInput, ModalWindow, ColorPicker
   },
   props: {
     uuid: {
       type: String,
       required: true
+    }
+  },
+  setup() { const api = useApi(); return { api } },
+  data() {
+    return {
+      paletteCreationModalVisible: false,
+      threadCreationModalVisible: false,
+      threadCreationCode: "",
+      threadCreationPaletteUuid: "",
+      threadCreationColorName: "",
+      threadCreationHexCode: "",
+      threadCreationKitThreadVariant: ""
     }
   },
   computed: {
@@ -46,6 +50,11 @@ export default defineComponent({
           !this.columns.map(pal => pal.palette.uuid).includes(palette.uuid)
       )
     }
+  },
+  async beforeCreate() {
+    await this.api.complex.getKitThreadTableData(this.uuid)
+    await this.api.threads.get()
+    await this.api.palettes.get()
   },
   methods: {
     sortedKitThreadVariants(array: KitsThreadVariantShort[]): KitsThreadVariantShort[] {
@@ -66,9 +75,8 @@ export default defineComponent({
       this.threadCreationColorName = "Black"
       this.threadCreationHexCode = "#000000"
       this.threadCreationModalVisible = true;
-
-      console.log("ref: ", this.$refs)
-      this.$refs.input_ref.setFocus()
+      // @ts-ignore
+      this.$nextTick(() => { this.$refs.inputRef?.setFocus() })
     },
     async createThread() {
       const newThread: Partial<Thread> = {
@@ -82,163 +90,175 @@ export default defineComponent({
       await this.api.complex.updateKitThreadVariant(this.threadCreationKitThreadVariant, { thread_uuid: newThread.uuid })
       await this.api.complex.getKitThreadTableData(this.uuid)
       this.threadCreationModalVisible = false;
+    },
+    changeColor(event: any) {
+      console.log("changeColor: ", event)
+      this.threadCreationHexCode = event.hex
     }
-  },
-  async beforeCreate() {
-    await this.api.complex.getKitThreadTableData(this.uuid)
-    await this.api.threads.get()
-    await this.api.palettes.get()
   }
 })
 </script>
 
 <template>
   <div class="kit-thread-table">
-    <div class="heading-16" style="margin-bottom: 7px">Таблица цветов</div>
+    <div
+      class="heading-16"
+      style="margin-bottom: 7px"
+    >
+      Таблица цветов
+    </div>
     <div class="table-container">
       <table v-if="api.complex.kitThreadTableData.kit_uuid !== undefined">
-      <thead>
-      <tr v-if="columns.length !== 0">
-        <th><label>№</label></th>
-        <th><label>Кол-во</label></th>
-        <th
-            v-for="column in columns"
-            :key="column.uuid"
-        >
-          <KitThreadColumn
-              :show_removal="columns.length > 1"
-              :name="column.palette.name"
-              :uuid="column.uuid"
-              :palettes="filteredPalettes"
-              @added="api.complex.addKitPalette($event)"
-              @removed="api.complex.removeKitPalette($event)"
-              style="min-width: 140px;"
-          />
-        </th>
-      </tr>
-      <tr v-else>
-        <TButton
-            label="Добавить палитру"
-            @click="showPaletteCreationModal"
-        />
-        <ModalWindow
-            v-model:show="paletteCreationModalVisible"
-        >
-          <SelectInput
-              @edited="api.complex.addKitPalette($event.uuid)"
-              class="palette-select"
-              caption="Новая палитра"
-              :value="undefined"
-              label="name"
-              :options="filteredPalettes"
-          />
-        </ModalWindow>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-if="rows.length !== 0"
-          v-for="row in rows"
-          :key="row.uuid"
-      >
-        <KitThreadRow
-            :show_removal="row.order_number === rows.length"
-            :number="row.order_number"
-            @removed="api.complex.removeKitThread(row.uuid)"
-        />
-        <td>
-          <div class="thread-quantity">
-            <StringInput
-                :value="row.quantity ?? 0"
-                :show_arrows="false"
-                :centered="true"
-                type="number"
-                style="width: 40px"
-                @edited="api.complex.updateKitThread(row.uuid, { quantity: $event })"
+        <thead>
+          <tr v-if="columns.length !== 0">
+            <th><label>№</label></th>
+            <th><label>Кол-во</label></th>
+            <th
+              v-for="column in columns"
+              :key="column.uuid"
+            >
+              <KitThreadColumn
+                :show_removal="columns.length > 1"
+                :name="column.palette.name"
+                :uuid="column.uuid"
+                :palettes="filteredPalettes"
+                style="min-width: 140px;"
+                @added="api.complex.addKitPalette($event)"
+                @removed="api.complex.removeKitPalette($event)"
+              />
+            </th>
+          </tr>
+          <tr v-else>
+            <TButton
+              label="Добавить палитру"
+              @click="showPaletteCreationModal"
             />
-          </div>
-        </td>
-        <td
-            v-if="row.kits_threads_variants.length > 0"
-            v-for="col in columns"
-            :key="col.uuid"
-        >
-          <div
-              v-for="kt_variant in Array(sortedKitThreadVariants(row.kits_threads_variants).find(el => el.kit_palette.uuid === col.uuid))"
+            <ModalWindow
+              v-model:show="paletteCreationModalVisible"
+            >
+              <SelectInput
+                class="palette-select"
+                caption="Новая палитра"
+                :value="undefined"
+                label="name"
+                :options="filteredPalettes"
+                @edited="api.complex.addKitPalette($event.uuid)"
+              />
+            </ModalWindow>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="row in rows"
+            v-if="rows.length !== 0"
+            :key="row.uuid"
           >
-            <KitThreadVariant
-                v-if="kt_variant"
-                :value="kt_variant"
-                :palette="kt_variant.kit_palette.palette"
-                :threads="api.threads.threads"
-                @edited="api.complex.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
-                @new="onCreateNewThread"
+            <KitThreadRow
+              :show_removal="row.order_number === rows.length"
+              :number="row.order_number"
+              @removed="api.complex.removeKitThread(row.uuid)"
             />
-            <div v-else>
-
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td :colspan="2 + columns.length" v-if="columns.length !== 0">
-          <div class="add-thread-row">
-           <TButton
-             label="Добавить цвет"
-             @click="api.complex.addKitThread()"
-           />
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+            <td>
+              <div class="thread-quantity">
+                <StringInput
+                  :value="row.quantity ?? 0"
+                  :show_arrows="false"
+                  :centered="true"
+                  type="number"
+                  style="width: 40px"
+                  @edited="api.complex.updateKitThread(row.uuid, { quantity: $event })"
+                />
+              </div>
+            </td>
+            <td
+              v-for="col in columns"
+              v-if="row.kits_threads_variants.length > 0"
+              :key="col.uuid"
+            >
+              <div
+                v-for="kt_variant in Array(sortedKitThreadVariants(row.kits_threads_variants).find(el => el.kit_palette.uuid === col.uuid))"
+              >
+                <KitThreadVariant
+                  v-if="kt_variant"
+                  :value="kt_variant"
+                  :palette="kt_variant.kit_palette.palette"
+                  :threads="api.threads.threads"
+                  @edited="api.complex.updateKitThreadVariant(kt_variant.uuid, { thread_uuid: $event })"
+                  @new="onCreateNewThread"
+                />
+                <div v-else />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              v-if="columns.length !== 0"
+              :colspan="2 + columns.length"
+            >
+              <div class="add-thread-row">
+                <TButton
+                  label="Добавить цвет"
+                  @click="api.complex.addKitThread()"
+                />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <ModalWindow
-        v-model:show="threadCreationModalVisible"
+      v-model:show="threadCreationModalVisible"
     >
       <div class="thread-creation-options-container">
         <div class="thread-creation-options">
           <StringInput
-              label="Код цвета"
-              :value="threadCreationCode"
-              type="string"
-              style="width: 150px"
-              @changed="threadCreationCode = $event"
+            label="Код цвета"
+            :value="threadCreationCode"
+            type="string"
+            style="width: 150px"
+            @changed="threadCreationCode = $event"
           />
           <SelectInput
-              disabled
-              caption="Палитра"
-              class="palette-select"
-              :value="api.palettes.palettes.find(pl => pl.uuid === threadCreationPaletteUuid)"
-              label="name"
-              style="width: 150px"
-              :options="Array(api.palettes.palettes.find(pl => pl.uuid === threadCreationPaletteUuid))"
+            disabled
+            caption="Палитра"
+            class="palette-select"
+            :value="api.palettes.palettes.find(pl => pl.uuid === threadCreationPaletteUuid)"
+            label="name"
+            style="width: 150px"
+            :options="Array(api.palettes.palettes.find(pl => pl.uuid === threadCreationPaletteUuid))"
+          />
+          <StringInput
+            ref="inputRef"
+            label="Название цвета"
+            :value="threadCreationColorName"
+            type="string"
+            style="width: 150px"
+            @changed="threadCreationColorName = $event"
+          />
+          <!--          <div class="kit-thread-variant-color-box"
+                         :style="`background-color: ${ threadCreationHexCode ?? 'rgba(0,0,0,0.001)'}`"
+                    >
+                    </div>-->
+          <StringInput
+            label="HEX-код цвета"
+            :value="threadCreationHexCode"
+            type="string"
+            style="width: 150px"
+            @changed="threadCreationHexCode = $event"
           />
         </div>
-        <div class="thread-creation-options">
-          <StringInput
-              ref="input_ref"
-              label="Название цвета"
-              :value="threadCreationColorName"
-              type="string"
-              style="width: 150px"
-              @changed="threadCreationColorName = $event"
-          />
-          <div class="kit-thread-variant-color-box"
-               :style="`background-color: ${ threadCreationHexCode ?? 'rgba(0,0,0,0.001)'}`"
-          >
-          </div>
-          <StringInput
-              label="HEX-код цвета"
-              :value="threadCreationHexCode"
-              type="string"
-              style="width: 150px"
-              @changed="threadCreationHexCode = $event"
-          />
-        </div>
+        <ColorPicker
+          class="color-picker"
+          theme="dark"
+          :color="threadCreationHexCode"
+          :sucker-hide="true"
+          style="width: 220px"
+          @changeColor="changeColor"
+        />
       </div>
       <TButton
-          label="Добавить новую нить"
-          @click="createThread"
+        label="Добавить новую нить"
+        @click="createThread"
       />
     </ModalWindow>
   </div>
@@ -260,19 +280,6 @@ th, td  {
   border: $border;
   padding: 10px;
 }
-
-/*thead tr th:first-child {
-  border-radius: $table-border-radius 0 0 0;
-}
-thead tr th:last-child {
-  border-radius: 0 $table-border-radius 0 0;
-}
-tbody tr:last-child td:last-child {
-  border-radius: 0 0 $table-border-radius 0;
-}
-tbody tr:last-child td:first-child {
-  border-radius: 0 0 0 $table-border-radius;
-}*/
 
 th {
   background-color: #323232;
@@ -310,15 +317,19 @@ tr:hover {
 
 .thread-creation-options-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-bottom: 10px;
 }
 
 .thread-creation-options {
   display: flex;
-  justify-content: space-between;
-  width: 340px;
+  flex-direction: column;
+  width: 160px;
   margin-bottom: 6px;
+}
+
+.thread-creation-options > * {
+  margin-bottom: 4px;
 }
 
 .kit-thread-variant-color-box {
@@ -328,6 +339,14 @@ tr:hover {
   height: 10px;
   margin-bottom: 10px;
   align-self: end;
+}
+
+.color-picker {
+  width: 320px;
+}
+
+.color-picker > * {
+  box-sizing: unset;
 }
 
 </style>

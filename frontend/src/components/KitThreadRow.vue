@@ -3,12 +3,6 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "KitThreadRow",
-  emits: ['removed'],
-  data() {
-    return {
-      hovered: false
-    }
-  },
   props: {
     number: Number,
     show_removal: {
@@ -16,20 +10,28 @@ export default defineComponent({
       default: false
     }
   },
+  emits: ['removed'],
+  data() {
+    return {
+      hovered: false
+    }
+  },
 })
 </script>
 
 <template>
-  <td class="kit-thread-row"
-      @mouseover="hovered = true"
-      @mouseleave="hovered = false">
+  <td
+    class="kit-thread-row"
+    @mouseover="hovered = true"
+    @mouseleave="hovered = false"
+  >
     <div>
       <div
-          v-if="hovered && show_removal"
-          class="remove-row-button"
-          @click="$emit('removed')"
+        v-if="hovered && show_removal"
+        class="remove-row-button"
+        @click="$emit('removed')"
       >
-        <i class="bx bx-trash"></i>
+        <i class="bx bx-trash" />
       </div>{{ number }}
     </div>
   </td>

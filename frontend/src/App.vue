@@ -2,8 +2,8 @@
 import LeftPanel from "@/components/LeftPanel.vue";
 
 export default {
-  components: {LeftPanel},
   name: 'App',
+  components: {LeftPanel},
   watch: {
     $route: {
       immediate: true,
@@ -17,9 +17,9 @@ export default {
 
 <template>
   <div class="application">
-    <LeftPanel/>
+    <LeftPanel />
     <div class="main-area">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>

@@ -9,6 +9,9 @@ export default defineComponent({
   name: "CanvasColorsPage",
   components: {DictionaryBlock, SelectInput, TableData},
   setup() { const api = useApi(); return { api } },
+  async mounted() {
+    await this.api.canvasColors.get()
+  },
   methods: {
     onCreated(name: string) {
       this.api.canvasColors.create(name)
@@ -16,9 +19,6 @@ export default defineComponent({
     onEdited(event: any) {
       this.api.canvasColors.patch(event.uuid, event.value)
     }
-  },
-  async mounted() {
-    await this.api.canvasColors.get()
   }
 })
 </script>
@@ -28,12 +28,12 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <DictionaryBlock
-            :items="api.canvasColors.items"
-            edit-field="name"
-            sort-field="created_at"
-            table-label="Наименование цвета"
-            @created="onCreated"
-            @edited="onEdited"
+          :items="api.canvasColors.items"
+          edit-field="name"
+          sort-field="created_at"
+          table-label="Наименование цвета"
+          @created="onCreated"
+          @edited="onEdited"
         />
       </div>
     </div>

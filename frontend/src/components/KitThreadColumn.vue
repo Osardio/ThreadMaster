@@ -8,18 +8,15 @@ import TButton from "@/ui/TButton.vue";
 export default defineComponent({
   name: "KitThreadColumn",
   components: {TButton, SelectInput, ModalWindow},
-  emits: ['removed', 'added'],
-  data() {
-    return {
-      hovered: false,
-      creationModalVisible: false,
-      newSelectedPalette: Object as Palette,
-      confirmDeletionModalVisible: false
-    }
-  },
   props: {
-    name: String,
-    uuid: String,
+    name: {
+      type: String,
+      default: ""
+    },
+    uuid: {
+      type: String,
+      default: ""
+    },
     show_removal: {
       type: Boolean,
       default: false
@@ -27,6 +24,15 @@ export default defineComponent({
     palettes: {
       type: [] as PropType<Palette[]>,
       required: true
+    }
+  },
+  emits: ['removed', 'added'],
+  data() {
+    return {
+      hovered: false,
+      creationModalVisible: false,
+      newSelectedPalette: {} as Palette,
+      confirmDeletionModalVisible: false
     }
   },
   methods: {
@@ -53,65 +59,69 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="kit-thread-column"
-       @mouseover="hovered = true"
-       @mouseleave="hovered = false">
+  <div
+    class="kit-thread-column"
+    @mouseover="hovered = true"
+    @mouseleave="hovered = false"
+  >
     <div
-        v-if="hovered && show_removal"
-        class="remove-column-button"
-        title="Удалить палитру"
-        @click="showDeletionModal"
+      v-if="hovered && show_removal"
+      class="remove-column-button"
+      title="Удалить палитру"
+      @click="showDeletionModal"
     >
-      <i class="bx bx-trash"></i>
+      <i class="bx bx-trash" />
     </div>
     <div
-        v-if="hovered"
-        class="add-column-button"
-        title="Добавить палитру"
-        @click="showModal"
+      v-if="hovered"
+      class="add-column-button"
+      title="Добавить палитру"
+      @click="showModal"
     >
-      <i class='bx bx-plus'></i>
+      <i class="bx bx-plus" />
     </div>
     <label>{{ name }}</label>
     <ModalWindow
-        v-model:show="creationModalVisible"
+      v-model:show="creationModalVisible"
     >
       <SelectInput
-          @edited="newSelectedPalette = $event"
-          class="palette-select"
-          caption="Новая палитра"
-          :value="undefined"
-          label="name"
-          :options="palettes"
+        class="palette-select"
+        caption="Новая палитра"
+        :value="undefined"
+        label="name"
+        :options="palettes"
+        @edited="newSelectedPalette = $event"
       />
       <TButton
-          style="margin-top: 10px"
-          label="Добавить палитру"
-          @click="columnAdded"
+        style="margin-top: 10px"
+        label="Добавить палитру"
+        @click="columnAdded"
       />
     </ModalWindow>
     <ModalWindow
-        v-model:show="confirmDeletionModalVisible"
+      v-model:show="confirmDeletionModalVisible"
     >
       <div class="confirm-deletion-modal">
         <div class="confirm-deletion">
           <span>Действительно хотите удалить эту палитру?</span>
           <div
-              class="palette-name"
-              :title="name"
-          >{{ name }}</div>
+            class="palette-name"
+            :title="name"
+          >
+            {{ name }}
+          </div>
           <span>Внимание: данное действие <b>НЕОБРАТИМО!</b></span>
           <span>Все связанные с данной палитрой нити по набору будут также удалены.</span>
           <div class="delete-buttons">
             <TButton
-                label="Да"
-                @click="deleted"
-                style="width: 50px"
+              label="Да"
+              style="width: 50px"
+              @click="deleted"
             />
             <TButton
-                label="Нет"
-                @click="confirmDeletionModalVisible = false"
-                style="width: 50px"
+              label="Нет"
+              style="width: 50px"
+              @click="confirmDeletionModalVisible = false"
             />
           </div>
         </div>

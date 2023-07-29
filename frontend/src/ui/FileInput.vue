@@ -8,6 +8,12 @@ import ModalWindow from "@/ui/ModalWindow.vue";
 export default defineComponent({
   name: "FileInput",
   components: {ImageWrapper, TButton, ModalWindow},
+  props: {
+    file: {
+      type: Object as PropType<File>,
+      required: false
+    }
+  },
   emits: ["uploaded", "setPreview", "deleted"],
   data() {
     return {
@@ -15,16 +21,10 @@ export default defineComponent({
       confirmDeletionModalVisible: false
     }
   },
-  props: {
-    file: {
-      type: Object as PropType<File>,
-      required: false
-    }
-  },
   computed: {
     fileFormat() {
       if (this.file?.name) {
-        return this.file?.name?.split(".").pop().toLowerCase()!;
+        return this.file?.name?.split(".").pop()!.toLowerCase()!;
       } else {
         return ""
       }
@@ -41,7 +41,7 @@ export default defineComponent({
     openFileDialog() {
       (this.$refs.file_input as HTMLInputElement).click();
     },
-    addFiles(event: InputEvent) {
+    addFiles(event: Event) {
       this.$emit("uploaded", (event.target as HTMLInputElement).files)
     },
     setImagePreview() {
@@ -68,79 +68,104 @@ export default defineComponent({
 
 <template>
   <div
-      class="file-input-container"
-      @mouseover="hovered = true"
-      @mouseleave="hovered = false"
+    class="file-input-container"
+    @mouseover="hovered = true"
+    @mouseleave="hovered = false"
   >
-    <div v-if="file" class="file-input">
+    <div
+      v-if="file"
+      class="file-input"
+    >
       <div class="file-left">
         <ImageWrapper
-            v-if="fileIsImage"
-            class="file-preview"
-            :src="`data:image/${fileFormat};base64,${file.data}`"
-            :alt="file.name ?? 'Файл'"
-            style="font-size: 40px"
+          v-if="fileIsImage"
+          class="file-preview"
+          :src="`data:image/${fileFormat};base64,${file.data}`"
+          :alt="file.name ?? 'Файл'"
+          style="font-size: 40px"
         />
         <div
-            v-else
-            class="file-preview file-icon bx bx-file"
+          v-else
+          class="file-preview file-icon bx bx-file"
         />
       </div>
       <div class="file-right">
-        <div class="file-name" :title="file.name">{{ file.name }}</div>
-        <div v-if="hovered" class="file-buttons">
-          <div v-if="fileIsImage" class='file-button bx bx-images'    @click="setImagePreview" title="Установить на превью"></div>
-          <div class='file-button bx bxs-download' @click="downloadFile" title="Скачать файл"></div>
-          <div class='file-button bx bx-trash'     @click="showDeletionModal" title="Удалить файл"></div>
+        <div
+          class="file-name"
+          :title="file?.name ?? ''"
+        >
+          {{ file.name }}
+        </div>
+        <div
+          v-if="hovered"
+          class="file-buttons"
+        >
+          <div
+            v-if="fileIsImage"
+            class="file-button bx bx-images"
+            title="Установить на превью"
+            @click="setImagePreview"
+          />
+          <div
+            class="file-button bx bxs-download"
+            title="Скачать файл"
+            @click="downloadFile"
+          />
+          <div
+            class="file-button bx bx-trash"
+            title="Удалить файл"
+            @click="showDeletionModal"
+          />
         </div>
       </div>
     </div>
     <div
-        v-else
-        class="file-stub"
+      v-else
+      class="file-stub"
     >
       <TButton
-          label="Добавить файлы"
-          @click="openFileDialog"
+        label="Добавить файлы"
+        @click="openFileDialog"
       />
     </div>
     <input
-        multiple
-        type="file"
-        ref="file_input"
-        accept="*"
-        style="display: none"
-        @change="addFiles"
-    />
-    <a
-        v-if="this.file"
-        style="display: none"
-        ref="download_link"
-        :download="this.file.name"
+      ref="file_input"
+      multiple
+      type="file"
+      accept="*"
+      style="display: none"
+      @change="addFiles"
     >
-    </a>
+    <a
+      v-if="file"
+      ref="download_link"
+      style="display: none"
+      :download="file?.name"
+    />
     <ModalWindow
-        v-model:show="confirmDeletionModalVisible"
+      v-model:show="confirmDeletionModalVisible"
     >
       <div class="confirm-deletion-modal">
         <div class="confirm-deletion">
           <span>Действительно хотите удалить этот файл?</span>
           <div
-              class="file-name"
-              :title="file.name"
-              style="margin-left: 0"
-          >{{ file.name }}</div>
+            class="file-name"
+            :title="file?.name ?? ''"
+            style="margin-left: 0"
+          >
+            {{ file?.name }}
+          </div>
           <span>Внимание: данное действие <b>НЕОБРАТИМО!</b></span>
           <div class="delete-buttons">
             <TButton
-                label="Да"
-                @click="deleteFile"
-                style="width: 50px"
+              label="Да"
+              style="width: 50px"
+              @click="deleteFile"
             />
             <TButton
-                label="Нет"
-                @click="confirmDeletionModalVisible = false"
-                style="width: 50px"
+              label="Нет"
+              style="width: 50px"
+              @click="confirmDeletionModalVisible = false"
             />
           </div>
         </div>

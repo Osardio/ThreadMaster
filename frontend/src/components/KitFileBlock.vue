@@ -8,17 +8,26 @@ import Utils from "@/Utils";
 export default defineComponent({
   name: "KitFileBlock",
   components: {FileInput},
-  setup() { const api = useApi(); return { api } },
   props: {
     kit: {
       type: Object as PropType<Kit>,
       required: true
     }
   },
+  setup() { const api = useApi(); return { api } },
   computed: {
     sortedFiles() {
       return Utils.sortArrayByField(this.api.files.files, "name")
     }
+  },
+  watch: {
+    async kit() {
+      // for updating component files on page switch
+      await this.api.files.get(this.kit.uuid);
+    }
+  },
+  async mounted() {
+    await this.api.files.get(this.kit.uuid);
   },
   methods: {
     async readUploadedFiles(files: FileList) {
@@ -33,7 +42,7 @@ export default defineComponent({
             data_type: fileData.split(";base64,")[0].split("data:")[1],
             file_type: file_type.OTHER
           })
-        } catch (e: Error) {
+        } catch (e: any) {
           console.error("Failed to upload file:", e)
         }
       }
@@ -43,17 +52,8 @@ export default defineComponent({
     },
     async setImageAsPreview(fileUuid: string) {
       await this.api.files.setFileAsFront(fileUuid)
-      this.$router.go() // refresh page to load updated preview
+      this.$router.go(0) // refresh page to load updated preview
     }
-  },
-  watch: {
-    async kit() {
-      // for updating component files on page switch
-      await this.api.files.get(this.kit.uuid);
-    }
-  },
-  async mounted() {
-    await this.api.files.get(this.kit.uuid);
   }
 })
 </script>
@@ -61,17 +61,22 @@ export default defineComponent({
 <template>
   <div class="kit-file-block">
     <div class="file-fields">
-      <div class="heading-16">Файлы по набору</div>
-      <FileInput
+      <div class="heading-16">
+        Файлы по набору
+      </div>
+      <div
           v-if="sortedFiles.length !== 0"
-          v-for="file in sortedFiles"
-          :file="file"
-          @deleted="deleteFile"
-          @setPreview="setImageAsPreview"
-      />
-      <FileInput
-          @uploaded="readUploadedFiles"
-      />
+          class="files">
+        <FileInput
+            v-for="file in sortedFiles"
+            :file="file"
+            @deleted="deleteFile"
+            @setPreview="setImageAsPreview"
+        />
+        <FileInput
+            @uploaded="readUploadedFiles"
+        />
+      </div>
     </div>
   </div>
 </template>

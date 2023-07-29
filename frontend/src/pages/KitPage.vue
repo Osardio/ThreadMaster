@@ -7,11 +7,12 @@ import KitThreadTable from "@/components/KitThreadTable.vue";
 import KitInfoBlock from "@/components/KitInfoBlock.vue"
 import {useApi} from "@/stores/Api";
 import KitFileBlock from "@/components/KitFileBlock.vue";
+import {types} from "sass";
+import Boolean = types.Boolean;
 
 export default defineComponent({
   name: "KitPage",
   components: {KitFileBlock, KitInfoBlock, KitThreadTable, RightPanel, KitSideBar},
-  setup() { const api = useApi(); return { api } },
   props: {
     uuid: {
       type: String,
@@ -22,14 +23,15 @@ export default defineComponent({
       required: false
     }
   },
+  setup() { const api = useApi(); return { api } },
   computed: {
     kit() : Kit {
       return this.api.kits.kit
     },
-    isDraft() {
+    isDraft() : boolean {
       return this.api.kits.isDraft
     },
-    kitTitle() {
+    kitTitle() : string {
       return `${this.kit.code} ${this.kit.name_en}`
     }
   },
@@ -65,33 +67,32 @@ export default defineComponent({
     <div class="page">
       <div class="kit-page">
         <KitThreadTable
-            v-if="!isDraft && kit.uuid !== undefined"
-            :uuid="uuid"
+          v-if="!isDraft && uuid !== undefined"
+          :uuid="uuid"
         />
         <div class="kit-info">
           <KitInfoBlock
-              v-if="!isDraft && kit.uuid"
-              :kit="kit"
+            v-if="!isDraft && kit.uuid"
+            :kit="kit"
           />
           <KitFileBlock
-              style="margin-top: 16px"
-              v-if="!isDraft && kit.uuid"
-              :kit="kit"
+            v-if="!isDraft && kit.uuid"
+            style="margin-top: 16px"
+            :kit="kit"
           />
 
         <!--
         TODO Даты
         -->
         </div>
-
       </div>
     </div>
     <RightPanel>
       <KitSideBar
-          v-if="kit.uuid !== undefined"
-          :kit="kit"
-          :draft="isDraft"
-          :removal-available="true"
+        v-if="kit.uuid !== undefined"
+        :kit="kit"
+        :draft="isDraft"
+        :removal-available="true"
       />
     </RightPanel>
   </div>

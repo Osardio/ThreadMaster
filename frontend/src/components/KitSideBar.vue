@@ -12,13 +12,6 @@ import TButton from "@/ui/TButton.vue";
 export default defineComponent({
   name: "KitSideBar",
   components: {TextInput, SelectInput, StringInput, ImageWrapper, ModalWindow, TButton},
-  setup() { const api = useApi(); return { api } },
-  data() {
-    return {
-      previewHovered: false,
-      kitRemovalModalModalVisible: false
-    }
-  },
   props: {
     kit: {
       type: Object as PropType<Kit>,
@@ -36,10 +29,21 @@ export default defineComponent({
       default: false
     }
   },
+  setup() { const api = useApi(); return { api } },
+  data() {
+    return {
+      previewHovered: false,
+      kitRemovalModalModalVisible: false
+    }
+  },
   computed: {
     previewLink() {
       return `${this.api.common.backendUrl}/image_preview?uuid=${this.kit.uuid}`
     }
+  },
+  async mounted() {
+    await this.api.manufacturers.get()
+    await this.api.series.get()
   },
   methods: {
     showKitRemovalModal() {
@@ -49,60 +53,65 @@ export default defineComponent({
       await this.api.kits.delete(this.kit.uuid)
       this.$router.push(`/`)
     }
-  },
-  async mounted() {
-    await this.api.manufacturers.get()
-    await this.api.series.get()
   }
 })
 </script>
 
 <template>
-  <div class="kit-side-panel" v-if="kit.uuid">
-    <div v-if="!draft"
-         @mouseover="previewHovered = true"
-         @mouseleave="previewHovered = false"
+  <div
+    v-if="kit.uuid"
+    class="kit-side-panel"
+  >
+    <div
+      v-if="!draft"
+      @mouseover="previewHovered = true"
+      @mouseleave="previewHovered = false"
     >
       <div
-          v-if="previewHovered && removalAvailable"
-          class="kit-removal-button"
-          title="Удалить набор"
-          @click="showKitRemovalModal"
+        v-if="previewHovered && removalAvailable"
+        class="kit-removal-button"
+        title="Удалить набор"
+        @click="showKitRemovalModal"
       >
-        <i class="bx bx-trash"/>
+        <i class="bx bx-trash" />
       </div>
       <ImageWrapper
-          class="kit-side-preview"
-          :src="previewLink"
-          :alt="kit.code ?? ''"
-          style="min-height: 100px; font-size: 150px; display: flex; justify-content: center"
+        class="kit-side-preview"
+        :src="previewLink"
+        :alt="kit.code ?? ''"
+        style="min-height: 100px; font-size: 150px; display: flex; justify-content: center"
       />
     </div>
-    <div class="draft-label" v-else>
+    <div
+      v-else
+      class="draft-label"
+    >
       Заполните обязательные поля:
     </div>
     <ModalWindow
-        v-model:show="kitRemovalModalModalVisible"
+      v-model:show="kitRemovalModalModalVisible"
     >
       <div class="confirm-deletion-modal">
         <div class="confirm-deletion">
           <span>Действительно хотите удалить данный набор?</span>
           <div
-              class="kit-name"
-              :title="`${kit.code} ${kit.name_en}`"
-              style="margin-left: 0"
-          >{{ kit.code }} {{ kit.name_en }}</div>
+            class="kit-name"
+            :title="`${kit.code} ${kit.name_en}`"
+            style="margin-left: 0"
+          >
+            {{ kit.code }} {{ kit.name_en }}
+          </div>
           <span>Внимание: данное действие <b>НЕОБРАТИМО!</b></span>
           <div class="delete-buttons">
             <TButton
-                label="Да"
-                @click="deleteKit"
-                style="width: 50px"
+              label="Да"
+              style="width: 50px"
+              @click="deleteKit"
             />
             <TButton
-                label="Нет"
-                @click="kitRemovalModalModalVisible = false"
-                style="width: 50px"
+              label="Нет"
+              style="width: 50px"
+              @click="kitRemovalModalModalVisible = false"
             />
           </div>
         </div>
@@ -110,92 +119,98 @@ export default defineComponent({
     </ModalWindow>
     <div class="input-container">
       <SelectInput
-          class="kit-side-input"
-          style="width: 150px"
-          caption="Производитель"
-          label="name"
-          :options="api.manufacturers.manufacturers"
-          :value="api.manufacturers.manufacturers.find(man => man.uuid === kit.manufacturer_uuid) ?? {}"
-          :clearable="false"
-          width="140px"
-          @edited="api.kits.patch({ manufacturer_uuid: $event.uuid})"
+        class="kit-side-input"
+        style="width: 150px"
+        caption="Производитель"
+        label="name"
+        :options="api.manufacturers.manufacturers"
+        :value="api.manufacturers.manufacturers.find(man => man.uuid === kit.manufacturer_uuid) ?? {}"
+        :clearable="false"
+        width="140px"
+        @edited="api.kits.patch({ manufacturer_uuid: $event.uuid})"
       />
       <StringInput
-          label="Код набора"
-          class="kit-side-input"
-          style="width: 80px"
-          :value="kit.code ?? ''"
-          width="80px"
-          @edited="api.kits.patch({ code: $event })"
+        label="Код набора"
+        class="kit-side-input"
+        style="width: 80px"
+        :value="kit.code ?? ''"
+        width="80px"
+        @edited="api.kits.patch({ code: $event })"
       />
     </div>
     <SelectInput
-        class="kit-side-input"
-        caption="Серия"
-        label="name"
-        :options="api.series.items"
-        :value="api.series.items.find(series => series.uuid === kit.series_uuid) ?? {}"
-        :clearable="false"
-        width="140px"
-        @edited="api.kits.patch({ series_uuid: $event.uuid })"
+      class="kit-side-input"
+      caption="Серия"
+      label="name"
+      :options="api.series.items"
+      :value="api.series.items.find(series => series.uuid === kit.series_uuid) ?? {}"
+      :clearable="false"
+      width="140px"
+      @edited="api.kits.patch({ series_uuid: $event.uuid })"
     />
     <StringInput
-        label="Английское название"
-        class="kit-side-input"
-        :value="kit.name_en ?? ''"
-        @edited="api.kits.patch({ name_en: $event })"
+      label="Английское название"
+      class="kit-side-input"
+      :value="kit.name_en ?? ''"
+      @edited="api.kits.patch({ name_en: $event })"
     />
     <StringInput
-        v-if="!draft"
-        label="Русскоязычное название"
-        class="kit-side-input"
-        :value="kit.name_ru ?? ''"
-        @edited="api.kits.patch({ name_ru: $event })"
+      v-if="!draft"
+      label="Русскоязычное название"
+      class="kit-side-input"
+      :value="kit.name_ru ?? ''"
+      @edited="api.kits.patch({ name_ru: $event })"
     />
-    <div v-if="!draft" class="input-container">
+    <div
+      v-if="!draft"
+      class="input-container"
+    >
       <StringInput
-          label="Длина дизайна"
-          class="kit-side-input"
-          :value="kit.design_length ?? 0"
-          type="number"
-          @edited="api.kits.patch({ design_length: $event })"
+        label="Длина дизайна"
+        class="kit-side-input"
+        :value="kit.design_length ?? 0"
+        type="number"
+        @edited="api.kits.patch({ design_length: $event })"
       />
       <StringInput
-          label="Ширина дизайна"
-          class="kit-side-input"
-          :value="kit.design_width ?? 0"
-          type="number"
-          @edited="api.kits.patch({ design_width: $event })"
+        label="Ширина дизайна"
+        class="kit-side-input"
+        :value="kit.design_width ?? 0"
+        type="number"
+        @edited="api.kits.patch({ design_width: $event })"
       />
     </div>
-    <div v-if="!draft" class="input-container">
+    <div
+      v-if="!draft"
+      class="input-container"
+    >
       <StringInput
-          label="Кол-во крестиков"
-          class="kit-side-input"
-          :value="kit.stitches_count ?? 0"
-          type="number"
-          @edited="api.kits.patch({ stitches_count: $event })"
+        label="Кол-во крестиков"
+        class="kit-side-input"
+        :value="kit.stitches_count ?? 0"
+        type="number"
+        @edited="api.kits.patch({ stitches_count: $event })"
       />
       <StringInput
-          label="Кол-во цветов"
-          class="kit-side-input"
-          :value="kit.colors_count ?? 0"
-          type="number"
-          @edited="api.kits.patch({ colors_count: $event })"
+        label="Кол-во цветов"
+        class="kit-side-input"
+        :value="kit.colors_count ?? 0"
+        type="number"
+        @edited="api.kits.patch({ colors_count: $event })"
       />
     </div>
     <StringInput
-        v-if="!draft"
-        label="Шaрмики"
-        class="kit-side-input"
-        :value="kit.charms ?? ''"
-        @edited="api.kits.patch({ charms: $event })"
+      v-if="!draft"
+      label="Шaрмики"
+      class="kit-side-input"
+      :value="kit.charms ?? ''"
+      @edited="api.kits.patch({ charms: $event })"
     />
     <TextInput
-        v-if="!draft"
-        label="Комментарий"
-        :value="kit.comment ?? ''"
-        @edited="api.kits.patch({ comment: $event })"
+      v-if="!draft"
+      label="Комментарий"
+      :value="kit.comment ?? ''"
+      @edited="api.kits.patch({ comment: $event })"
     />
   </div>
 </template>

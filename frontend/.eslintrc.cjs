@@ -1,15 +1,21 @@
 module.exports = {
+    root: true,
+    env: {
+      browser: true,
+      node: true
+    },
     extends: [
-        'eslint:recommended',
-        'plugin:vue/vue3-recommended',
+        "plugin:vue/vue3-essential",
+        "eslint:recommended",
+        "plugin:vue/vue3-recommended",
     ],
     plugins: ["@typescript-eslint"],
-    rules: {
-        'vue/no-unused-vars': 'warn'
-    },
     parser: "vue-eslint-parser",
     parserOptions: {
         parser: "@typescript-eslint/parser",
         sourceType: "module"
-    }
+    },
+    rules: {
+
+    },
 }

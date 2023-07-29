@@ -11,7 +11,7 @@ export default defineComponent({
   emits: ['edited'],
   data() {
     return {
-      val: { name: "name" } as Object,
+      val: { name: "name" } as object,
       lab: "name"
     }
   },
@@ -41,35 +41,33 @@ export default defineComponent({
       this.val = newValue
     }
   },
+  mounted() {
+    this.val = this.value ?? {}
+    this.lab = this.label
+  },
   methods: {
     onSelected(value: [Object,String]) {
       this.$emit('edited', value)
     }
-  },
-  mounted() {
-    this.val = this.value
-    this.lab = this.label
   }
 })
 </script>
 
 <template>
   <div class="select-input-container">
-    <label class="select-input-label">{{caption}}</label>
+    <label class="select-input-label">{{ caption }}</label>
     <VueSelects
-        v-if="options"
-        class="select-input"
-        placeholder="Выберите..."
-        :label="lab"
-        :options="options"
-        :clearable="clearable"
-        :searchable="searchable"
-        v-model="val"
-        @option:selected="onSelected($event)"
-    >
-    </VueSelects>
+      v-if="options"
+      v-model="val"
+      class="select-input"
+      placeholder="Выберите..."
+      :label="lab"
+      :options="options"
+      :clearable="clearable"
+      :searchable="searchable"
+      @option:selected="onSelected($event)"
+    />
   </div>
-
 </template>
 
 <style lang="scss">

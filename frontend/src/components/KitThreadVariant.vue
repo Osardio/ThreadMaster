@@ -6,7 +6,6 @@ import {Thread} from "#/Types";
 
 export default defineComponent({
   name: "KitThreadVariant",
-  emits: ["edited", "new"],
   components: {SelectKitThreadInput},
   props: {
     value: {
@@ -25,6 +24,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ["edited", "new"],
   computed: {
     suitableThreads() {
       if (this.value?.kit_palette !== undefined) {
@@ -54,12 +54,12 @@ export default defineComponent({
 <template>
   <div class="kit-thread-variant">
     <SelectKitThreadInput
-        v-if="threads"
-        :options="suitableThreads"
-        :value="threads.find((thread) => thread.uuid === value?.thread?.uuid)"
-        :show_color="show_color"
-        @edited="updateKitThreadVariant($event)"
-        @new="onCreateNewThread"
+      v-if="threads"
+      :options="suitableThreads"
+      :value="threads.find((thread) => thread.uuid === value?.thread?.uuid)"
+      :show_color="show_color"
+      @edited="updateKitThreadVariant($event)"
+      @new="onCreateNewThread"
     />
   </div>
 </template>

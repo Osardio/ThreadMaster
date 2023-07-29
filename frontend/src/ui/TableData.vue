@@ -7,15 +7,14 @@ import TButton from "@/ui/TButton.vue";
 export default defineComponent({
   name: "TableData",
   components: {StringInput, TButton},
-  emits: ["edited", "created"],
   props: {
     tableData: {
-      type: Array as PropType<DomainEntity[]>,
+      type: [] as PropType<DomainEntity[]>,
       default: [],
       required: true
     },
     editField: {
-      type: String as PropType<keyof DomainEntity>,
+      type: String,
       required: true
     },
     label: {
@@ -27,6 +26,7 @@ export default defineComponent({
       default: "string"
     }
   },
+  emits: ["edited", "created"],
   methods: {
     onCreated() {
       this.$emit("created", "")
@@ -50,15 +50,14 @@ export default defineComponent({
       </thead>
       <tbody>
         <tr
-            v-for="row in tableData"
-            :key="row.uuid"
+          v-for="row in tableData"
+          :key="row.uuid"
         >
-          <td
-          >
+          <td>
             <StringInput
-                :value="row[editField]"
-                :type="editFieldType"
-                @edited="onEdited(row.uuid, $event)"
+              :value="row[editField as keyof typeof row]"
+              :type="editFieldType"
+              @edited="onEdited(row.uuid, $event)"
             />
           </td>
         </tr>
@@ -66,8 +65,8 @@ export default defineComponent({
           <td>
             <div class="add-row">
               <TButton
-                  label="Добавить"
-                  @click="onCreated"
+                label="Добавить"
+                @click="onCreated"
               />
             </div>
           </td>

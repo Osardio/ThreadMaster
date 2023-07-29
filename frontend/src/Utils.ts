@@ -31,4 +31,42 @@ export default class Utils {
     );
   }
 
+  static getFieldLabel(fieldName: string): string {
+    const mapValue = this.fieldNames.get(fieldName)
+    if (mapValue !== undefined) {
+      return mapValue
+    } else {
+      return "Поле"
+    }
+  }
+
+  private static fieldNames: Map<string, string> = new Map([
+    ["code", "Код"],
+    ["name", "Название"],
+    ["color", "Цвет"],
+    ["quantity", "Количество"],
+    ["order_number", "Номер"],
+    ["comment", "Комментарий"],
+    ["size", "Размер"],
+  ])
+
+  static getFieldType(fieldName: string): string {
+    const mapValue = this.fieldTypes.get(fieldName)
+    if (mapValue !== undefined) {
+      return mapValue
+    } else {
+      return "string"
+    }
+  }
+
+  private static fieldTypes: Map<string, string> = new Map([
+    ["code", "string"],
+    ["name", "string"],
+    ["color", "string"],
+    ["quantity", "number"],
+    ["order_number", "number"],
+    ["comment", "string"],
+    ["size", "number"],
+  ])
+
 }

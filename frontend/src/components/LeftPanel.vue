@@ -14,10 +14,9 @@ export default defineComponent({
 
 <template>
   <div class="panel">
-    <AppLogo/>
-    <NavBar/>
+    <AppLogo />
+    <NavBar />
   </div>
-
 </template>
 
 <style scoped>

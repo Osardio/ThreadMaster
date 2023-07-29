@@ -7,6 +7,13 @@ import {useApi} from "@/stores/Api";
 export default defineComponent({
   name: "KitCard",
   components: {ImageWrapper},
+  props: {
+    kit: {
+      type: Object as PropType<Kit>,
+      required: true,
+      default: () => {}
+    }
+  },
   setup() { const api = useApi(); return { api } },
   data() {
     return {
@@ -16,13 +23,6 @@ export default defineComponent({
   computed: {
     kitSelected() {
       return this.api.kits.kit.uuid === this.kit.uuid
-    }
-  },
-  props: {
-    kit: {
-      type: Object as PropType<Kit>,
-      required: true,
-      default: () => {}
     }
   },
   methods: {
@@ -39,29 +39,32 @@ export default defineComponent({
 
 <template>
   <div
-      :class="{'kit-card': true, 'kit-selected': kitSelected}"
-       @click="setActive"
+    :class="{'kit-card': true, 'kit-selected': kitSelected}"
+    @click="setActive"
   >
-    <div class="kit-preview-container"
-         @mouseover="hovered = true"
-         @mouseleave="hovered = false"
+    <div
+      class="kit-preview-container"
+      @mouseover="hovered = true"
+      @mouseleave="hovered = false"
     >
       <div
-          v-if="hovered"
-          class="kit-open-button"
-          title="Открыть"
-          @click="openKit"
+        v-if="hovered"
+        class="kit-open-button"
+        title="Открыть"
+        @click="openKit"
       >
-        <i class="bx bx-link-external"/>
+        <i class="bx bx-link-external" />
       </div>
       <ImageWrapper
-          class="kit-preview"
-          :src="`${api.common.backendUrl}/image_preview?uuid=${kit.uuid}`"
-          :alt="kit.code ?? ''"
-          style="font-size: 150px"
+        class="kit-preview"
+        :src="`${api.common.backendUrl}/image_preview?uuid=${kit.uuid}`"
+        :alt="kit.code ?? ''"
+        style="font-size: 150px"
       />
     </div>
-    <div class="kit-label">{{ `${kit.code} ${kit.name_en}` }}</div>
+    <div class="kit-label">
+      {{ `${kit.code} ${kit.name_en}` }}
+    </div>
   </div>
 </template>
 

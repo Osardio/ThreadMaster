@@ -8,7 +8,11 @@ export default defineComponent({
 
 <template>
   <div class="logo-container">
-    <img alt="ThreadMaster Logo" class="logo-image" src="../assets/logo.png">
+    <img
+      alt="ThreadMaster Logo"
+      class="logo-image"
+      src="../assets/logo.png"
+    >
     <label class="logo-label">ThreadMaster</label>
   </div>
 </template>

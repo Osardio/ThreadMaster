@@ -10,13 +10,6 @@ const VueSelects = VueSelect as Component
 export default defineComponent({
   name: "SelectKitThreadInput",
   components: { TButton, VueSelects },
-  emits: ["edited", "new"],
-  data() {
-    return {
-      val: {} as unknown | PropType<Thread | null>,
-      searchValue: null as number | string
-    }
-  },
   props: {
     options: {
       type: [] as PropType<Thread[]>,
@@ -38,10 +31,20 @@ export default defineComponent({
       default: true
     }
   },
+  emits: ["edited", "new"],
+  data() {
+    return {
+      val: {} as Thread,
+      searchValue: "" as number | string
+    }
+  },
   watch: {
-    value(newValue?: object) {
+    value(newValue: Thread) {
       this.val = newValue
     }
+  },
+  mounted() {
+    this.val = this.value
   },
   methods: {
     filter(options: Thread[], search: string) {
@@ -56,60 +59,67 @@ export default defineComponent({
     onSearchValueChanged(value: string | number) {
       this.searchValue = value
     }
-  },
-  mounted() {
-    this.val = this.value
   }
 })
 </script>
 
 <template>
   <div class="select-input-container">
-    <label class="select-input-label">{{caption}}</label>
+    <label class="select-input-label">{{ caption }}</label>
     <VueSelects
-        class="select-input"
-        :options="options"
-        :clearable="clearable"
-        :searchable="searchable"
-        :filter="filter"
-        placeholder="Выберите цвет"
-        v-model="val"
-        @search="onSearchValueChanged"
-        @option:selected="onSelected($event)"
+      v-model="val"
+      class="select-input"
+      :options="options"
+      :clearable="clearable"
+      :searchable="searchable"
+      :filter="filter"
+      placeholder="Выберите цвет"
+      @search="onSearchValueChanged"
+      @option:selected="onSelected($event)"
     >
-        <template #option="{ name, color, code }" class="kit-thread-variant-option">
-          <div class="kit-thread-variant-option">
-            <div class="kit-thread-variant-code">{{ code }}</div>
-            <div class="kit-thread-variant-color-box"
-                 :style="`background-color: ${ color ?? 'rgba(0,0,0,0.001)'}`"
-                 v-if="show_color"
-            >
-            </div>
-            <div class="kit-thread-variant-name">{{ name }}</div>
-          </div>
-      </template>
-      <template #selected-option="{ name, color, code }" >
+      <template
+        #option="{ name, color, code }"
+        class="kit-thread-variant-option"
+      >
         <div class="kit-thread-variant-option">
-          <div class="kit-thread-variant-code">{{ code }}</div>
-          <div class="kit-thread-variant-color-box"
-               :style="`background-color: ${ color ?? 'rgba(0,0,0,0.001)'}`"
-               v-if="show_color"
-          >
+          <div class="kit-thread-variant-code">
+            {{ code }}
           </div>
-          <div class="kit-thread-variant-name">{{ name }}</div>
+          <div
+            v-if="show_color"
+            class="kit-thread-variant-color-box"
+            :style="`background-color: ${ color ?? 'rgba(0,0,0,0.001)'}`"
+          />
+          <div class="kit-thread-variant-name">
+            {{ name }}
+          </div>
         </div>
       </template>
-      <template #no-options="{ name, color, code }" >
+      <template #selected-option="{ name, color, code }">
+        <div class="kit-thread-variant-option">
+          <div class="kit-thread-variant-code">
+            {{ code }}
+          </div>
+          <div
+            v-if="show_color"
+            class="kit-thread-variant-color-box"
+            :style="`background-color: ${ color ?? 'rgba(0,0,0,0.001)'}`"
+          />
+          <div class="kit-thread-variant-name">
+            {{ name }}
+          </div>
+        </div>
+      </template>
+      <template #no-options="{ name, color, code }">
         <div class="new-thread-button">
           <TButton
-              @click="onCreateNewThread"
-              label="Новая нить"
+            label="Новая нить"
+            @click="onCreateNewThread"
           />
         </div>
       </template>
     </VueSelects>
   </div>
-
 </template>
 
 <style lang="scss">

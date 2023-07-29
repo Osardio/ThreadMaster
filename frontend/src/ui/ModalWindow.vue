@@ -21,11 +21,15 @@ export default defineComponent({
 
 <template>
   <div
-      v-if="show"
-      class="modal-window"
-      @click="hideDialog">
-    <div @click.stop class="modal-content">
-      <slot></slot>
+    v-if="show"
+    class="modal-window"
+    @click="hideDialog"
+  >
+    <div
+      class="modal-content"
+      @click.stop
+    >
+      <slot />
     </div>
   </div>
 </template>

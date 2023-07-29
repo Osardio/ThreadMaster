@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "BooleanInput",
   props: {
     caption: {
@@ -16,19 +18,19 @@ export default {
       this.$emit('toggled', !this.selected)
     }
   }
-}
+})
 </script>
 
 <template>
   <div class="boolean-input-container">
-    <label class="boolean-input-label">{{caption}}</label>
+    <label class="boolean-input-label">{{ caption }}</label>
     <div
-        class="boolean-input"
-        @click="onToggled"
+      class="boolean-input"
+      @click="onToggled"
     >
       <div
-          v-if="selected"
-          class="boolean-cross bx bx-check"
+        v-if="selected"
+        class="boolean-cross bx bx-check"
       />
     </div>
   </div>

@@ -8,15 +8,57 @@ export default defineComponent({
 
 <template>
   <nav class="navbar">
-    <router-link class="nav-button" to="/"><i class='nav-icon bx bxs-book-content'></i>Каталог</router-link>
-    <div class="navbar-section"><i class='nav-icon bx bxs-book'></i>Справочники</div>
-    <router-link class="nav-button" to="/dictionaries/threads"><i class='nav-icon bx bx-color'></i>Нити</router-link>
-    <router-link class="nav-button" to="/dictionaries/palettes"><i class='nav-icon bx bx-palette'></i>Палитры</router-link>
-    <router-link class="nav-button" to="/dictionaries/manufacturers"><i class='nav-icon bx bxs-factory'></i>Производители</router-link>
-    <router-link class="nav-button" to="/dictionaries/series"><i class='nav-icon bx bxs-food-menu'></i>Серии</router-link>
-    <router-link class="nav-button" to="/dictionaries/canvas_names"><i class='nav-icon bx bx-grid'></i>Виды канвы</router-link>
-    <router-link class="nav-button" to="/dictionaries/canvas_colors"><i class='nav-icon bx bxs-color-fill'></i>Цвета канвы</router-link>
-    <router-link class="nav-button" to="/dictionaries/canvas_sizes"><i class='nav-icon bx bx-move-horizontal'></i>Размеры канвы</router-link>
+    <router-link
+      class="nav-button"
+      to="/"
+    >
+      <i class="nav-icon bx bxs-book-content" />Каталог
+    </router-link>
+    <div class="navbar-section">
+      <i class="nav-icon bx bxs-book" />Справочники
+    </div>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/threads"
+    >
+      <i class="nav-icon bx bx-color" />Нити
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/palettes"
+    >
+      <i class="nav-icon bx bx-palette" />Палитры
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/manufacturers"
+    >
+      <i class="nav-icon bx bxs-factory" />Производители
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/series"
+    >
+      <i class="nav-icon bx bxs-food-menu" />Серии
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/canvas_names"
+    >
+      <i class="nav-icon bx bx-grid" />Виды канвы
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/canvas_colors"
+    >
+      <i class="nav-icon bx bxs-color-fill" />Цвета канвы
+    </router-link>
+    <router-link
+      class="nav-button"
+      to="/dictionaries/canvas_sizes"
+    >
+      <i class="nav-icon bx bx-move-horizontal" />Размеры канвы
+    </router-link>
   </nav>
 </template>
 

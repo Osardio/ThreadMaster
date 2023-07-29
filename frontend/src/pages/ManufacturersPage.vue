@@ -18,6 +18,9 @@ export default defineComponent({
       return Utils.sortArrayByField(this.manufacturers, "created_at")
     }
   },
+  async mounted() {
+    await this.api.manufacturers.get()
+  },
   methods: {
     onCreated(name: string) {
       if (!this.manufacturers.find(el => el.name === name)) {
@@ -27,9 +30,6 @@ export default defineComponent({
     onEdited(event: any) {
       this.api.manufacturers.patch(event.uuid, event.value)
     }
-  },
-  async mounted() {
-    await this.api.manufacturers.get()
   }
 })
 </script>
@@ -39,13 +39,13 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <TableData
-            style="width: 260px"
-            v-if="sortedManufacturers.length !== 0"
-            :table-data="sortedManufacturers"
-            edit-field="name"
-            label="Производители"
-            @created="onCreated"
-            @edited="onEdited"
+          v-if="sortedManufacturers.length !== 0"
+          style="width: 260px"
+          :table-data="sortedManufacturers"
+          edit-field="name"
+          label="Производители"
+          @created="onCreated"
+          @edited="onEdited"
         />
       </div>
     </div>

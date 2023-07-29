@@ -3,8 +3,6 @@ import {defineComponent, nextTick} from "vue";
 
 export default defineComponent({
   name: "TextInput",
-  emits: ['edited'],
-  data() { return { initialValue: "" } },
   props: {
     label: {
       type: String,
@@ -14,6 +12,14 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+  emits: ['edited'],
+  data() { return { initialValue: "" } },
+  mounted() {
+    this.initialValue = this.value
+    nextTick(() => {
+      this.resize();
+    })
   },
   methods: {
     resize() {
@@ -28,25 +34,22 @@ export default defineComponent({
         this.initialValue = this.value
       }
     }
-  },
-  mounted() {
-    this.initialValue = this.value
-    nextTick(() => {
-      this.resize();
-    })
   }
 })
 </script>
 
 <template>
   <div class="text-input-container">
-    <label v-if="label !==''" class="text-input-label">{{label}}</label>
+    <label
+      v-if="label !==''"
+      class="text-input-label"
+    >{{ label }}</label>
     <textarea
-        @input="resize"
-        @blur="onFocusLost($event)"
-        :value="value ?? ''"
-        ref="_textarea"
-        class="text-input"
+      ref="_textarea"
+      :value="value ?? ''"
+      class="text-input"
+      @input="resize"
+      @blur="onFocusLost($event)"
     />
   </div>
 </template>

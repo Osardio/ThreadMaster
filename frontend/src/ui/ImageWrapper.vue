@@ -3,11 +3,6 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "ImageWrapper",
-  data() {
-    return {
-      error: false
-    }
-  },
   props: {
     src: {
       type: String,
@@ -17,6 +12,11 @@ export default defineComponent({
     alt: {
       type: String,
       default: ""
+    }
+  },
+  data() {
+    return {
+      error: false
     }
   },
   watch: {
@@ -33,14 +33,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <img v-if="!error"
-       :src="src"
-       :alt="alt ?? ''"
-       @error="onImageError($event)"
-       ref="_img"
+  <img
+    v-if="!error"
+    ref="_img"
+    :src="src"
+    :alt="alt ?? ''"
+    @error="onImageError($event)"
   >
-  <div v-else
-       class="image-placeholder bx bx-image-alt"
+  <div
+    v-else
+    class="image-placeholder bx bx-image-alt"
   />
 </template>
 

@@ -12,13 +12,18 @@ export default defineComponent({
   setup() { const api = useApi(); return { api } },
   data() {
     return {
-      manufacturer: Object as Manufacturer
+      manufacturer: {} as Manufacturer
     }
   },
   computed: {
     filteredSeries() {
       return this.api.series.items.filter(series => series.manufacturer_uuid === this.manufacturer.uuid)
     }
+  },
+  async mounted() {
+    await this.api.manufacturers.get()
+    this.manufacturer = this.api.manufacturers.manufacturers[0]
+    await this.api.series.get()
   },
   methods: {
     onCreated() {
@@ -30,11 +35,6 @@ export default defineComponent({
     onManufacturerChanged(manufacturer: Manufacturer) {
       this.manufacturer = manufacturer
     }
-  },
-  async mounted() {
-    await this.api.manufacturers.get()
-    this.manufacturer = this.api.manufacturers.manufacturers[0]
-    await this.api.series.get()
   }
 })
 </script>
@@ -44,22 +44,22 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <SelectInput
-            class="dictionary-select"
-            label="name"
-            caption="Производитель"
-            :value="manufacturer"
-            :options="api.manufacturers.manufacturers"
-            :clearable="false"
-            @edited="onManufacturerChanged"
+          class="dictionary-select"
+          label="name"
+          caption="Производитель"
+          :value="manufacturer"
+          :options="api.manufacturers.manufacturers"
+          :clearable="false"
+          @edited="onManufacturerChanged"
         />
         <DictionaryBlock
-            :items="filteredSeries"
-            data-type="string"
-            edit-field="name"
-            sort-field="created_at"
-            table-label="Серия"
-            @created="onCreated"
-            @edited="onEdited"
+          :items="filteredSeries"
+          data-type="string"
+          edit-field="name"
+          sort-field="created_at"
+          table-label="Серия"
+          @created="onCreated"
+          @edited="onEdited"
         />
       </div>
     </div>

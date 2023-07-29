@@ -10,18 +10,18 @@ import Utils from "@/Utils";
 
 export default defineComponent({
   name: 'CatalogPage',
-  data() {
-    return {
-      searchQuery: ""
-    }
-  },
-  setup() { const api = useApi(); return { api } },
   components: {
     TButton,
     StringInput,
     KitSideBar,
     KitCard,
     RightPanel
+  },
+  setup() { const api = useApi(); return { api } },
+  data() {
+    return {
+      searchQuery: ""
+    }
   },
   computed: {
     sortedKits() {
@@ -40,13 +40,13 @@ export default defineComponent({
       }
     }
   },
+  async mounted() {
+    await this.api.kits.get()
+  },
   methods: {
     addKit() {
       this.$router.push({ path: '/kit/new' })
     }
-  },
-  async mounted() {
-    await this.api.kits.get()
   }
 })
 
@@ -56,25 +56,25 @@ export default defineComponent({
   <div class="page-container">
     <div class="page">
       <div class="top-bar">
-      <StringInput
+        <StringInput
           class="search-bar"
           placeholder="Поиск наборов..."
           :value="searchQuery"
           @changed="searchQuery = $event"
-      />
-      <TButton
+        />
+        <TButton
           class="create-kit-button"
           label="Добавить набор"
           style="width: 160px; height: 30px"
           @click="addKit"
-      />
+        />
       </div>
       <div class="kits">
         <KitCard
-            v-for="kit of sortedFilteredKits"
-            :key="kit.uuid"
-            :kit="kit"
-        ></KitCard>
+          v-for="kit of sortedFilteredKits"
+          :key="kit.uuid"
+          :kit="kit"
+        />
       </div>
     </div>
     <RightPanel>
