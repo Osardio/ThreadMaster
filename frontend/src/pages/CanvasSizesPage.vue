@@ -30,7 +30,7 @@ export default defineComponent({
       <div class="dictionary-page">
         <DictionaryBlock
           :items="api.canvasSizes.items"
-          data-type="number"
+          edit-field-type="number"
           edit-field="size"
           sort-field="created_at"
           table-label="Размер канвы"

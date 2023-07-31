@@ -31,6 +31,11 @@
   padding: 20px;
 }
 
+.dictionary-page {
+  overflow: auto;
+  height: calc(100vh - 40px);
+}
+
 .panel {
   border-left: $panel-border;
   border-right: $panel-border;
