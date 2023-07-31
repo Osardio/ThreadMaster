@@ -65,7 +65,6 @@ export default defineComponent({
         Файлы по набору
       </div>
       <div
-          v-if="sortedFiles.length !== 0"
           class="files">
         <FileInput
             v-for="file in sortedFiles"

@@ -72,7 +72,7 @@ export default defineComponent({
       this.threadCreationKitThreadVariant = event.kits_thread_variant_uuid
       this.threadCreationCode = event.code
       this.threadCreationPaletteUuid = event.palette_uuid
-      this.threadCreationColorName = "Black"
+      this.threadCreationColorName = ""
       this.threadCreationHexCode = "#000000"
       this.threadCreationModalVisible = true;
       // @ts-ignore

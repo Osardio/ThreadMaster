@@ -27,7 +27,7 @@ export default defineComponent({
     tableLabel: {
       type: String,
       required: true
-    },
+    }
   },
   emits: ["created", "edited"],
   computed: {
