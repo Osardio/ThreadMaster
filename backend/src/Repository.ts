@@ -70,6 +70,9 @@ export default class Repository {
             }
           }
         }
+      },
+      orderBy: {
+        order_number: 'asc'
       }
     })
     return {
