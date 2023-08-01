@@ -62,7 +62,7 @@ export default defineComponent({
       />
       <SelectInput
         style="width: 150px"
-        caption="Размер канвы"
+        caption="Каунт канвы"
         label="size"
         :options="api.canvases.canvasSizes"
         :value="api.canvases.canvasSizes.find(size => size.uuid === canvas?.canvas_size_uuid)"

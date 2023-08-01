@@ -192,7 +192,7 @@ export default defineComponent({
         @edited="api.kits.patch({ stitches_count: $event })"
       />
       <StringInput
-        label="Кол-во цветов"
+        label="Основных цветов"
         class="kit-side-input"
         :value="kit.colors_count ?? 0"
         type="number"

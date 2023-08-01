@@ -1,8 +1,8 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import TableComplex from "../ui/TableComplex.vue";
-import {useApi} from "../stores/Api";
-import {Palette} from "../../types/Types";
+import {useApi} from "@/stores/Api";
+import {Palette} from "#/Types";
 
 export default defineComponent({
   name: "DictionaryThreadTable",
@@ -11,7 +11,7 @@ export default defineComponent({
     palette: {
       type: Object as PropType<Palette>,
       required: true
-    }
+    },
   },
   setup() { const api = useApi(); return { api } },
   computed: {

@@ -3,6 +3,7 @@ import {DomainEntity} from "#/Types";
 import {defineComponent, PropType} from "vue";
 import StringInput from "@/ui/StringInput.vue";
 import TButton from "@/ui/TButton.vue";
+import Utils from "@/Utils";
 
 export default defineComponent({
   name: "TableData",
@@ -24,6 +25,11 @@ export default defineComponent({
     editFieldType: {
       type: String,
       default: "string"
+    }
+  },
+  computed: {
+    sortedData() {
+      return Utils.sortArrayByField(this.tableData, this.editField as keyof DomainEntity)
     }
   },
   emits: ["edited", "created"],
@@ -50,7 +56,7 @@ export default defineComponent({
       </thead>
       <tbody>
         <tr
-          v-for="row in tableData"
+          v-for="row in sortedData"
           :key="row.uuid"
         >
           <td>

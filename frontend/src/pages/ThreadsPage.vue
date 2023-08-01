@@ -40,7 +40,7 @@ export default defineComponent({
           @edited="onPaletteChanged"
         />
         <DictionaryThreadTable
-          :palette="palette"
+            :palette="palette"
         />
       </div>
     </div>
