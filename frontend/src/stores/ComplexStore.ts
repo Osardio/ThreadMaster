@@ -15,14 +15,14 @@ export const useComplexStore = defineStore("complexStore",{
       this.kitThreadTableData = await Rest.getKitThreadTableData(uuid)
     },
     async updateKitThread(kitThreadUuid: string, updatedProperty: object) {
+      console.log('updateKitThread: ', kitThreadUuid, updatedProperty)
       await Rest.patchEntity(EntityType.KIT_THREAD, kitThreadUuid, updatedProperty)
       await this.getKitThreadTableData(this.kit_uuid)
     },
     async addKitThread() {
       await Rest.postEntity(EntityType.KIT_THREAD, {
         kit_uuid: this.kit_uuid,
-        order_number: this.kitThreadTableData.table_rows.length + 1,
-        quantity: 0
+        order_number: this.kitThreadTableData.table_rows.length + 1
       })
       await this.getKitThreadTableData(this.kit_uuid)
     },

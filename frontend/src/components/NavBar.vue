@@ -1,8 +1,10 @@
 <script lang="ts">
 import {defineComponent} from "vue";
+import YarnIcon from "@/icons/YarnIcon.vue";
 
 export default defineComponent({
-  name: "NavBar"
+  name: "NavBar",
+  components: {YarnIcon}
 })
 </script>
 
@@ -21,7 +23,7 @@ export default defineComponent({
       class="nav-button"
       to="/dictionaries/threads"
     >
-      <i class="nav-icon bx bx-color" />Нити
+      <YarnIcon class="nav-icon"/>Нити
     </router-link>
     <router-link
       class="nav-button"
@@ -57,7 +59,7 @@ export default defineComponent({
       class="nav-button"
       to="/dictionaries/canvas_sizes"
     >
-      <i class="nav-icon bx bx-move-horizontal" />Размеры канвы
+      <i class="nav-icon bx bx-move-horizontal" />Каунты канвы
     </router-link>
   </nav>
 </template>

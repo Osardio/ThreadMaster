@@ -161,12 +161,12 @@ export default defineComponent({
             <td>
               <div class="thread-quantity">
                 <StringInput
-                  :value="row.quantity ?? 0"
+                  :value="row.quantity ?? NaN"
                   :show_arrows="false"
                   :centered="true"
                   type="number"
                   style="width: 40px"
-                  @edited="api.complex.updateKitThread(row.uuid, { quantity: $event })"
+                  @edited="api.complex.updateKitThread(row.uuid, { quantity: $event ?? NaN })"
                 />
               </div>
             </td>
@@ -212,7 +212,7 @@ export default defineComponent({
       <div class="thread-creation-options-container">
         <div class="thread-creation-options">
           <StringInput
-            label="Код цвета"
+            label="Номер цвета"
             :value="threadCreationCode"
             type="string"
             style="width: 150px"
@@ -240,7 +240,7 @@ export default defineComponent({
                     >
                     </div>-->
           <StringInput
-            label="HEX-код цвета"
+            label="Hex-код цвета"
             :value="threadCreationHexCode"
             type="string"
             style="width: 150px"

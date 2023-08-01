@@ -4,7 +4,6 @@ import SelectInput from "@/ui/SelectInput.vue";
 import TableData from "@/ui/TableData.vue";
 import {useApi} from "@/stores/Api";
 import {Palette} from "#/Types";
-import Utils from "@/Utils";
 
 export default defineComponent({
   name: "PalettesPage",
@@ -14,9 +13,6 @@ export default defineComponent({
     items() : Palette[] {
       return this.api.palettes.palettes
     },
-    sortedPalettes() {
-      return Utils.sortArrayByField(this.items, "created_at")
-    }
   },
   async mounted() {
     await this.api.palettes.get()
@@ -39,9 +35,9 @@ export default defineComponent({
     <div class="page">
       <div class="dictionary-page">
         <TableData
-          v-if="sortedPalettes.length !== 0"
+          v-if="items"
           style="width: 260px"
-          :table-data="sortedPalettes"
+          :table-data="items"
           edit-field="name"
           label="Палитры"
           @created="onCreated"

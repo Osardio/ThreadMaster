@@ -41,9 +41,9 @@ export default class Utils {
   }
 
   private static fieldNames: Map<string, string> = new Map([
-    ["code", "Код"],
+    ["code", "Номер"],
     ["name", "Название"],
-    ["color", "Цвет"],
+    ["color", "Hex-код цвета"],
     ["quantity", "Количество"],
     ["order_number", "Номер"],
     ["comment", "Комментарий"],

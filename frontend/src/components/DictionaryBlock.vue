@@ -2,7 +2,6 @@
 import {defineComponent, PropType} from "vue";
 import TableData from "../ui/TableData.vue";
 import {DomainEntity} from "#/Types";
-import Utils from "../Utils";
 
 export default defineComponent({
   name: "DictionaryBlock",
@@ -30,17 +29,9 @@ export default defineComponent({
     }
   },
   emits: ["created", "edited"],
-  computed: {
-    sortedItems() {
-      // @ts-ignore
-      return Utils.sortArrayByField(this.items, this.sortField)
-    }
-  },
   methods: {
     onCreated(event: string) {
-      //if (!this.items.find(el => el[this.editField as keyof DomainEntity] === event[this.editField])) {
       this.$emit("created", event)
-      //}
     },
     onEdited(event: any) {
       this.$emit("edited", event)
@@ -51,9 +42,9 @@ export default defineComponent({
 
 <template>
   <TableData
-    v-if="sortedItems"
+    v-if="items"
     style="width: 260px"
-    :table-data="sortedItems"
+    :table-data="items"
     :label="tableLabel"
     :edit-field="editField"
     :edit-field-type="editFieldType"

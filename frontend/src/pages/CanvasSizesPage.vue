@@ -33,7 +33,7 @@ export default defineComponent({
           edit-field-type="number"
           edit-field="size"
           sort-field="created_at"
-          table-label="Размер канвы"
+          table-label="Каунт канвы"
           @created="onCreated"
           @edited="onEdited"
         />

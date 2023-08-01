@@ -44,10 +44,14 @@ export default defineComponent({
   methods: {
     onFocusLost(event: Event) {
       const value = (event.target as HTMLInputElement).value;
-      let result;
-      if (this.type === "number") { result = Number(value) } else { result = String(value) }
-      if (result !== this.initialValue) {
-        this.$emit('edited', result)
+      let newValue;
+      if (this.type === "number") {
+        if (value === "") { newValue = "" } else newValue = Number(value)
+      } else { newValue = String(value) }
+      console.log("OLD VAL: ", this.initialValue)
+      console.log("NEW VAL: ", newValue)
+      if (newValue !== this.initialValue) {
+        this.$emit('edited', newValue)
         this.initialValue = value
       }
     },

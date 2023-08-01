@@ -85,16 +85,16 @@ export default defineComponent({
       </thead>
       <tbody>
         <tr
-          v-for="entity in data"
+          v-for="entity in sortedData"
           :key="entity.uuid"
         >
           <td
             v-for="(field) in tableFields"
             :key="field"
           >
-            <ColorInput
-              v-if="getFieldType(field) === 'color'"
-            />
+            <!--
+              <ColorInput v-if="getFieldType(field) === 'color'"/>
+            -->
             <StringInput
               v-if="getFieldType(field) === 'number'"
               :value="entity[field as keyof typeof entity]"

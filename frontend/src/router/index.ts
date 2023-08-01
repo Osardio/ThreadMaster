@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: "/dictionaries/palettes",       name: "palettes",      component: PalettesPage, meta: { title: "Палитры" } },
   { path: "/dictionaries/canvas_names",   name: "canvasNames",   component: CanvasNamesPage, meta: { title: "Виды канвы" } },
   { path: "/dictionaries/canvas_colors",  name: "canvasColors",  component: CanvasColorsPage, meta: { title: "Цвета канвы" } },
-  { path: "/dictionaries/canvas_sizes",   name: "canvasSizes",   component: CanvasSizesPage, meta: { title: "Размеры канвы" } },
+  { path: "/dictionaries/canvas_sizes",   name: "canvasSizes",   component: CanvasSizesPage, meta: { title: "Каунты канвы" } },
   { path: "/dictionaries/series",         name: "series",        component: SeriesPage, meta: { title: "Серии" } },
   { path: "/dictionaries/threads",        name: "threads",       component: ThreadsPage, meta: { title: "Нити" } },
 ]
