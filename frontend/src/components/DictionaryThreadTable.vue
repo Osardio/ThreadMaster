@@ -42,6 +42,7 @@ export default defineComponent({
     :ignored-fields="['uuid','palette_uuid','created_at','updated_at']"
     :fields="['code', 'name', 'color']"
     sort-field="code"
+    sort-field-type="number"
     style="width: 500px"
     @created="onCreated"
     @edited="onEdited"

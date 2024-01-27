@@ -22,6 +22,14 @@ export default class Utils {
     })
   }
 
+  static sortArrayByNumberField<T>(array: Array<T>, sortField: keyof T) : Array<T> {
+    return array.sort( (a: T, b: T) => {
+      if (Number(a[sortField]) < Number(b[sortField])) return -1;
+      if (Number(a[sortField]) > Number(b[sortField])) return 1;
+      return 0;
+    })
+  }
+
   static uuidv4(): string {
     return (String(1e7) + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
       (
