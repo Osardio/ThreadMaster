@@ -175,6 +175,7 @@ export default defineComponent({
 .kit-thread-variant-color-box {
   outline: $input-field-border;
   border-radius: 5px;
+  min-width: 10px;
   width: 10px;
   height: 10px;
   margin: 3px 6px 3px 6px;
