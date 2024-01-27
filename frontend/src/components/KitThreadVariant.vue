@@ -3,6 +3,7 @@ import {defineComponent, PropType} from "vue";
 import {KitsThreadVariantShort, PaletteShort} from "#/ComplexTypes";
 import SelectKitThreadInput from "@/components/SelectKitThreadInput.vue"
 import {Thread} from "#/Types";
+import Utils from "@/Utils";
 
 export default defineComponent({
   name: "KitThreadVariant",
@@ -28,13 +29,16 @@ export default defineComponent({
   computed: {
     suitableThreads() {
       if (this.value?.kit_palette !== undefined) {
-        return this.threads.filter( (thread) =>
+        return this.sortedThreads.filter( (thread) =>
             (thread.palette_uuid === this.value!.kit_palette.palette.uuid)
         ) ?? []
       } else {
-        return this.threads
+        return this.sortedThreads
       }
-    }
+    },
+    sortedThreads() {
+      return Utils.sortArrayByNumberField(this.threads, "code")
+    },
   },
   methods: {
     updateKitThreadVariant(event: Event ) {
