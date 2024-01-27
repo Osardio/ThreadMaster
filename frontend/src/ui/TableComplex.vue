@@ -25,13 +25,22 @@ export default defineComponent({
     sortField: {
       type: String,
       required: false
+    },
+    sortFieldType: {
+      type: String,
+      required: false
     }
   },
   emits: ["edited", "created"],
   computed: {
     sortedData() {
-      // @ts-ignore
-      return Utils.sortArrayByField(this.data, this.sortField)
+      if (this.sortFieldType == "number") {
+        // @ts-ignore
+        return Utils.sortArrayByNumberField(this.data, this.sortField)
+      } else {
+        // @ts-ignore
+        return Utils.sortArrayByField(this.data, this.sortField)
+      }
     },
     filteredFields() : string[] | undefined {
       if (this.data && this.data[0]) {
