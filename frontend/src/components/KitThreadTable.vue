@@ -112,7 +112,6 @@ export default defineComponent({
         <thead>
           <tr v-if="columns.length !== 0">
             <th><label>№</label></th>
-            <th><label>Кол-во</label></th>
             <th
               v-for="column in columns"
               :key="column.uuid"
@@ -127,6 +126,7 @@ export default defineComponent({
                 @removed="api.complex.removeKitPalette($event)"
               />
             </th>
+            <th><label>Кол-во</label></th>
           </tr>
           <tr v-else>
             <TButton
@@ -158,18 +158,6 @@ export default defineComponent({
               :number="row.order_number"
               @removed="api.complex.removeKitThread(row.uuid)"
             />
-            <td>
-              <div class="thread-quantity">
-                <StringInput
-                  :value="row.quantity ?? NaN"
-                  :show_arrows="false"
-                  :centered="true"
-                  type="number"
-                  style="width: 40px"
-                  @edited="api.complex.updateKitThread(row.uuid, { quantity: $event ?? NaN })"
-                />
-              </div>
-            </td>
             <td
               v-for="col in columns"
               v-if="row.kits_threads_variants.length > 0"
@@ -187,6 +175,18 @@ export default defineComponent({
                   @new="onCreateNewThread"
                 />
                 <div v-else />
+              </div>
+            </td>
+            <td>
+              <div class="thread-quantity">
+                <StringInput
+                    :value="row.quantity ?? NaN"
+                    :show_arrows="false"
+                    :centered="true"
+                    type="number"
+                    style="width: 40px"
+                    @edited="api.complex.updateKitThread(row.uuid, { quantity: $event ?? NaN })"
+                />
               </div>
             </td>
           </tr>
